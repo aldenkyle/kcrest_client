@@ -1058,8 +1058,8 @@ const LeafletMap = () => {
   }, [map]);
 
   //console.log("in LM" + JSON.stringify(clickState.tog))
-  const [center, setCenter] = useState({ lat: 38.9555, lng: -77.04749867734917 });
-  const zoomLevel = 14;
+  const [center, setCenter] = useState({ lat: -1, lng: 20 });
+  const zoomLevel = 4;
   return (
     <>
     <MapContainer  ref={setMap} center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1}  >  
