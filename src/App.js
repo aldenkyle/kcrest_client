@@ -38,7 +38,24 @@ export default function App() {
   return (
     <><div className="App">
       <div id="head-desc" style={{zIndex: 20000, position: "absolute", top: 1, left: 0, width: "100%"}}>
-      <h1>Scenario Builder for Development Programs</h1></div>
+      <h1>Scenario Builder for Development Programs<br></br>
+        Select a Country:  
+      <select name="country" id="country">
+        <option value="Ghana">Ghana</option>
+        <option value="Liberia">Liberia</option>
+        <option value="Kenya">Kenya</option>
+        <option value="Madagascar">Madagascar</option>
+        <option value="Malawi">Malawi</option>
+        <option value="Mozambique">Mozambique</option>
+        <option value="Rwanda">Rwanda</option>
+        <option value="Senegal">Senegal</option>
+        <option value="Tanzania">Tanzania</option>
+        <option value="Zambia">Zambia</option>
+        <option value="all" selected>Select a Country</option>
+      </select> 
+      <button class="button button13"  type="button"> Go </button>
+      </h1>
+      </div>
       <LeafletMap ></LeafletMap>
  
     </div></>

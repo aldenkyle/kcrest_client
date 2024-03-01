@@ -151,27 +151,6 @@ export const LocationFinderDummy = (clickState) => {
 };
 
 
-export function onEachTrail(trail, layer) {
-  const countryName = trail.properties.trlname;
-  //console.log(countryName);
-  layer.bindPopup(countryName);}
-
-export function onEachPOI(trail, layer) {
-    const countryName = trail.properties.poiname;
-    const countrType = trail.properties.poitype;
-    //console.log(countryName);
-    layer.bindPopup(countrType +"- "+ countryName);}
-
-export function onEachRoad(trail, layer) {
-  const countryName = trail.properties.rdname;
-  //console.log(countryName);
-  layer.bindPopup(countryName);}
-
-export function onEachContour(trail, layer) {
-  const countryName = trail.properties.elevation;
-  //console.log(countryName);
-  layer.bindPopup("Elevation: "+ countryName);}
-
 
 export function onEachHex(trail, layer) {
     const awestruck = trail.properties.awestruck + 0;
@@ -185,12 +164,6 @@ export function onEachHex(trail, layer) {
     //console.log(countryName);
     layer.bindPopup("<b>Instances of Each Feeling</b><br> Awestruck: "+awestruck + "  <span style='color:white'>---</span> Excited: " +excited + "<br> Happy: "+happy + "  <span style='color:white'>--------</span> Relaxed: " + relaxed +  "<br> Ambivalent: "+ ambivalent + " <span style='color:white'>--</span> Annoyed: " + annoyed + "<br> Anxious: "+anxious + " <span style='color:white'>------</span> Fearful: " + fearful  );}
 
-
-
-export function onEachFeel(trail, layer) {
-  const feeling = trail.properties.feeling;
-  const story = trail.properties.story;
-  layer.bindPopup(feeling +"- "+ story);}
 
 export function layersUtils(geoJsonRef, mapRef) {
   function highlightOnClick(e) {
