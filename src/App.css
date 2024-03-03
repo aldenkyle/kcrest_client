@@ -1,5 +1,5 @@
 .App {
-  background-color:#A80084;
+  background-color:#005F73;
 }
 
 .leaflet-container {
@@ -46,7 +46,7 @@ body::-webkit-scrollbar{
   width: 100%;
   line-height: 1;
   text-align:center;
-  background-color:#A8008495;
+  background-color:#005F7395;
 }
 
 #info-div {
@@ -129,6 +129,10 @@ h1 {
   font-family:'Gill Sans MT';
   text-align:center;
   margin: 10px;
+}
+
+#country {
+  width: 30%;
 }
 
 .p1 {
@@ -249,27 +253,30 @@ label {
 }
 
 .button11 {
-  background-color: #9B2226;
+  background-color: #354d36;
   padding: 6px 6px;
   margin-left: 5px;
   margin-right: 5px;
 }
 
 .button12 {
-  background-color: #9B2226;
+  background-color: #66507d;
   padding: 6px 6px;
   margin-left: 5px;
   margin-right: 5px;
 }
 
+.button13 {
+  background-color: #3C4F76;
+  padding: 8px 12px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
 
 .test_skill {
   border: 5px solid white;
 }
 
-#country {
-  width: 70%;
-}
 
 
 /* Style the container */

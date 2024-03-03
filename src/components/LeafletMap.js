@@ -18,13 +18,130 @@ import "./MyMap.css";
 
 
 
+
+const urlToQuery = () => {
+  var cntry = document.getElementById('country').value;
+  var urlQ = "http://localhost:3000/all";
+  if (cntry == 'Ghana')
+  {urlQ = "http://localhost:3000/ghana" }
+  else if (cntry == 'Senegal')
+  {urlQ = "http://localhost:3000/senegal" }
+  else if (cntry == 'Liberia')
+  {urlQ = "http://localhost:3000/liberia" }
+  else if (cntry == 'Kenya')
+  {urlQ = "http://localhost:3000/kenya" }
+  else if (cntry == 'Rwanda')
+  {urlQ = "http://localhost:3000/rwanda" }
+  else if (cntry == 'Tanzania')
+  {urlQ = "http://localhost:3000/tanzania" }
+  else if (cntry == 'Mozambique')
+  {urlQ = "http://localhost:3000/mozambique" }
+  else if (cntry == 'Malawi')
+  {urlQ = "http://localhost:3000/malawi" }
+  else if (cntry == 'Madagascar')
+  {urlQ = "http://localhost:3000/madagascar" }
+  else if (cntry == 'Zambia')
+  {urlQ = "http://localhost:3000/zambia" }
+  else
+  {urlQ = "http://localhost:3000/all" }
+  console.log(urlQ)
+  return urlQ
+}
+
+const zoomLevelVar = (country) => {
+  var cntry = country;
+  var urlQ = 6;
+  if (cntry == 'Ghana')
+  {urlQ = 7 }
+  else if (cntry == 'Senegal')
+  {urlQ = 7 }
+  else if (cntry == 'Liberia')
+  {urlQ = 8 }
+  else if (cntry == 'Kenya')
+  {urlQ = 6 }
+  else if (cntry == 'Rwanda')
+  {urlQ = 9 }
+  else if (cntry == 'Tanzania')
+  {urlQ = 6 }
+  else if (cntry == 'Mozambique')
+  {urlQ = 6 }
+  else if (cntry == 'Malawi')
+  {urlQ = 7}
+  else if (cntry == 'Madagascar')
+  {urlQ = 6 }
+  else if (cntry == 'Zambia')
+  {urlQ = 6 }
+  else
+  {urlQ = 4 }
+  return urlQ
+}
+
+const latCent = (country) => {
+  var cntry = country;
+  var urlQ = -1;
+  if (cntry == 'Ghana')
+  {urlQ = 7.965234 }
+  else if (cntry == 'Senegal')
+  {urlQ = 14.362423 }
+  else if (cntry == 'Liberia')
+  {urlQ = 6.447149 }
+  else if (cntry == 'Kenya')
+  {urlQ = 0.558101 }
+  else if (cntry == 'Rwanda')
+  {urlQ = -2.001052 }
+  else if (cntry == 'Tanzania')
+  {urlQ = -6.263001 }
+  else if (cntry == 'Mozambique')
+  {urlQ = -17.259122 }
+  else if (cntry == 'Malawi')
+  {urlQ = -13.211085}
+  else if (cntry == 'Madagascar')
+  {urlQ = -19.384331 }
+  else if (cntry == 'Zambia')
+  {urlQ = -13.456343 }
+  else
+  {urlQ = -1 }
+  return urlQ
+}
+
+const lonCent = (country) => {
+  var cntry = country;
+  var urlQ = 20;
+  if (cntry == 'Ghana')
+  {urlQ = -1.206203 }
+  else if (cntry == 'Senegal')
+  {urlQ = -14.467627 }
+  else if (cntry == 'Liberia')
+  {urlQ = -9.309511 }
+  else if (cntry == 'Kenya')
+  {urlQ = 37.845552 }
+  else if (cntry == 'Rwanda')
+  {urlQ = 29.925426 }
+  else if (cntry == 'Tanzania')
+  {urlQ = 34.819776 }
+  else if (cntry == 'Mozambique')
+  {urlQ = 35.552121 }
+  else if (cntry == 'Malawi')
+  {urlQ = 34.302515}
+  else if (cntry == 'Madagascar')
+  {urlQ = 46.697973 }
+  else if (cntry == 'Zambia')
+  {urlQ = 27.79609 }
+  else
+  {urlQ = 20 }
+  return urlQ
+}
+
+
+
+
 const KcrestCountries = () => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/kcrest_countries");
+      const response = await fetch("http://localhost:3000/all");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -43,11 +160,43 @@ const KcrestCountries = () => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return <GeoJSON data={data} pathOptions={{opacity:1, color:'white', fillOpacity:1, weight:1}} />;
+    return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
   } else {
     return null;
   }
 };
+
+const KcrestFeaturesFront = () => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+
+  const getData = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/all");
+
+      //jsonData is an array cotaining the json object
+      const jsonData = await response.json();
+      //Accessing the json object and then obtaining the geojson object
+      //which is the value of st_asgeojson key
+      setData(jsonData[0].json_build_object);
+      //console.log(jsonData[0].json_build_object)
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+  //console.log( data );
+
+  // render react-leaflet GeoJSON when the data is ready
+  if (data) {
+    return <GeoJSON data={data}  onEachFeature={onEachHex}  pathOptions={{opacity:0, fillColor:'white', color:'#dcdee0', fillOpacity:0, weight:1, smoothFactor:.1}} />;
+  } else {
+    return null;
+  }
+};
+
 
 const KcrestCountriesFront = () => {
   // create state variable to hold data when it is fetched
@@ -80,36 +229,6 @@ const KcrestCountriesFront = () => {
   }
 };
 
-const Buffer = () => {
-  // create state variable to hold data when it is fetched
-  const [data, setData] = useState();
-
-  const getData = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/buffer");
-
-      //jsonData is an array cotaining the json object
-      const jsonData = await response.json();
-      //Accessing the json object and then obtaining the geojson object
-      //which is the value of st_asgeojson key
-      setData(jsonData[0].json_build_object);
-      //console.log(jsonData[0].json_build_object)
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-  //console.log( data );
-
-  // render react-leaflet GeoJSON when the data is ready
-  if (data) {
-    return <GeoJSON data={data} pathOptions={{fillcolor:'white', opacity:1, color:'white', fillOpacity:.6, weight:0}} />;
-  } else {
-    return null;
-  }
-};
 
 
 export function getMax(arr, prop) {
@@ -127,7 +246,7 @@ const Hunger = forwardRef((undefined, povRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -146,8 +265,7 @@ const Hunger = forwardRef((undefined, povRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}   style={(feature) => {
       const hunger = feature.properties.hunger_1;
      // console.log(fcount)
       return {
@@ -174,7 +292,7 @@ const Stunting = forwardRef((undefined, povRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -193,7 +311,6 @@ const Stunting = forwardRef((undefined, povRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
      // console.log(fcount)
@@ -222,7 +339,7 @@ const Wasting = forwardRef((undefined, wastingRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -241,7 +358,6 @@ const Wasting = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
      // console.log(fcount)
@@ -271,7 +387,7 @@ const Under5Mort = forwardRef((undefined, wastingRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -290,7 +406,6 @@ const Under5Mort = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
      // console.log(fcount)
@@ -319,7 +434,7 @@ const Conflict = forwardRef((undefined, wastingRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -338,12 +453,11 @@ const Conflict = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const viol = feature.properties.count_viol;
      // console.log(fcount)
       return {
-        color: "#E9D8A6",
+        color: "#BB3E03",
         weight: 0, 
         fillOpacity: viol/50,
         smoothFactor: .1
@@ -368,7 +482,7 @@ const Literacy = forwardRef((undefined, wastingRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -387,7 +501,6 @@ const Literacy = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
@@ -417,7 +530,7 @@ const Handwashing = forwardRef((undefined, wastingRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -436,12 +549,11 @@ const Handwashing = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const viol = feature.properties.handwashin;
      // console.log(fcount)
       return {
-        color: "#BB3E03",
+        color: "#b8a004",
         weight: 0, 
         fillOpacity: viol/70,
         smoothFactor: .1
@@ -466,7 +578,7 @@ const AgPotential = forwardRef((undefined, wastingRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -485,12 +597,11 @@ const AgPotential = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const viol = feature.properties.agpotentia;
      // console.log(fcount)
       return {
-        color: "#E9D8A6",
+        color: "#354d36",
         weight: 0, 
         fillOpacity: viol/50000,
         smoothFactor: .1
@@ -516,7 +627,7 @@ const Traveltime = forwardRef((undefined, wastingRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -535,12 +646,11 @@ const Traveltime = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const viol = feature.properties.timeperper;
      // console.log(fcount)
       return {
-        color: "#E9D8A6",
+        color: "#66507d",
         weight: 0, 
         fillOpacity: viol/120,
         smoothFactor: .1
@@ -566,7 +676,7 @@ const Poverty = forwardRef((undefined, povRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/poverty");
+      const response = await fetch(urlToQuery(country));
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -585,7 +695,6 @@ const Poverty = forwardRef((undefined, povRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const poverty = feature.properties.gsap_pov21;
      // console.log(fcount)
@@ -614,7 +723,7 @@ const FeelsHex = forwardRef((undefined, povRef) => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/feels-hex");
+      const response = await fetch(urlToQuery());
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -633,14 +742,13 @@ const FeelsHex = forwardRef((undefined, povRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    console.log(data)
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const fcount = feature.properties.feelcount;
      // console.log(fcount)
       return {
         color: "#431682",
         weight: 0, 
-        fillOpacity: stunting/250
+        fillOpacity: fcount/250
       };}} 
     eventHandlers={{
       add: (e) => {
@@ -654,93 +762,6 @@ const FeelsHex = forwardRef((undefined, povRef) => {
     return null;
   }
 });
-
-
-const PovertyData = () => {
-  // create state variable to hold data when it is fetched
-  const [data, setData] = useState();
-
-  const getData = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/poverty");
-
-      //jsonData is an array cotaining the json object
-      const jsonData = await response.json();
-      //Accessing the json object and then obtaining the geojson object
-      //which is the value of st_asgeojson key
-      setData(jsonData[0].json_build_object);
-      //console.log(jsonData[0].json_build_object)
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-  //console.log( data );
-
-  // render react-leaflet GeoJSON when the data is ready
-  if (data) {
-    console.log(data)
-    return data;
-  } else {
-    return null;
-  }
-};
-
-
-const POIs = () => {
-  // create state variable to hold data when it is fetched
-  const [data, setData] = useState();
-
-  const getData = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/pois");
-
-      //jsonData is an array cotaining the json object
-      const jsonData = await response.json();
-      //Accessing the json object and then obtaining the geojson object
-      //which is the value of st_asgeojson key
-      setData(jsonData[0].json_build_object);
-      //console.log(jsonData[0].json_build_object)
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-  //console.log( data);
-  // render react-leaflet GeoJSON when the data is ready
-  if (data) {
-    //console.log(data.features)
-    const myPoints = data.features.map( (pt, index) => {
-      const coord = [pt.geometry.coordinates[1], pt.geometry.coordinates[0]]
-      const name = pt.properties.poiname
-      //console.log(coord)
-      return (
-              <CircleMarker
-                 key={'cm-' + index}
-                 className={"myClass-" + index}
-                 center={coord}
-                 fillOpacity={1}
-                 radius={4}
-                 fillColor={'#363533'}
-                 stroke={0}
-               >
-                 <Popup>
-                   <span>{pt.properties.poiname}</span>
-                 </Popup>
-            </CircleMarker>
-          )});
-    return myPoints;
-  } else {
-    return null;
-  }
-};
-
-
-
 
 
 // make new leaflet element
@@ -762,11 +783,17 @@ const Search = (props) => {
 }
 
 
+
+
+
 // Using the GeoJSON tag in a Map container
 const LeafletMap = () => {
+
   const [map, setMap] = useState(null);
   const [position, setPosition] = useState(null);
-  const feelRef = useRef();
+  const feelRef = useRef()
+  const popRef = useRef()
+  const layersRef = useRef();
   const [feelState, setFeeltate] = useState(false);
   const hungerRef = useRef();
   const [hungerState, setHungerState] = useState(false);
@@ -791,14 +818,31 @@ const LeafletMap = () => {
   const [clickState, setClickState] = useState(false);
   const [infoState, setInfoState] = useState(false);
  
+  const zoomToCountry = () => {
+    const mapC = map;
+    //mapC.removeLayer(povRef.current)
+    console.log(layersRef.current)
+    var country2 = document.getElementById('country').value
+    var lat2 = latCent(country2)
+    var lon2 = lonCent(country2)
+    var zoom2 = zoomLevelVar(country2)
+    mapC.setView([lat2,lon2],zoom2)
+    console.log(country2)
+    //var url = urlToQuery()
+    //map.remove()
+    //LeafletMap()
+  }  
+  
   const toggle=(clickState)=>{
-      console.log(clickState)
+      //console.log(clickState)
       setClickState(!clickState)};
-      console.log(clickState)
+      //console.log(clickState)
 
   const toggleInfo=()=>{
         setInfoState(!infoState)};
 
+
+        
   const removeLayers = () => {
           const mapC = map;
           mapC.removeLayer(hungerRef.current)
@@ -831,15 +875,17 @@ const LeafletMap = () => {
   const toggleHunger = () => {
     const arr = [hungerState,stuntingState, wastingState, u5mortState,conflictState, literacyState, handwashingState, PovState ]
     const count = arr.filter(Boolean).length
-    console.log(count)
-    console.log(map)
+    //console.log(count)
+    //console.log(map)
     if (map && hungerRef.current && !hungerState) {
       const mapC = map;
       const hungerLayer = hungerRef.current;
       removeLayers()
       mapC.addLayer(hungerLayer);
       const feelLayer = feelRef.current;
-      feelLayer.bringToFront()
+      //feelLayer.bringToFront()
+      const popLayer = popRef.current
+      popLayer.bringToFront()
       setHungerState(!hungerState);
       removeOutlines()
       document.getElementsByClassName("button3")[0].classList.add("test_skill");
@@ -848,7 +894,8 @@ const LeafletMap = () => {
       const hungerLayer = hungerRef.current;
       mapC.removeLayer(hungerLayer);
       const feelLayer = feelRef.current;
-      feelLayer.bringToFront()
+      //feelLayer.bringToFront()
+      popRef.current.bringToFront()
       setHungerState(!hungerState);
       document.getElementsByClassName("button3")[0].classList.remove("test_skill");
     }
@@ -857,8 +904,6 @@ const LeafletMap = () => {
   const toggleTrav = () => {
     const arr = [hungerState, travState, agpotState, stuntingState, wastingState, u5mortState,conflictState, literacyState, handwashingState, PovState ]
     const count = arr.filter(Boolean).length
-    console.log(count)
-    console.log(map)
     if (map && travRef.current && !travState) {
       const mapC = map;
       const travLayer = travRef.current;
@@ -883,8 +928,6 @@ const LeafletMap = () => {
   const toggleAgpot = () => {
     const arr = [hungerState,stuntingState, wastingState, u5mortState,conflictState, literacyState, handwashingState, PovState ]
     const count = arr.filter(Boolean).length
-    console.log(count)
-    console.log(map)
     if (map && agpotRef.current && !agpotState) {
       const mapC = map;
       const agpotLayer = agpotRef.current;
@@ -908,7 +951,6 @@ const LeafletMap = () => {
   };
 
   const toggleStunting = () => {
-    console.log(map)
     if (map && stuntingRef.current && !stuntingState) {
        const mapC = map;
       const stuntingLayer = stuntingRef.current;
@@ -931,7 +973,6 @@ const LeafletMap = () => {
   };
 
   const toggleWasting = () => {
-    console.log(map)
     if (map && wastingRef.current && !wastingState) {
        const mapC = map;
       const wastingLayer = wastingRef.current;
@@ -954,7 +995,6 @@ const LeafletMap = () => {
   };
 
   const toggleU5Mort = () => {
-    console.log(map)
     if (map && u5mortRef.current && !u5mortState) {
        const mapC = map;
       const u5mortLayer = u5mortRef.current;
@@ -977,7 +1017,6 @@ const LeafletMap = () => {
   };
 
   const toggleConflict = () => {
-    console.log(map)
     if (map && conflictRef.current && !conflictState) {
        const mapC = map;
       const conflictLayer = conflictRef.current;
@@ -1000,7 +1039,6 @@ const LeafletMap = () => {
   };
 
   const toggleLiteracy = () => {
-    console.log(map)
     if (map && literacyRef.current && !literacyState) {
        const mapC = map;
       const literacyLayer = literacyRef.current;
@@ -1023,7 +1061,6 @@ const LeafletMap = () => {
   };
 
   const toggleHandwashing = () => {
-    console.log(map)
     if (map && handwashingRef.current && !handwashingState) {
        const mapC = map;
       const handwashingLayer = handwashingRef.current;
@@ -1048,7 +1085,6 @@ const LeafletMap = () => {
 
 
   const togglePov = () => {
-    console.log(map)
     if (map && povRef.current && !PovState) {
        const mapC = map;
       const povLayer = povRef.current;
@@ -1091,7 +1127,6 @@ const LeafletMap = () => {
   useEffect(() => {
     if (!map) return;
     //const map = mapRef.current;
-    console.log(map)
     L.easyButton("fa-crosshairs", () => {
       map.locate().on("locationfound", function (e) {
         setPosition(e.latlng);
@@ -1104,29 +1139,27 @@ const LeafletMap = () => {
   useEffect(() => {
     if (!map) return;
     //const map = mapRef.current;
-    console.log(map)
     L.easyButton( "fa-map-marker", () => {
       setClickState(!clickState);
     }).addTo(map);
 
   }, [map]);
 
+
   const  PointsToFront = () => {
     setTimeout(function(){
-      if (map && feelRef.current) {
+      if (map && popRef.current) {
         const mapC = map;
         console.log("I'm fronting2")
-        const feelLayer = feelRef.current;
+        const feelLayer = popRef.current;
         mapC.removeLayer(feelLayer);
         mapC.addLayer(feelLayer);}
      },1000);
    }
 
-
   useEffect(() => {
     if (!map) return;
     //const map = mapRef.current;
-    console.log(map)
     L.easyButton("fa-map", () => {
       addLegend()
     }).addTo(map);
@@ -1142,12 +1175,38 @@ const LeafletMap = () => {
     }).addTo(map);
 
   }, [map]);
+ 
+  try{
+    var country = document.getElementById('country').value()
+    }catch(e){
+    var country = 'all';
+    }
 
   //console.log("in LM" + JSON.stringify(clickState.tog))
-  const [center, setCenter] = useState({ lat: -1, lng: 20 });
-  const zoomLevel = 4;
+  const [center, setCenter] = useState({ lat: latCent(country), lng: lonCent(country) });
+  const zoomLevel = zoomLevelVar(country);
   return (
     <>
+    <div id="head-desc" style={{zIndex: 20000, position: "absolute", top: 1, left: 0, width: "100%"}}>
+      <h1>Scenario Builder for Development Programs<br></br>
+        Select a Country:  
+      <select name="country" id="country">
+        <option value="Ghana">Ghana</option>
+        <option value="Liberia">Liberia</option>
+        <option value="Kenya" >Kenya</option>
+        <option value="Madagascar">Madagascar</option>
+        <option value="Malawi">Malawi</option>
+        <option value="Mozambique">Mozambique</option>
+        <option value="Rwanda">Rwanda</option>
+        <option value="Senegal">Senegal</option>
+        <option value="Tanzania">Tanzania</option>
+        <option value="Zambia">Zambia</option>
+        <option value="all" selected>Select a Country</option>
+      </select> 
+      <button class="button button13" onClick={zoomToCountry} type="button"> Go </button>
+      </h1>
+      </div>
+
     <MapContainer  ref={setMap} center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1}  >  
     <LocationFinderDummy tog={clickState} />
       {/*The LayersControl tag help us organize our layers into baselayers and tilelayers*/}
@@ -1162,12 +1221,9 @@ const LeafletMap = () => {
             opacity={0.5}
             maxZoom={21} />     
       <KcrestCountries />
-      <LayersControl position="topright">
+      <LayersControl ref={layersRef} position="topright">
         <LayersControl.Overlay name="Poverty" checked>
           <LayerGroup id='povG' ref={povRef} ><Poverty /></LayerGroup>
-        </LayersControl.Overlay>
-        <LayersControl.Overlay name="Combined Feelings" unchecked>
-          <FeatureGroup><FeelsHex /></FeatureGroup>
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Hunger" unchecked>
         <LayerGroup id='hungerG' ref={hungerRef} ><Hunger /></LayerGroup>
@@ -1199,20 +1255,23 @@ const LeafletMap = () => {
           <LayersControl.Overlay name="Countries" checked>
           <FeatureGroup id='countG' ref={feelRef} ><KcrestCountriesFront /></FeatureGroup>
         </LayersControl.Overlay>
+        <LayersControl.Overlay name="Features" checked>
+          <FeatureGroup id='popG' ref={popRef} ><KcrestFeaturesFront /></FeatureGroup>
+        </LayersControl.Overlay>
       </LayersControl>
       <PointsToFront/>
       <Search provider={new OpenStreetMapProvider({ })} />
     </MapContainer>
-    <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}We want to see how different places in Rock Creek Park make people feel. If you'd like to share your experience, click the map marker button on the left, then click anywhere in the park to tell us a story (or several) about your experiences in the park. If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com{"\n "}</text></div> 
+    <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}This tool allows international development practitioners to develop scenarios regarding where they will target international development programs. The tool will also allow users to visualize several key development indicators and summarize them across subsets of administrative areas in their countries of interest. Finally, it will allow users to save scenarios so that they can retrieve those scenarios and review them multiple times. The goal is to ensure that development practitioners have easy access to, and are using, high quality quantitative data as a determinant in their decision making about where to invest their limited resources.  If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com{"\n "}</text></div> 
     <div id="bottom-desc" style={{zIndex: 19999, position: "absolute", bottom: 36, left: 1, width: "100%", textAlign: "center"}}>
     <button class="button button10"  onClick={togglePov} type="button">Poverty</button>   
     <button class="button button3"  onClick={toggleHunger} type="button">Hunger</button> 
     <button class="button button4"  onClick={toggleStunting} type="button">Stunting</button> 
     <button class="button button5"  onClick={toggleWasting} type="button">Wasting</button> 
     <button class="button button6"  onClick={toggleU5Mort} type="button">Under 5 Mortality</button> 
-    <button class="button button7"  onClick={toggleConflict} type="button">Conflict Events</button> 
+    <button class="button button7"  onClick={toggleHandwashing} type="button">Access to Handwashing</button> 
     <button class="button button8"  onClick={toggleLiteracy} type="button">Women's Literacy</button> 
-    <button class="button button9"  onClick={toggleHandwashing} type="button">Access to Handwashing</button> 
+    <button class="button button9"  onClick={toggleConflict} type="button">Conflict Events</button> 
     <button class="button button11"  onClick={toggleAgpot} type="button">Agricultural Potential</button> 
     <button class="button button12"  onClick={toggleTrav} type="button">Avg. Travel Time to Cities</button> </div>
     <div id="legend" style={{display:"none"}}><button id="close" class="button close" onClick={addLegend}>x</button><b>Legend</b><br></br><br></br>
@@ -1221,13 +1280,15 @@ const LeafletMap = () => {
     <i style={{background:"#005F73"}}></i><span2>Stunting</span2><br></br>
     <i style={{background:"#0A9396"}}></i><span2>Wasting</span2><br></br>
     <i style={{background:"#94D2BD"}}></i><span2>Under 5 Mortality</span2><br></br>
-    <i style={{background:"#E9D8A6"}}></i><span2>Count of Conflict Events</span2><br></br>
+    <i style={{background:"#b8a004"}}></i><span2>Access to Basic Handwashing Station</span2><br></br>
     <i style={{background:"#EE9B00"}}></i><span2>Women's Literacy</span2><br></br>
-    <i style={{background:"#BB3E03"}}></i><span2>Access to Basic Handwashing Station</span2><br></br>
+    <i style={{background:"#BB3E03"}}></i><span2>Count of Conflict Events</span2><br></br>
+    <i style={{background:"#354d36"}}></i><span2>Agricultural Potential</span2><br></br>
+    <i style={{background:"#66507d"}}></i><span2>Avg. Travel Time to Cities</span2><br></br>
     <i class="i2" style={{background:"#363533"}}></i><span2>Points of Interest</span2><br></br>
     <text class="i3" style={{color:"#ab985e", fontWeight:"bold", fontSize:"20px"}}>- - </text><span2>Trails</span2><br></br>
     <i class="i4" style={{background:"gray"}}></i><span2>Roads</span2><br></br>
-    
+
     </div>
     </>
   );

@@ -11,53 +11,21 @@ console.log(window.React1)
 console.log(window.React2);
 
 
-export const QueryBuilderFeels=(clickState3, clickState4)=> {
-  console.log("I ran!")
-  console.log(clickState3, clickState4)
-}
-
 
 export default function App() {
   const [clickState, setClickState] = useState(false);
-  const [clickState3, setClickState3] = useState(false);
+  const [country, setCountry] = useState([]);
   const toggle=()=>{
       setClickState(!clickState)
       //console.log(clickState)
   
   }
-  const toggle3=()=>{
-    setClickState3(!clickState3)
-    //console.log(clickState4)
-    document.getElementsByClassName("button3")[0].addEventListener("click", function() {
-      if (clickState3)
-      {this.classList.remove("test_skill")} else {
-      this.classList.add("test_skill")}});
-      QueryBuilderFeels( {clickState3} ) ;
-  }
  
   return (
     <><div className="App">
-      <div id="head-desc" style={{zIndex: 20000, position: "absolute", top: 1, left: 0, width: "100%"}}>
-      <h1>Scenario Builder for Development Programs<br></br>
-        Select a Country:  
-      <select name="country" id="country">
-        <option value="Ghana">Ghana</option>
-        <option value="Liberia">Liberia</option>
-        <option value="Kenya">Kenya</option>
-        <option value="Madagascar">Madagascar</option>
-        <option value="Malawi">Malawi</option>
-        <option value="Mozambique">Mozambique</option>
-        <option value="Rwanda">Rwanda</option>
-        <option value="Senegal">Senegal</option>
-        <option value="Tanzania">Tanzania</option>
-        <option value="Zambia">Zambia</option>
-        <option value="all" selected>Select a Country</option>
-      </select> 
-      <button class="button button13"  type="button"> Go </button>
-      </h1>
-      </div>
+      <div id="map-space">
       <LeafletMap ></LeafletMap>
- 
+      </div>
     </div></>
   );
 }

@@ -153,16 +153,23 @@ export const LocationFinderDummy = (clickState) => {
 
 
 export function onEachHex(trail, layer) {
-    const awestruck = trail.properties.awestruck + 0;
-    const excited = trail.properties.excited + 0;
-    const happy = trail.properties.happy + 0;
-    const relaxed = trail.properties.relaxed + 0;
-    const ambivalent = trail.properties.abivalent + 0;
-    const annoyed = trail.properties.annoyed + 0;
-    const anxious = trail.properties.anxious + 0;
-    const fearful = trail.properties.fearful + 0;
+    const adm0 = trail.properties.adm0_name;
+    const adm1 = trail.properties.adm1_name;
+    const adm2 = trail.properties.adm2_name;
+    const popP = trail.properties.pop_ls_1.toFixed(0);
+    const stuntingP = trail.properties.stunting_1.toFixed(1);
+    const povertyP = trail.properties.gsap_pov21;
+    const hungerP = trail.properties.hunger_1;
+    const wastingP = trail.properties.wasting_1;
+    const under5mortP = trail.properties.under5_mor;
+    const accesstoHWP = trail.properties.handwashin.toFixed(1);
+    const travTimeP = trail.properties.timeperper.toFixed(1);
+    const agPotP = trail.properties.agpotentia;
+    const conflictP = trail.properties.count_viol;
+    const literacWP = trail.properties.women_lite.toFixed(1);
+    const hungerSource = trail.properties.hungersour;
     //console.log(countryName);
-    layer.bindPopup("<b>Instances of Each Feeling</b><br> Awestruck: "+awestruck + "  <span style='color:white'>---</span> Excited: " +excited + "<br> Happy: "+happy + "  <span style='color:white'>--------</span> Relaxed: " + relaxed +  "<br> Ambivalent: "+ ambivalent + " <span style='color:white'>--</span> Annoyed: " + annoyed + "<br> Anxious: "+anxious + " <span style='color:white'>------</span> Fearful: " + fearful  );}
+    layer.bindPopup("<b>"+ adm0 + " | " + adm1+ " | " + adm2 + "</b><br>Est. Population 2022 (Landscan): <span style='color:black;font-weight:bold'>"+ popP + "</span><br>Prevalence of Poverty ($2.15/day, GSAP): <span style='color:#9B2226;font-weight:bold'>"+ povertyP + "%</span><br>Prevalence of Stunting (DHS): <span style='color:#005F73;font-weight:bold'>"+ stuntingP + "%</span><br> Hunger: <span style='color:#3C4F76;font-weight:bold'>"+ hungerP + "%</span><br>Prevalence of Wasting (DHS): <span style='color:#0A9396;font-weight:bold'>"+ wastingP + "%</span><br>Under 5 Mortality per 100,000 (DHS): <span style='color:#94D2BD;font-weight:bold'>"+ under5mortP + "</span><br> Count of Violence Events (ACLED): <span style='color:#BB3E03;font-weight:bold'>"+ conflictP + "</span><br>Access to Basic Handwashing (DHS): <span style='color:#b8a004;font-weight:bold'>"+ accesstoHWP + "%</span><br>Percent of Women Literate (DHS): <span style='color:#EE9B00;font-weight:bold'>"+ literacWP + "%</span><br>Avg. Minutes in Travel Time to a City: <span style='color:#66507d;font-weight:bold'>"+ travTimeP + "%</span><br>Potential Agricultural Growth (FAO): <span style='color:#354d36;font-weight:bold'>"+ agPotP + "</span>"  );}
 
 
 export function layersUtils(geoJsonRef, mapRef) {
