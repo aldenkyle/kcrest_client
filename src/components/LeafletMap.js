@@ -21,29 +21,29 @@ import "./MyMap.css";
 
 const urlToQuery = () => {
   var cntry = document.getElementById('country').value;
-  var urlQ = "http://localhost:3000/all";
+  var urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/all";
   if (cntry == 'Ghana')
-  {urlQ = "http://localhost:3000/ghana" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/ghana" }
   else if (cntry == 'Senegal')
-  {urlQ = "http://localhost:3000/senegal" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/senegal" }
   else if (cntry == 'Liberia')
-  {urlQ = "http://localhost:3000/liberia" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/liberia" }
   else if (cntry == 'Kenya')
-  {urlQ = "http://localhost:3000/kenya" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/kenya" }
   else if (cntry == 'Rwanda')
-  {urlQ = "http://localhost:3000/rwanda" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda" }
   else if (cntry == 'Tanzania')
-  {urlQ = "http://localhost:3000/tanzania" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania" }
   else if (cntry == 'Mozambique')
-  {urlQ = "http://localhost:3000/mozambique" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique" }
   else if (cntry == 'Malawi')
-  {urlQ = "http://localhost:3000/malawi" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/malawi" }
   else if (cntry == 'Madagascar')
-  {urlQ = "http://localhost:3000/madagascar" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar" }
   else if (cntry == 'Zambia')
-  {urlQ = "http://localhost:3000/zambia" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/zambia" }
   else
-  {urlQ = "http://localhost:3000/all" }
+  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/all" }
   console.log(urlQ)
   return urlQ
 }
@@ -141,7 +141,7 @@ const KcrestCountries = () => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/all");
+      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -172,7 +172,7 @@ const KcrestFeaturesFront = () => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/all");
+      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -204,7 +204,7 @@ const KcrestCountriesFront = () => {
 
   const getData = async () => {
     try {
-      const response = await fetch("http://localhost:3000/kcrest_countries");
+      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kcrest_countries");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -713,7 +713,7 @@ const PovertyGhana = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/ghana");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -735,7 +735,7 @@ const HungerGhana = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/ghana");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -766,7 +766,7 @@ const StuntingGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/ghana");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -789,7 +789,7 @@ const WastingGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/ghana");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -812,7 +812,7 @@ const Under5MortGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/ghana");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -835,7 +835,7 @@ const Under5MortGhana = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/ghana");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -858,7 +858,7 @@ const LiteracyGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/ghana");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -881,7 +881,7 @@ const ConflictGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/ghana");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -904,7 +904,7 @@ const AgPotentialGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/ghana");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -935,7 +935,7 @@ const TraveltimeGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/ghana");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -959,7 +959,7 @@ const GhanaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/ghana");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -981,7 +981,7 @@ const GhanaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/liberia");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1003,7 +1003,7 @@ const HungerLiberia = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/liberia");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -1034,7 +1034,7 @@ const StuntingLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/liberia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1057,7 +1057,7 @@ const WastingLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/liberia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1080,7 +1080,7 @@ const Under5MortLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/liberia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1103,7 +1103,7 @@ const Under5MortLiberia = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/liberia");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1126,7 +1126,7 @@ const LiteracyLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/liberia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1149,7 +1149,7 @@ const ConflictLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/liberia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1172,7 +1172,7 @@ const AgPotentialLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/liberia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1203,7 +1203,7 @@ const TraveltimeLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/liberia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1227,7 +1227,7 @@ const LiberiaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/liberia");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -1249,7 +1249,7 @@ const LiberiaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/senegal");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1271,7 +1271,7 @@ const HungerSenegal = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/senegal");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -1302,7 +1302,7 @@ const StuntingSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/senegal");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1325,7 +1325,7 @@ const WastingSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/senegal");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1348,7 +1348,7 @@ const Under5MortSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/senegal");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1371,7 +1371,7 @@ const Under5MortSenegal = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/senegal");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1394,7 +1394,7 @@ const LiteracySenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/senegal");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1417,7 +1417,7 @@ const ConflictSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/senegal");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1440,7 +1440,7 @@ const AgPotentialSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/senegal");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1471,7 +1471,7 @@ const TraveltimeSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/senegal");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1495,7 +1495,7 @@ const SenegalCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/senegal");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -1519,7 +1519,7 @@ const SenegalCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/kenya");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1541,7 +1541,7 @@ const HungerKenya = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/kenya");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -1572,7 +1572,7 @@ const StuntingKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/kenya");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1595,7 +1595,7 @@ const WastingKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/kenya");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1618,7 +1618,7 @@ const Under5MortKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/kenya");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1641,7 +1641,7 @@ const Under5MortKenya = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/kenya");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1664,7 +1664,7 @@ const LiteracyKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/kenya");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1687,7 +1687,7 @@ const ConflictKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/kenya");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1710,7 +1710,7 @@ const AgPotentialKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/kenya");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1741,7 +1741,7 @@ const TraveltimeKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/kenya");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1765,7 +1765,7 @@ const KenyaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/kenya");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -1789,7 +1789,7 @@ const KenyaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/malawi");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1811,7 +1811,7 @@ const HungerMalawi = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/malawi");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -1842,7 +1842,7 @@ const StuntingMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/malawi");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1865,7 +1865,7 @@ const WastingMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/malawi");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1888,7 +1888,7 @@ const Under5MortMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/malawi");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1911,7 +1911,7 @@ const Under5MortMalawi = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/malawi");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1934,7 +1934,7 @@ const LiteracyMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/malawi");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1957,7 +1957,7 @@ const ConflictMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/malawi");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1980,7 +1980,7 @@ const AgPotentialMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/malawi");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2011,7 +2011,7 @@ const TraveltimeMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/malawi");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2035,7 +2035,7 @@ const MalawiCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/malawi");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -2059,7 +2059,7 @@ const MalawiCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/madagascar");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2081,7 +2081,7 @@ const HungerMadagascar = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/madagascar");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -2112,7 +2112,7 @@ const StuntingMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/madagascar");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2135,7 +2135,7 @@ const WastingMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/madagascar");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2158,7 +2158,7 @@ const Under5MortMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/madagascar");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2181,7 +2181,7 @@ const Under5MortMadagascar = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/madagascar");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2204,7 +2204,7 @@ const LiteracyMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/madagascar");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2227,7 +2227,7 @@ const ConflictMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/madagascar");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2250,7 +2250,7 @@ const AgPotentialMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/madagascar");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2281,7 +2281,7 @@ const TraveltimeMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/madagascar");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2305,7 +2305,7 @@ const MadagascarCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/madagascar");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -2329,7 +2329,7 @@ const MadagascarCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/mozambique");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2351,7 +2351,7 @@ const HungerMozambique = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/mozambique");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -2382,7 +2382,7 @@ const StuntingMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/mozambique");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2405,7 +2405,7 @@ const WastingMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/mozambique");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2428,7 +2428,7 @@ const Under5MortMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/mozambique");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2451,7 +2451,7 @@ const Under5MortMozambique = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/mozambique");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2474,7 +2474,7 @@ const LiteracyMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/mozambique");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2497,7 +2497,7 @@ const ConflictMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/mozambique");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2520,7 +2520,7 @@ const AgPotentialMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/mozambique");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2551,7 +2551,7 @@ const TraveltimeMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/mozambique");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2575,7 +2575,7 @@ const MozambiqueCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/mozambique");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -2599,7 +2599,7 @@ const MozambiqueCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/rwanda");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2621,7 +2621,7 @@ const HungerRwanda = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/rwanda");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -2652,7 +2652,7 @@ const StuntingRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/rwanda");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2675,7 +2675,7 @@ const WastingRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/rwanda");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2698,7 +2698,7 @@ const Under5MortRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/rwanda");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2721,7 +2721,7 @@ const Under5MortRwanda = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/rwanda");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2744,7 +2744,7 @@ const LiteracyRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/rwanda");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2767,7 +2767,7 @@ const ConflictRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/rwanda");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2790,7 +2790,7 @@ const AgPotentialRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/rwanda");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2821,7 +2821,7 @@ const TraveltimeRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/rwanda");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2845,7 +2845,7 @@ const RwandaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/rwanda");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -2869,7 +2869,7 @@ const RwandaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/tanzania");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2891,7 +2891,7 @@ const HungerTanzania = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/tanzania");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -2922,7 +2922,7 @@ const StuntingTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/tanzania");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2945,7 +2945,7 @@ const WastingTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/tanzania");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2968,7 +2968,7 @@ const Under5MortTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/tanzania");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2991,7 +2991,7 @@ const Under5MortTanzania = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/tanzania");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3014,7 +3014,7 @@ const LiteracyTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/tanzania");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3037,7 +3037,7 @@ const ConflictTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/tanzania");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3060,7 +3060,7 @@ const AgPotentialTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/tanzania");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3091,7 +3091,7 @@ const TraveltimeTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/tanzania");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3115,7 +3115,7 @@ const TanzaniaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/tanzania");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -3139,7 +3139,7 @@ const TanzaniaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/zambia");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3161,7 +3161,7 @@ const HungerZambia = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("http://localhost:3000/zambia");
+        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -3192,7 +3192,7 @@ const StuntingZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/zambia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3215,7 +3215,7 @@ const WastingZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/zambia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3238,7 +3238,7 @@ const Under5MortZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/zambia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3261,7 +3261,7 @@ const Under5MortZambia = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("http://localhost:3000/zambia");
+      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3284,7 +3284,7 @@ const LiteracyZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/zambia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3307,7 +3307,7 @@ const ConflictZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/zambia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3330,7 +3330,7 @@ const AgPotentialZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/zambia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3361,7 +3361,7 @@ const TraveltimeZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("http://localhost:3000/zambia");
+    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3385,7 +3385,7 @@ const ZambiaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/zambia");
+        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
