@@ -267,11 +267,19 @@ const Hunger = forwardRef((undefined, povRef) => {
   if (data) {
     return  <GeoJSON data={data}   style={(feature) => {
       const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/80
+        else return 1
+       }
      // console.log(fcount)
       return {
-        color: "#3C4F76",
+        color: colorWork(),
         weight: 0, 
-        fillOpacity: hunger/100,
+        fillOpacity: opacityWork(),
         smoothFactor: .1
       };}} 
     eventHandlers={{
@@ -598,12 +606,20 @@ const AgPotential = forwardRef((undefined, wastingRef) => {
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
-      const viol = feature.properties.agpotentia;
+    const potent = feature.properties.agpotentia;
      // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/50000
+      else return 1
+     }
       return {
-        color: "#354d36",
+        color: colorWork(),
         weight: 0, 
-        fillOpacity: viol/50000,
+        fillOpacity: opacityWork(),
         smoothFactor: .1
       };}} 
     eventHandlers={{
@@ -673,95 +689,2722 @@ const Traveltime = forwardRef((undefined, wastingRef) => {
 const Poverty = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
-
   const getData = async () => {
-    try {
-      const response = await fetch(urlToQuery(country));
-
-      //jsonData is an array cotaining the json object
+    try {const response = await fetch(urlToQuery(country));
       const jsonData = await response.json();
-      //Accessing the json object and then obtaining the geojson object
-      //which is the value of st_asgeojson key
       setData(jsonData[0].json_build_object);
-      //console.log(jsonData[0].json_build_object)
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-  //console.log( data );
-
-  // render react-leaflet GeoJSON when the data is ready
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
   if (data) {
     return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
       const poverty = feature.properties.gsap_pov21;
-     // console.log(fcount)
       return {
         color: "#9B2226",
         weight: 0, 
         fillOpacity: poverty/100,
         smoothFactor: .1
-      };}} 
-    eventHandlers={{
-      add: (e) => {
-        console.log("Added Layer:", e.target);
-      },
-      remove: (e) => {
-        console.log("Removed layer:", e.target);
-      }
-    }} /> ;
+      };}}/> ;
   } else {
     return null;
-  }
-});
+  }});
 
-const FeelsHex = forwardRef((undefined, povRef) => {
-  // create state variable to hold data when it is fetched
-  const [data, setData] = useState();
 
-  const getData = async () => {
-    try {
-      const response = await fetch(urlToQuery());
+const PovertyGhana = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/ghana");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/50,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
 
-      //jsonData is an array cotaining the json object
-      const jsonData = await response.json();
-      //Accessing the json object and then obtaining the geojson object
-      //which is the value of st_asgeojson key
-      setData(jsonData[0].json_build_object);
-      //console.log(jsonData[0].json_build_object)
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-  useEffect(() => {
-    getData();
-  }, []);
-  //console.log( data );
-
-  // render react-leaflet GeoJSON when the data is ready
-  if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
-      const fcount = feature.properties.feelcount;
+const HungerGhana = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/ghana");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/80
+        else return 1
+       }
      // console.log(fcount)
       return {
-        color: "#431682",
+        color: colorWork(),
         weight: 0, 
-        fillOpacity: fcount/250
-      };}} 
-    eventHandlers={{
-      add: (e) => {
-        console.log("Added Layer:", e.target);
-      },
-      remove: (e) => {
-        console.log("Removed layer:", e.target);
-      }
-    }} /> ;
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingGhana = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/ghana");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/30,
+         smoothFactor: .1
+       };}} /> ;
   } else {
     return null;
-  }
-});
+  }});
+
+const WastingGhana = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/ghana");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/10,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortGhana = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/ghana");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/52,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingGhana = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/ghana");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/70,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyGhana = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/ghana");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/100,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictGhana = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/ghana");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/10,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialGhana = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/ghana");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/50000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeGhana = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/ghana");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/30,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const GhanaCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/ghana");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+  const PovertyLiberia = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/liberia");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/70,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerLiberia = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/liberia");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/91
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingLiberia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/liberia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/35,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingLiberia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/liberia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/5,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortLiberia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/liberia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/120,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingLiberia = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/liberia");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/10,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyLiberia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/liberia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/65,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictLiberia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/liberia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/24,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialLiberia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/liberia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/50000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeLiberia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/liberia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/90,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const LiberiaCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/liberia");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+  const PovertySenegal = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/senegal");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/65,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerSenegal = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/senegal");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/80
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingSenegal = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/senegal");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/31,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingSenegal = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/senegal");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/15,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortSenegal = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/senegal");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/80,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingSenegal = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/senegal");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/60,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracySenegal = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/senegal");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/70,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictSenegal = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/senegal");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/18,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialSenegal = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/senegal");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/50000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeSenegal = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/senegal");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/30,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const SenegalCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/senegal");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+  
+
+
+  const PovertyKenya = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/kenya");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/65,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerKenya = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/kenya");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/80
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingKenya = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/kenya");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/37,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingKenya = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/kenya");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/23,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortKenya = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/kenya");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/60,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingKenya = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/kenya");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/88,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyKenya = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/kenya");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/100,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictKenya = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/kenya");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/120,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialKenya = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/kenya");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/50000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeKenya = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/kenya");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/30,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const KenyaCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/kenya");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+
+
+  const PovertyMalawi = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/malawi");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/88,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerMalawi = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/malawi");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/60
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingMalawi = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/malawi");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/40,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingMalawi = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/malawi");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/5,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortMalawi = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/malawi");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/125,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingMalawi = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/malawi");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/14,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyMalawi = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/malawi");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/80,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictMalawi = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/malawi");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/15,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialMalawi = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/malawi");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/50000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeMalawi = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/malawi");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/30,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const MalawiCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/malawi");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+  
+
+  const PovertyMadagascar = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/madagascar");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/100,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerMadagascar = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/madagascar");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/90
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingMadagascar = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/madagascar");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/52,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingMadagascar = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/madagascar");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/15,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortMadagascar = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/madagascar");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/100,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingMadagascar = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/madagascar");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/40,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyMadagascar = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/madagascar");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/100,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictMadagascar = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/madagascar");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/60,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialMadagascar = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/madagascar");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/100000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeMadagascar = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/madagascar");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/120,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const MadagascarCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/madagascar");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+  
+
+  const PovertyMozambique = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/mozambique");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/80,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerMozambique = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/mozambique");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/80
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingMozambique = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/mozambique");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/55,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingMozambique = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/mozambique");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/10,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortMozambique = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/mozambique");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/140,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingMozambique = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/mozambique");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/28,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyMozambique = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/mozambique");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/75,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictMozambique = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/mozambique");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/100,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialMozambique = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/mozambique");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/18000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeMozambique = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/mozambique");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/60,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const MozambiqueCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/mozambique");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+  
+
+  const PovertyRwanda = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/rwanda");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/83,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerRwanda = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/rwanda");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/80
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingRwanda = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/rwanda");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/40,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingRwanda = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/rwanda");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/3,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortRwanda = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/rwanda");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/57,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingRwanda = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/rwanda");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/35,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyRwanda = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/rwanda");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/100,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictRwanda = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/rwanda");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/20,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialRwanda = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/rwanda");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/250000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeRwanda = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/rwanda");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/10,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const RwandaCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/rwanda");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+  
+
+  const PovertyTanzania = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/tanzania");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/75,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerTanzania = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/tanzania");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/65
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingTanzania = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/tanzania");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/46,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingTanzania = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/tanzania");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/8,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortTanzania = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/tanzania");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/70,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingTanzania = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/tanzania");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/16,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyTanzania = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/tanzania");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/90,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictTanzania = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/tanzania");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/10,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialTanzania = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/tanzania");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/3500000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeTanzania = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/tanzania");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/30,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TanzaniaCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/tanzania");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+  
+
+  const PovertyZambia = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/zambia");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const poverty = feature.properties.gsap_pov21;
+        return {
+          color: "#9B2226",
+          weight: 0, 
+          fillOpacity: poverty/85,
+          smoothFactor: .1
+        };}}/> ;
+    } else {
+      return null;
+    }});
+
+const HungerZambia = forwardRef((undefined, povRef) => {
+      // create state variable to hold data when it is fetched
+      const [data, setData] = useState();
+      const getData = async () => {
+        try {const response = await fetch("http://localhost:3000/zambia");
+          const jsonData = await response.json();
+          setData(jsonData[0].json_build_object);
+        } catch (err) {console.error(err.message);}};
+      useEffect(() => { getData();  }, []);
+      if (data) {
+        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+          const hunger = feature.properties.hunger_1;
+      const colorWork = () => {
+        if (hunger > 0) return  "#3C4F76"
+        else return "gray"
+       }
+       const opacityWork = () => {
+        if (hunger > 0) return  hunger/92
+        else return 1
+       }
+     // console.log(fcount)
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}/> ;
+      } else {
+        return null;
+      }});
+
+const StuntingZambia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/zambia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const stunting = feature.properties.stunting_1;
+      // console.log(fcount)
+       return {
+         color: "#005F73",
+         weight: 0, 
+         fillOpacity: stunting/45,
+         smoothFactor: .1
+       };}} /> ;
+  } else {
+    return null;
+  }});
+
+const WastingZambia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/zambia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const wasting = feature.properties.wasting_1;
+      // console.log(fcount)
+        return {
+          color: "#005F73",
+          weight: 0, 
+          fillOpacity: wasting/8,
+          smoothFactor: .1
+        };}} /> ;
+  } else {
+    return null;
+  }});
+
+const Under5MortZambia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/zambia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const u5mort = feature.properties.under5_mor;
+    // console.log(fcount)
+    return {
+      color: "#94D2BD",
+      weight: 0, 
+      fillOpacity: u5mort/110,
+      smoothFactor: .1
+    };}}  /> ;
+  } else {
+    return null;
+  }});
+
+  const HandwashingZambia = forwardRef((undefined, povRef) => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState();
+    const getData = async () => {
+      try {const response = await fetch("http://localhost:3000/zambia");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+      } catch (err) {console.error(err.message);}};
+    useEffect(() => { getData();  }, []);
+    if (data) {
+      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        const hw = feature.properties.handwashin;
+     // console.log(fcount)
+      return {
+        color: "#b8a004",
+        weight: 0, 
+        fillOpacity: hw/37,
+        smoothFactor: .1
+      };}}   /> ;
+    } else {
+      return null;
+    }});
+  
+const LiteracyZambia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/zambia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const liter = feature.properties.women_lite;
+     // console.log(fcount)
+      return {
+        color: "#EE9B00",
+        weight: 0, 
+        fillOpacity: liter/80,
+        smoothFactor: .1
+      };}}    /> ;
+  } else {
+    return null;
+  }});
+    
+const ConflictZambia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/zambia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.count_viol;
+      // console.log(fcount)
+        return {
+          color: "#BB3E03",
+          weight: 0, 
+          fillOpacity: viol/10,
+          smoothFactor: .1
+        };}}    /> ;
+  } else {
+    return null;
+  }});
+
+const AgPotentialZambia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/zambia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const potent = feature.properties.agpotentia;
+     // console.log(fcount)
+     const colorWork = () => {
+      if (potent > 0) return  "#354d36"
+      else return "gray"
+     }
+     const opacityWork = () => {
+      if (potent > 0) return  potent/50000
+      else return 1
+     }
+      return {
+        color: colorWork(),
+        weight: 0, 
+        fillOpacity: opacityWork(),
+        smoothFactor: .1
+      };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const TraveltimeZambia = forwardRef((undefined, povRef) => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {const response = await fetch("http://localhost:3000/zambia");
+      const jsonData = await response.json();
+      setData(jsonData[0].json_build_object);
+    } catch (err) {console.error(err.message);}};
+  useEffect(() => { getData();  }, []);
+  if (data) {
+    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      const viol = feature.properties.timeperper;
+      // console.log(fcount)
+       return {
+         color: "#66507d",
+         weight: 0, 
+         fillOpacity: viol/60,
+         smoothFactor: .1
+       };}}     /> ;
+  } else {
+    return null;
+  }});
+
+const ZambiaCountry = () => {
+    // create state variable to hold data when it is fetched
+    const [data, setData] = useState(); 
+    const getData = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/zambia");
+        const jsonData = await response.json();
+        setData(jsonData[0].json_build_object);
+        //console.log(jsonData[0].json_build_object)
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    useEffect(() => {
+      getData();
+    }, []);
+    if (data) {
+      return <GeoJSON data={data}  pathOptions={{opacity:.3, fillColor:'white', color:'#dcdee0', fillOpacity:1, weight:1, smoothFactor:.1}} />;
+    } else {
+      return null;
+    }
+  };
+
+
+
 
 
 // make new leaflet element
@@ -792,6 +3435,7 @@ const LeafletMap = () => {
   const [map, setMap] = useState(null);
   const [position, setPosition] = useState(null);
   const feelRef = useRef()
+  const countryRef = useRef()
   const popRef = useRef()
   const layersRef = useRef();
   const [feelState, setFeeltate] = useState(false);
@@ -817,7 +3461,18 @@ const LeafletMap = () => {
   const [agpotState, setAgpotState] = useState(false);
   const [clickState, setClickState] = useState(false);
   const [infoState, setInfoState] = useState(false);
- 
+  const countryRefGhana = useRef();  const povRefGhana = useRef(); const hungerRefGhana = useRef(); const stuntingRefGhana = useRef(); const wastingRefGhana = useRef();const u5mortRefGhana = useRef(); const conflictRefGhana = useRef();const literacyRefGhana = useRef();const handwashingRefGhana = useRef(); const travRefGhana = useRef(); const agpotRefGhana = useRef();
+  const countryRefLiberia = useRef();const povRefLiberia = useRef();const hungerRefLiberia = useRef();const stuntingRefLiberia = useRef();const wastingRefLiberia = useRef(); const u5mortRefLiberia = useRef(); const conflictRefLiberia = useRef(); const literacyRefLiberia = useRef(); const handwashingRefLiberia = useRef(); const travRefLiberia = useRef(); const agpotRefLiberia = useRef();
+  const countryRefSenegal = useRef(); const povRefSenegal = useRef(); const hungerRefSenegal = useRef(); const stuntingRefSenegal = useRef(); const wastingRefSenegal = useRef(); const u5mortRefSenegal = useRef(); const conflictRefSenegal = useRef(); const literacyRefSenegal = useRef(); const handwashingRefSenegal = useRef(); const travRefSenegal = useRef(); const agpotRefSenegal = useRef();
+  const countryRefKenya = useRef(); const povRefKenya = useRef(); const hungerRefKenya = useRef(); const stuntingRefKenya = useRef(); const wastingRefKenya = useRef(); const u5mortRefKenya = useRef(); const conflictRefKenya = useRef(); const literacyRefKenya = useRef(); const handwashingRefKenya = useRef(); const travRefKenya = useRef(); const agpotRefKenya = useRef();
+  const countryRefMalawi = useRef(); const povRefMalawi = useRef(); const hungerRefMalawi = useRef(); const stuntingRefMalawi = useRef(); const wastingRefMalawi = useRef(); const u5mortRefMalawi = useRef(); const conflictRefMalawi = useRef(); const literacyRefMalawi = useRef(); const handwashingRefMalawi = useRef(); const travRefMalawi = useRef(); const agpotRefMalawi = useRef();
+  const countryRefMadagascar = useRef(); const povRefMadagascar = useRef(); const hungerRefMadagascar = useRef(); const stuntingRefMadagascar = useRef(); const wastingRefMadagascar = useRef(); const u5mortRefMadagascar = useRef(); const conflictRefMadagascar = useRef(); const literacyRefMadagascar = useRef(); const handwashingRefMadagascar = useRef(); const travRefMadagascar = useRef(); const agpotRefMadagascar = useRef();
+  const countryRefMozambique = useRef(); const povRefMozambique = useRef(); const hungerRefMozambique = useRef(); const stuntingRefMozambique = useRef(); const wastingRefMozambique = useRef(); const u5mortRefMozambique = useRef(); const conflictRefMozambique = useRef(); const literacyRefMozambique = useRef(); const handwashingRefMozambique = useRef(); const travRefMozambique = useRef(); const agpotRefMozambique = useRef();
+  const countryRefRwanda = useRef(); const povRefRwanda = useRef(); const hungerRefRwanda = useRef(); const stuntingRefRwanda = useRef(); const wastingRefRwanda = useRef(); const u5mortRefRwanda = useRef(); const conflictRefRwanda = useRef(); const literacyRefRwanda = useRef(); const handwashingRefRwanda = useRef(); const travRefRwanda = useRef(); const agpotRefRwanda = useRef();
+  const countryRefTanzania = useRef(); const povRefTanzania = useRef(); const hungerRefTanzania = useRef(); const stuntingRefTanzania = useRef(); const wastingRefTanzania = useRef(); const u5mortRefTanzania = useRef(); const conflictRefTanzania = useRef(); const literacyRefTanzania = useRef(); const handwashingRefTanzania = useRef(); const travRefTanzania = useRef(); const agpotRefTanzania = useRef();
+  const countryRefZambia = useRef(); const povRefZambia = useRef(); const hungerRefZambia = useRef(); const stuntingRefZambia = useRef(); const wastingRefZambia = useRef(); const u5mortRefZambia = useRef(); const conflictRefZambia = useRef(); const literacyRefZambia = useRef(); const handwashingRefZambia = useRef(); const travRefZambia = useRef(); const agpotRefZambia = useRef();
+  
+  
   const zoomToCountry = () => {
     const mapC = map;
     //mapC.removeLayer(povRef.current)
@@ -827,7 +3482,19 @@ const LeafletMap = () => {
     var lon2 = lonCent(country2)
     var zoom2 = zoomLevelVar(country2)
     mapC.setView([lat2,lon2],zoom2)
+    removeLayers()
     console.log(country2)
+    if (country2 == 'Ghana') {mapC.addLayer(countryRefGhana.current);mapC.addLayer(povRefGhana.current);}
+    else if (country2 == 'Liberia') {mapC.addLayer(countryRefLiberia.current);mapC.addLayer(povRefLiberia.current);}
+    else if (country2 == 'Senegal') {mapC.addLayer(countryRefSenegal.current);mapC.addLayer(povRefSenegal.current);}
+    else if (country2 == 'Kenya') {mapC.addLayer(countryRefKenya.current);mapC.addLayer(povRefKenya.current);}
+    else if (country2 == 'Malawi') {mapC.addLayer(countryRefMalawi.current);mapC.addLayer(povRefMalawi.current);}
+    else if (country2 == 'Madagascar') {mapC.addLayer(countryRefMadagascar.current);mapC.addLayer(povRefMadagascar.current);}
+    else if (country2 == 'Mozambique') {mapC.addLayer(countryRefMozambique.current);mapC.addLayer(povRefMozambique.current);}
+    else if (country2 == 'Rwanda') {mapC.addLayer(countryRefRwanda.current);mapC.addLayer(povRefRwanda.current);}
+    else if (country2 == 'Tanzania') {mapC.addLayer(countryRefTanzania.current);mapC.addLayer(povRefTanzania.current);}
+    else if (country2 == 'Zambia') {mapC.addLayer(countryRefZambia.current);mapC.addLayer(povRefZambia.current);}
+    else {mapC.addLayer(countryRef.current);mapC.addLayer(povRef.current);}
     //var url = urlToQuery()
     //map.remove()
     //LeafletMap()
@@ -845,16 +3512,18 @@ const LeafletMap = () => {
         
   const removeLayers = () => {
           const mapC = map;
-          mapC.removeLayer(hungerRef.current)
-          mapC.removeLayer(povRef.current)
-          mapC.removeLayer(stuntingRef.current)
-          mapC.removeLayer(wastingRef.current)
-          mapC.removeLayer(handwashingRef.current)
-          mapC.removeLayer(conflictRef.current)
-          mapC.removeLayer(literacyRef.current)
-          mapC.removeLayer(agpotRef.current)
-          mapC.removeLayer(travRef.current)
-          mapC.removeLayer(u5mortRef.current)
+          mapC.removeLayer(countryRef.current);mapC.removeLayer(hungerRef.current); mapC.removeLayer(povRef.current);mapC.removeLayer(stuntingRef.current);mapC.removeLayer(wastingRef.current);mapC.removeLayer(handwashingRef.current);mapC.removeLayer(conflictRef.current); mapC.removeLayer(literacyRef.current); mapC.removeLayer(agpotRef.current); mapC.removeLayer(travRef.current);mapC.removeLayer(u5mortRef.current);
+          mapC.removeLayer(countryRefGhana.current);mapC.removeLayer(hungerRefGhana.current); mapC.removeLayer(povRefGhana.current);mapC.removeLayer(stuntingRefGhana.current);mapC.removeLayer(wastingRefGhana.current);mapC.removeLayer(handwashingRefGhana.current);mapC.removeLayer(conflictRefGhana.current); mapC.removeLayer(literacyRefGhana.current); mapC.removeLayer(agpotRefGhana.current); mapC.removeLayer(travRefGhana.current);mapC.removeLayer(u5mortRefGhana.current);
+          mapC.removeLayer(countryRefLiberia.current);mapC.removeLayer(hungerRefLiberia.current); mapC.removeLayer(povRefLiberia.current);mapC.removeLayer(stuntingRefLiberia.current);mapC.removeLayer(wastingRefLiberia.current);mapC.removeLayer(handwashingRefLiberia.current);mapC.removeLayer(conflictRefLiberia.current); mapC.removeLayer(literacyRefLiberia.current); mapC.removeLayer(agpotRefLiberia.current); mapC.removeLayer(travRefLiberia.current);mapC.removeLayer(u5mortRefLiberia.current);
+          mapC.removeLayer(countryRefSenegal.current);mapC.removeLayer(hungerRefSenegal.current); mapC.removeLayer(povRefSenegal.current);mapC.removeLayer(stuntingRefSenegal.current);mapC.removeLayer(wastingRefSenegal.current);mapC.removeLayer(handwashingRefSenegal.current);mapC.removeLayer(conflictRefSenegal.current); mapC.removeLayer(literacyRefSenegal.current); mapC.removeLayer(agpotRefSenegal.current); mapC.removeLayer(travRefSenegal.current);mapC.removeLayer(u5mortRefSenegal.current);
+          mapC.removeLayer(countryRefKenya.current);mapC.removeLayer(hungerRefKenya.current); mapC.removeLayer(povRefKenya.current);mapC.removeLayer(stuntingRefKenya.current);mapC.removeLayer(wastingRefKenya.current);mapC.removeLayer(handwashingRefKenya.current);mapC.removeLayer(conflictRefKenya.current); mapC.removeLayer(literacyRefKenya.current); mapC.removeLayer(agpotRefKenya.current); mapC.removeLayer(travRefKenya.current);mapC.removeLayer(u5mortRefKenya.current);
+          mapC.removeLayer(countryRefMalawi.current);mapC.removeLayer(hungerRefMalawi.current); mapC.removeLayer(povRefMalawi.current);mapC.removeLayer(stuntingRefMalawi.current);mapC.removeLayer(wastingRefMalawi.current);mapC.removeLayer(handwashingRefMalawi.current);mapC.removeLayer(conflictRefMalawi.current); mapC.removeLayer(literacyRefMalawi.current); mapC.removeLayer(agpotRefMalawi.current); mapC.removeLayer(travRefMalawi.current);mapC.removeLayer(u5mortRefMalawi.current);
+          mapC.removeLayer(countryRefMadagascar.current);mapC.removeLayer(hungerRefMadagascar.current); mapC.removeLayer(povRefMadagascar.current);mapC.removeLayer(stuntingRefMadagascar.current);mapC.removeLayer(wastingRefMadagascar.current);mapC.removeLayer(handwashingRefMadagascar.current);mapC.removeLayer(conflictRefMadagascar.current); mapC.removeLayer(literacyRefMadagascar.current); mapC.removeLayer(agpotRefMadagascar.current); mapC.removeLayer(travRefMadagascar.current);mapC.removeLayer(u5mortRefMadagascar.current);
+          mapC.removeLayer(countryRefRwanda.current);mapC.removeLayer(hungerRefRwanda.current); mapC.removeLayer(povRefRwanda.current);mapC.removeLayer(stuntingRefRwanda.current);mapC.removeLayer(wastingRefRwanda.current);mapC.removeLayer(handwashingRefRwanda.current);mapC.removeLayer(conflictRefRwanda.current); mapC.removeLayer(literacyRefRwanda.current); mapC.removeLayer(agpotRefRwanda.current); mapC.removeLayer(travRefRwanda.current);mapC.removeLayer(u5mortRefRwanda.current);
+          mapC.removeLayer(countryRefTanzania.current);mapC.removeLayer(hungerRefTanzania.current); mapC.removeLayer(povRefTanzania.current);mapC.removeLayer(stuntingRefTanzania.current);mapC.removeLayer(wastingRefTanzania.current);mapC.removeLayer(handwashingRefTanzania.current);mapC.removeLayer(conflictRefTanzania.current); mapC.removeLayer(literacyRefTanzania.current); mapC.removeLayer(agpotRefTanzania.current); mapC.removeLayer(travRefTanzania.current);mapC.removeLayer(u5mortRefTanzania.current);
+          mapC.removeLayer(countryRefMozambique.current);mapC.removeLayer(hungerRefMozambique.current); mapC.removeLayer(povRefMozambique.current);mapC.removeLayer(stuntingRefMozambique.current);mapC.removeLayer(wastingRefMozambique.current);mapC.removeLayer(handwashingRefMozambique.current);mapC.removeLayer(conflictRefMozambique.current); mapC.removeLayer(literacyRefMozambique.current); mapC.removeLayer(agpotRefMozambique.current); mapC.removeLayer(travRefMozambique.current);mapC.removeLayer(u5mortRefMozambique.current);
+          mapC.removeLayer(countryRefZambia.current);mapC.removeLayer(hungerRefZambia.current); mapC.removeLayer(povRefZambia.current);mapC.removeLayer(stuntingRefZambia.current);mapC.removeLayer(wastingRefZambia.current);mapC.removeLayer(handwashingRefZambia.current);mapC.removeLayer(conflictRefZambia.current); mapC.removeLayer(literacyRefZambia.current); mapC.removeLayer(agpotRefZambia.current); mapC.removeLayer(travRefZambia.current);mapC.removeLayer(u5mortRefZambia.current);
+        
         }  
 
     const removeOutlines = () => {
@@ -873,17 +3542,29 @@ const LeafletMap = () => {
 
 
   const toggleHunger = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var hungerLayer = hungerRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var hungerLayer = hungerRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var hungerLayer = hungerRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var hungerLayer = hungerRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var hungerLayer = hungerRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var hungerLayer = hungerRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var hungerLayer = hungerRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var hungerLayer = hungerRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var hungerLayer = hungerRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var hungerLayer = hungerRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var hungerLayer = hungerRefZambia.current; var baseLayer = countryRefZambia.current}
     const arr = [hungerState,stuntingState, wastingState, u5mortState,conflictState, literacyState, handwashingState, PovState ]
     const count = arr.filter(Boolean).length
     //console.log(count)
     //console.log(map)
     if (map && hungerRef.current && !hungerState) {
       const mapC = map;
-      const hungerLayer = hungerRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(hungerLayer);
       const feelLayer = feelRef.current;
-      //feelLayer.bringToFront()
+      feelLayer.bringToFront()
       const popLayer = popRef.current
       popLayer.bringToFront()
       setHungerState(!hungerState);
@@ -902,12 +3583,24 @@ const LeafletMap = () => {
    
   };
   const toggleTrav = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var travLayer = travRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var travLayer = travRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var travLayer = travRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var travLayer = travRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var travLayer = travRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var travLayer = travRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var travLayer = travRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var travLayer = travRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var travLayer = travRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var travLayer = travRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var travLayer = travRefZambia.current; var baseLayer = countryRefZambia.current}
     const arr = [hungerState, travState, agpotState, stuntingState, wastingState, u5mortState,conflictState, literacyState, handwashingState, PovState ]
     const count = arr.filter(Boolean).length
     if (map && travRef.current && !travState) {
       const mapC = map;
-      const travLayer = travRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(travLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -926,12 +3619,24 @@ const LeafletMap = () => {
    
   };
   const toggleAgpot = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var agpotLayer = agpotRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var agpotLayer = agpotRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var agpotLayer = agpotRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var agpotLayer = agpotRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var agpotLayer = agpotRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var agpotLayer = agpotRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var agpotLayer = agpotRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var agpotLayer = agpotRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var agpotLayer = agpotRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var agpotLayer = agpotRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var agpotLayer = agpotRefZambia.current; var baseLayer = countryRefZambia.current}
     const arr = [hungerState,stuntingState, wastingState, u5mortState,conflictState, literacyState, handwashingState, PovState ]
     const count = arr.filter(Boolean).length
     if (map && agpotRef.current && !agpotState) {
       const mapC = map;
-      const agpotLayer = agpotRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(agpotLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -951,10 +3656,22 @@ const LeafletMap = () => {
   };
 
   const toggleStunting = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var stuntingLayer = stuntingRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var stuntingLayer = stuntingRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var stuntingLayer = stuntingRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var stuntingLayer = stuntingRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var stuntingLayer = stuntingRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var stuntingLayer = stuntingRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var stuntingLayer = stuntingRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var stuntingLayer = stuntingRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var stuntingLayer = stuntingRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var stuntingLayer = stuntingRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var stuntingLayer = stuntingRefZambia.current; var baseLayer = countryRefZambia.current}
     if (map && stuntingRef.current && !stuntingState) {
        const mapC = map;
-      const stuntingLayer = stuntingRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(stuntingLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -963,7 +3680,6 @@ const LeafletMap = () => {
       document.getElementsByClassName("button4")[0].classList.add("test_skill");
     } else if (map && stuntingRef.current && stuntingState) {
        const mapC = map;
-      const stuntingLayer = stuntingRef.current;
       mapC.removeLayer(stuntingLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -973,10 +3689,22 @@ const LeafletMap = () => {
   };
 
   const toggleWasting = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var wastingLayer = wastingRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var wastingLayer = wastingRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var wastingLayer = wastingRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var wastingLayer = wastingRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var wastingLayer = wastingRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var wastingLayer = wastingRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var wastingLayer = wastingRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var wastingLayer = wastingRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var wastingLayer = wastingRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var wastingLayer = wastingRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var wastingLayer = wastingRefZambia.current; var baseLayer = countryRefZambia.current}
     if (map && wastingRef.current && !wastingState) {
        const mapC = map;
-      const wastingLayer = wastingRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(wastingLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -985,7 +3713,6 @@ const LeafletMap = () => {
       document.getElementsByClassName("button5")[0].classList.add("test_skill");
     } else if (map && wastingRef.current && wastingState) {
        const mapC = map;
-      const wastingLayer = wastingRef.current;
       mapC.removeLayer(wastingLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -995,10 +3722,22 @@ const LeafletMap = () => {
   };
 
   const toggleU5Mort = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var u5mortLayer = u5mortRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var u5mortLayer = u5mortRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var u5mortLayer = u5mortRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var u5mortLayer = u5mortRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var u5mortLayer = u5mortRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var u5mortLayer = u5mortRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var u5mortLayer = u5mortRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var u5mortLayer = u5mortRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var u5mortLayer = u5mortRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var u5mortLayer = u5mortRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var u5mortLayer = u5mortRefZambia.current; var baseLayer = countryRefZambia.current}
     if (map && u5mortRef.current && !u5mortState) {
        const mapC = map;
-      const u5mortLayer = u5mortRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(u5mortLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -1007,7 +3746,6 @@ const LeafletMap = () => {
       document.getElementsByClassName("button6")[0].classList.add("test_skill");
     } else if (map && u5mortRef.current && u5mortState) {
        const mapC = map;
-      const u5mortLayer = u5mortRef.current;
       mapC.removeLayer(u5mortLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -1017,32 +3755,55 @@ const LeafletMap = () => {
   };
 
   const toggleConflict = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var conflictLayer = conflictRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var conflictLayer = conflictRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var conflictLayer = conflictRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var conflictLayer = conflictRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var conflictLayer = conflictRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var conflictLayer = conflictRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var conflictLayer = conflictRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var conflictLayer = conflictRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var conflictLayer = conflictRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var conflictLayer = conflictRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var conflictLayer = conflictRefZambia.current; var baseLayer = countryRefZambia.current}
     if (map && conflictRef.current && !conflictState) {
        const mapC = map;
-      const conflictLayer = conflictRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(conflictLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
       setConflictState(!conflictState);
       removeOutlines()
-      document.getElementsByClassName("button7")[0].classList.add("test_skill");
+      document.getElementsByClassName("button9")[0].classList.add("test_skill");
     } else if (map && conflictRef.current && conflictState) {
        const mapC = map;
-      const conflictLayer = conflictRef.current;
       mapC.removeLayer(conflictLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
       setConflictState(!conflictState);
-      document.getElementsByClassName("button7")[0].classList.remove("test_skill");
+      document.getElementsByClassName("button9")[0].classList.remove("test_skill");
     }
   };
 
   const toggleLiteracy = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var literacyLayer = literacyRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var literacyLayer = literacyRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var literacyLayer = literacyRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var literacyLayer = literacyRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var literacyLayer = literacyRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var literacyLayer = literacyRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var literacyLayer = literacyRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var literacyLayer = literacyRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var literacyLayer = literacyRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var literacyLayer = literacyRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var literacyLayer = literacyRefZambia.current; var baseLayer = countryRefZambia.current}
     if (map && literacyRef.current && !literacyState) {
        const mapC = map;
-      const literacyLayer = literacyRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(literacyLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -1061,16 +3822,28 @@ const LeafletMap = () => {
   };
 
   const toggleHandwashing = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var handwashingLayer = handwashingRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var handwashingLayer = handwashingRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var handwashingLayer = handwashingRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var handwashingLayer = handwashingRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var handwashingLayer = handwashingRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var handwashingLayer = handwashingRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var handwashingLayer = handwashingRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var handwashingLayer = handwashingRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var handwashingLayer = handwashingRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var handwashingLayer = handwashingRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var handwashingLayer = handwashingRefZambia.current; var baseLayer = countryRefZambia.current}
     if (map && handwashingRef.current && !handwashingState) {
        const mapC = map;
-      const handwashingLayer = handwashingRef.current;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(handwashingLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
       setHwashState(!handwashingState);
       removeOutlines()
-      document.getElementsByClassName("button9")[0].classList.add("test_skill");
+      document.getElementsByClassName("button7")[0].classList.add("test_skill");
     } else if (map && handwashingRef.current && handwashingState) {
        const mapC = map;
       const handwashingLayer = handwashingRef.current;
@@ -1078,17 +3851,29 @@ const LeafletMap = () => {
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
       setHwashState(!handwashingState);
-      document.getElementsByClassName("button9")[0].classList.remove("test_skill");
+      document.getElementsByClassName("button7")[0].classList.remove("test_skill");
     }
   };
 
 
 
   const togglePov = () => {
+    const country3 = document.getElementById('country').value
+    if (country3 == 'all') {var povLayer = povRef.current; var baseLayer = countryRef.current}
+    else if (country3 == 'Ghana') {var povLayer = povRefGhana.current; var baseLayer = countryRefGhana.current}
+    else if (country3 == 'Senegal') {var povLayer = povRefSenegal.current; var baseLayer = countryRefSenegal.current}
+    else if (country3 == 'Kenya') {var povLayer = povRefKenya.current; var baseLayer = countryRefKenya.current}
+    else if (country3 == 'Liberia') {var povLayer = povRefLiberia.current; var baseLayer = countryRefLiberia.current}
+    else if (country3 == 'Malawi') {var povLayer = povRefMalawi.current; var baseLayer = countryRefMalawi.current}
+    else if (country3 == 'Madagascar') {var povLayer = povRefMadagascar.current; var baseLayer = countryRefMadagascar.current}
+    else if (country3 == 'Mozambique') {var povLayer = povRefMozambique.current; var baseLayer = countryRefMozambique.current}
+    else if (country3 == 'Rwanda') {var povLayer = povRefRwanda.current; var baseLayer = countryRefRwanda.current}
+    else if (country3 == 'Tanzania') {var povLayer = povRefTanzania.current; var baseLayer = countryRefTanzania.current}
+    else if (country3 == 'Zambia') {var povLayer = povRefZambia.current; var baseLayer = countryRefZambia.current}
     if (map && povRef.current && !PovState) {
-       const mapC = map;
-      const povLayer = povRef.current;
+      const mapC = map;
       removeLayers()
+      mapC.addLayer(baseLayer);
       mapC.addLayer(povLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -1096,8 +3881,7 @@ const LeafletMap = () => {
       removeOutlines()
       document.getElementsByClassName("button10")[0].classList.add("test_skill");
     } else if (map && povRef.current && PovState) {
-       const mapC = map;
-      const povLayer = povRef.current;
+      const mapC = map;
       mapC.removeLayer(povLayer);
       const feelLayer = feelRef.current;
       feelLayer.bringToFront()
@@ -1151,9 +3935,12 @@ const LeafletMap = () => {
       if (map && popRef.current) {
         const mapC = map;
         console.log("I'm fronting2")
-        const feelLayer = popRef.current;
-        mapC.removeLayer(feelLayer);
-        mapC.addLayer(feelLayer);}
+        const popLayer = popRef.current;
+        //const feelLayer = feelRef.current;
+        //mapC.removeLayer(feelLayer);
+        //mapC.addLayer(feelLayer);
+        mapC.removeLayer(popLayer);
+        mapC.addLayer(popLayer);}
      },1000);
    }
 
@@ -1220,8 +4007,10 @@ const LeafletMap = () => {
             url="https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Ortho2019_WebMercator/MapServer/tile/{z}/{y}/{x}"
             opacity={0.5}
             maxZoom={21} />     
-      <KcrestCountries />
       <LayersControl ref={layersRef} position="topright">
+      <LayersControl.Overlay name="Countries - Base" checked>
+          <LayerGroup id='countriesG' ref={countryRef} ><KcrestCountries /></LayerGroup>
+        </LayersControl.Overlay>
         <LayersControl.Overlay name="Poverty" checked>
           <LayerGroup id='povG' ref={povRef} ><Poverty /></LayerGroup>
         </LayersControl.Overlay>
@@ -1258,6 +4047,336 @@ const LeafletMap = () => {
         <LayersControl.Overlay name="Features" checked>
           <FeatureGroup id='popG' ref={popRef} ><KcrestFeaturesFront /></FeatureGroup>
         </LayersControl.Overlay>
+        <LayersControl.Overlay name="Countries - Base" unchecked>
+          <LayerGroup id='countriesGhana' ref={countryRefGhana} ><GhanaCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty" unchecked>
+          <LayerGroup id='povGhana' ref={povRefGhana} ><PovertyGhana /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger" unchecked>
+        <LayerGroup id='hungerGhana' ref={hungerRefGhana} ><HungerGhana /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City" unchecked>
+        <LayerGroup id='travGhana' ref={travRefGhana} ><TraveltimeGhana /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential" unchecked>
+        <LayerGroup id='agGhana' ref={agpotRefGhana} ><AgPotentialGhana /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary" unchecked>
+          <LayerGroup id='stuntingGhana' ref={stuntingRefGhana} ><StuntingGhana /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary" unchecked>
+          <LayerGroup id='wastingGhana' ref={wastingRefGhana} ><WastingGhana /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality" unchecked>
+          <LayerGroup id='u5mortGhana' ref={u5mortRefGhana} ><Under5MortGhana /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events" unchecked>
+          <LayerGroup id='conflictGhana' ref={conflictRefGhana} ><ConflictGhana /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy" unchecked>
+          <LayerGroup id='literacyGhana' ref={literacyRefGhana} ><LiteracyGhana /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station" unchecked>
+          <LayerGroup id='handwashingGhana' ref={handwashingRefGhana} ><HandwashingGhana /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base" unchecked>
+          <LayerGroup id='countriesLiberia' ref={countryRefLiberia} ><LiberiaCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty" unchecked>
+          <LayerGroup id='povLiberia' ref={povRefLiberia} ><PovertyLiberia /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger" unchecked>
+        <LayerGroup id='hungerLiberia' ref={hungerRefLiberia} ><HungerLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City" unchecked>
+        <LayerGroup id='travLiberia' ref={travRefLiberia} ><TraveltimeLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential" unchecked>
+        <LayerGroup id='agLiberia' ref={agpotRefLiberia} ><AgPotentialLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary" unchecked>
+          <LayerGroup id='stuntingLiberia' ref={stuntingRefLiberia} ><StuntingLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary" unchecked>
+          <LayerGroup id='wastingLiberia' ref={wastingRefLiberia} ><WastingLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality" unchecked>
+          <LayerGroup id='u5mortLiberia' ref={u5mortRefLiberia} ><Under5MortLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events" unchecked>
+          <LayerGroup id='conflictLiberia' ref={conflictRefLiberia} ><ConflictLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy" unchecked>
+          <LayerGroup id='literacyLiberia' ref={literacyRefLiberia} ><LiteracyLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station" unchecked>
+          <LayerGroup id='handwashingLiberia' ref={handwashingRefLiberia} ><HandwashingLiberia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base" unchecked>
+          <LayerGroup id='countriesSenegal' ref={countryRefSenegal} ><SenegalCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty" unchecked>
+          <LayerGroup id='povSenegal' ref={povRefSenegal} ><PovertySenegal /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger" unchecked>
+        <LayerGroup id='hungerSenegal' ref={hungerRefSenegal} ><HungerSenegal /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City" unchecked>
+        <LayerGroup id='travSenegal' ref={travRefSenegal} ><TraveltimeSenegal /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential" unchecked>
+        <LayerGroup id='agSenegal' ref={agpotRefSenegal} ><AgPotentialSenegal /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary" unchecked>
+          <LayerGroup id='stuntingSenegal' ref={stuntingRefSenegal} ><StuntingSenegal /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary" unchecked>
+          <LayerGroup id='wastingSenegal' ref={wastingRefSenegal} ><WastingSenegal /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality" unchecked>
+          <LayerGroup id='u5mortSenegal' ref={u5mortRefSenegal} ><Under5MortSenegal /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events" unchecked>
+          <LayerGroup id='conflictSenegal' ref={conflictRefSenegal} ><ConflictSenegal /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy" unchecked>
+          <LayerGroup id='literacySenegal' ref={literacyRefSenegal} ><LiteracySenegal /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station" unchecked>
+          <LayerGroup id='handwashingSenegal' ref={handwashingRefSenegal} ><HandwashingSenegal /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base Kenya" unchecked>
+          <LayerGroup id='countriesKenya' ref={countryRefKenya} ><KenyaCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty Kenya" unchecked>
+          <LayerGroup id='povKenya' ref={povRefKenya} ><PovertyKenya /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger Kenya" unchecked>
+        <LayerGroup id='hungerKenya' ref={hungerRefKenya} ><HungerKenya /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City Kenya" unchecked>
+        <LayerGroup id='travKenya' ref={travRefKenya} ><TraveltimeKenya /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential Kenya" unchecked>
+        <LayerGroup id='agKenya' ref={agpotRefKenya} ><AgPotentialKenya /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary Kenya" unchecked>
+          <LayerGroup id='stuntingKenya' ref={stuntingRefKenya} ><StuntingKenya /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary Kenya" unchecked>
+          <LayerGroup id='wastingKenya' ref={wastingRefKenya} ><WastingKenya /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality Kenya" unchecked>
+          <LayerGroup id='u5mortKenya' ref={u5mortRefKenya} ><Under5MortKenya /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events Kenya" unchecked>
+          <LayerGroup id='conflictKenya' ref={conflictRefKenya} ><ConflictKenya /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy Kenya" unchecked>
+          <LayerGroup id='literacyKenya' ref={literacyRefKenya} ><LiteracyKenya /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station Kenya" unchecked>
+          <LayerGroup id='handwashingKenya' ref={handwashingRefKenya} ><HandwashingKenya /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base Malawi" unchecked>
+          <LayerGroup id='countriesMalawi' ref={countryRefMalawi} ><MalawiCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty Malawi" unchecked>
+          <LayerGroup id='povMalawi' ref={povRefMalawi} ><PovertyMalawi /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger Malawi" unchecked>
+        <LayerGroup id='hungerMalawi' ref={hungerRefMalawi} ><HungerMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City Malawi" unchecked>
+        <LayerGroup id='travMalawi' ref={travRefMalawi} ><TraveltimeMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential Malawi" unchecked>
+        <LayerGroup id='agMalawi' ref={agpotRefMalawi} ><AgPotentialMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary Malawi" unchecked>
+          <LayerGroup id='stuntingMalawi' ref={stuntingRefMalawi} ><StuntingMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary Malawi" unchecked>
+          <LayerGroup id='wastingMalawi' ref={wastingRefMalawi} ><WastingMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality Malawi" unchecked>
+          <LayerGroup id='u5mortMalawi' ref={u5mortRefMalawi} ><Under5MortMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events Malawi" unchecked>
+          <LayerGroup id='conflictMalawi' ref={conflictRefMalawi} ><ConflictMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy Malawi" unchecked>
+          <LayerGroup id='literacyMalawi' ref={literacyRefMalawi} ><LiteracyMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station Malawi" unchecked>
+          <LayerGroup id='handwashingMalawi' ref={handwashingRefMalawi} ><HandwashingMalawi /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base Madagascar" unchecked>
+          <LayerGroup id='countriesMadagascar' ref={countryRefMadagascar} ><MadagascarCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty Madagascar" unchecked>
+          <LayerGroup id='povMadagascar' ref={povRefMadagascar} ><PovertyMadagascar /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger Madagascar" unchecked>
+        <LayerGroup id='hungerMadagascar' ref={hungerRefMadagascar} ><HungerMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City Madagascar" unchecked>
+        <LayerGroup id='travMadagascar' ref={travRefMadagascar} ><TraveltimeMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential Madagascar" unchecked>
+        <LayerGroup id='agMadagascar' ref={agpotRefMadagascar} ><AgPotentialMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary Madagascar" unchecked>
+          <LayerGroup id='stuntingMadagascar' ref={stuntingRefMadagascar} ><StuntingMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary Madagascar" unchecked>
+          <LayerGroup id='wastingMadagascar' ref={wastingRefMadagascar} ><WastingMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality Madagascar" unchecked>
+          <LayerGroup id='u5mortMadagascar' ref={u5mortRefMadagascar} ><Under5MortMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events Madagascar" unchecked>
+          <LayerGroup id='conflictMadagascar' ref={conflictRefMadagascar} ><ConflictMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy Madagascar" unchecked>
+          <LayerGroup id='literacyMadagascar' ref={literacyRefMadagascar} ><LiteracyMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station Madagascar" unchecked>
+          <LayerGroup id='handwashingMadagascar' ref={handwashingRefMadagascar} ><HandwashingMadagascar /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base Mozambique" unchecked>
+          <LayerGroup id='countriesMozambique' ref={countryRefMozambique} ><MozambiqueCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty Mozambique" unchecked>
+          <LayerGroup id='povMozambique' ref={povRefMozambique} ><PovertyMozambique /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger Mozambique" unchecked>
+        <LayerGroup id='hungerMozambique' ref={hungerRefMozambique} ><HungerMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City Mozambique" unchecked>
+        <LayerGroup id='travMozambique' ref={travRefMozambique} ><TraveltimeMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential Mozambique" unchecked>
+        <LayerGroup id='agMozambique' ref={agpotRefMozambique} ><AgPotentialMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary Mozambique" unchecked>
+          <LayerGroup id='stuntingMozambique' ref={stuntingRefMozambique} ><StuntingMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary Mozambique" unchecked>
+          <LayerGroup id='wastingMozambique' ref={wastingRefMozambique} ><WastingMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality Mozambique" unchecked>
+          <LayerGroup id='u5mortMozambique' ref={u5mortRefMozambique} ><Under5MortMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events Mozambique" unchecked>
+          <LayerGroup id='conflictMozambique' ref={conflictRefMozambique} ><ConflictMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy Mozambique" unchecked>
+          <LayerGroup id='literacyMozambique' ref={literacyRefMozambique} ><LiteracyMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station Mozambique" unchecked>
+          <LayerGroup id='handwashingMozambique' ref={handwashingRefMozambique} ><HandwashingMozambique /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base Rwanda" unchecked>
+          <LayerGroup id='countriesRwanda' ref={countryRefRwanda} ><RwandaCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty Rwanda" unchecked>
+          <LayerGroup id='povRwanda' ref={povRefRwanda} ><PovertyRwanda /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger Rwanda" unchecked>
+        <LayerGroup id='hungerRwanda' ref={hungerRefRwanda} ><HungerRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City Rwanda" unchecked>
+        <LayerGroup id='travRwanda' ref={travRefRwanda} ><TraveltimeRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential Rwanda" unchecked>
+        <LayerGroup id='agRwanda' ref={agpotRefRwanda} ><AgPotentialRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary Rwanda" unchecked>
+          <LayerGroup id='stuntingRwanda' ref={stuntingRefRwanda} ><StuntingRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary Rwanda" unchecked>
+          <LayerGroup id='wastingRwanda' ref={wastingRefRwanda} ><WastingRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality Rwanda" unchecked>
+          <LayerGroup id='u5mortRwanda' ref={u5mortRefRwanda} ><Under5MortRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events Rwanda" unchecked>
+          <LayerGroup id='conflictRwanda' ref={conflictRefRwanda} ><ConflictRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy Rwanda" unchecked>
+          <LayerGroup id='literacyRwanda' ref={literacyRefRwanda} ><LiteracyRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station Rwanda" unchecked>
+          <LayerGroup id='handwashingRwanda' ref={handwashingRefRwanda} ><HandwashingRwanda /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base Tanzania" unchecked>
+          <LayerGroup id='countriesTanzania' ref={countryRefTanzania} ><TanzaniaCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty Tanzania" unchecked>
+          <LayerGroup id='povTanzania' ref={povRefTanzania} ><PovertyTanzania /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger Tanzania" unchecked>
+        <LayerGroup id='hungerTanzania' ref={hungerRefTanzania} ><HungerTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City Tanzania" unchecked>
+        <LayerGroup id='travTanzania' ref={travRefTanzania} ><TraveltimeTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential Tanzania" unchecked>
+        <LayerGroup id='agTanzania' ref={agpotRefTanzania} ><AgPotentialTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary Tanzania" unchecked>
+          <LayerGroup id='stuntingTanzania' ref={stuntingRefTanzania} ><StuntingTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary Tanzania" unchecked>
+          <LayerGroup id='wastingTanzania' ref={wastingRefTanzania} ><WastingTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality Tanzania" unchecked>
+          <LayerGroup id='u5mortTanzania' ref={u5mortRefTanzania} ><Under5MortTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events Tanzania" unchecked>
+          <LayerGroup id='conflictTanzania' ref={conflictRefTanzania} ><ConflictTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy Tanzania" unchecked>
+          <LayerGroup id='literacyTanzania' ref={literacyRefTanzania} ><LiteracyTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station Tanzania" unchecked>
+          <LayerGroup id='handwashingTanzania' ref={handwashingRefTanzania} ><HandwashingTanzania /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Countries - Base Zambia" unchecked>
+          <LayerGroup id='countriesZambia' ref={countryRefZambia} ><ZambiaCountry /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Poverty Zambia" unchecked>
+          <LayerGroup id='povZambia' ref={povRefZambia} ><PovertyZambia /></LayerGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Hunger Zambia" unchecked>
+        <LayerGroup id='hungerZambia' ref={hungerRefZambia} ><HungerZambia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Avg. Travel Time to Nearest City Zambia" unchecked>
+        <LayerGroup id='travZambia' ref={travRefZambia} ><TraveltimeZambia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Agricultural Potential Zambia" unchecked>
+        <LayerGroup id='agZambia' ref={agpotRefZambia} ><AgPotentialZambia /></LayerGroup>
+          </LayersControl.Overlay>
+        <LayersControl.Overlay name="Stunting Summary Zambia" unchecked>
+          <LayerGroup id='stuntingZambia' ref={stuntingRefZambia} ><StuntingZambia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Wasting Summary Zambia" unchecked>
+          <LayerGroup id='wastingZambia' ref={wastingRefZambia} ><WastingZambia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Under 5 Mortality Zambia" unchecked>
+          <LayerGroup id='u5mortZambia' ref={u5mortRefZambia} ><Under5MortZambia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Conflict Events Zambia" unchecked>
+          <LayerGroup id='conflictZambia' ref={conflictRefZambia} ><ConflictZambia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Women's Literacy Zambia" unchecked>
+          <LayerGroup id='literacyZambia' ref={literacyRefZambia} ><LiteracyZambia /></LayerGroup>
+          </LayersControl.Overlay>
+          <LayersControl.Overlay name="Access to Basic Handwashing Station Zambia" unchecked>
+          <LayerGroup id='handwashingZambia' ref={handwashingRefZambia} ><HandwashingZambia /></LayerGroup>
+          </LayersControl.Overlay>
       </LayersControl>
       <PointsToFront/>
       <Search provider={new OpenStreetMapProvider({ })} />
@@ -1285,10 +4404,7 @@ const LeafletMap = () => {
     <i style={{background:"#BB3E03"}}></i><span2>Count of Conflict Events</span2><br></br>
     <i style={{background:"#354d36"}}></i><span2>Agricultural Potential</span2><br></br>
     <i style={{background:"#66507d"}}></i><span2>Avg. Travel Time to Cities</span2><br></br>
-    <i class="i2" style={{background:"#363533"}}></i><span2>Points of Interest</span2><br></br>
-    <text class="i3" style={{color:"#ab985e", fontWeight:"bold", fontSize:"20px"}}>- - </text><span2>Trails</span2><br></br>
-    <i class="i4" style={{background:"gray"}}></i><span2>Roads</span2><br></br>
-
+    <i style={{background:"#gray"}}></i><span2>No Data Available</span2><br></br>
     </div>
     </>
   );
