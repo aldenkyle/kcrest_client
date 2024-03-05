@@ -11,6 +11,7 @@
     "react": "^18.2.0",
     "react-leaflet": "^4.2.1",
     "react-scripts": "^5.0.1",
+    "serve": "^14.2.1",
     "web-vitals": "^3.5.0"
   },
   "name": "client",
@@ -18,10 +19,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "npm run build"
   },
   "author": "",
   "license": "ISC",
