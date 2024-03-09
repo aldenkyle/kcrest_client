@@ -1,6 +1,6 @@
 import { React, useState, useEffect, useRef, cloneElement,forwardRef } from "react";
 import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,useMap,FeatureGroup, Marker, LayerGroup,Tooltip } from "react-leaflet";
-import { onEachTrail,LocationFinderDummy ,getFeelColor,getHexColor,onEachRoad,onEachContour, onEachHex} from "./maputils";
+import { BuildScenarioOne} from "./maputils";
 //import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 import "leaflet-easybutton/src/easy-button.js";
@@ -16,6 +16,100 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
 
+export const handleFeatureClick = (e) => {
+  //console.log("clikced marker", e)
+  console.log("clikced marker", e.layer.options.opacity)
+  //e.layer.options.fillOpacity = 1
+  //e.layer.options.color = "black"
+  const layer = e.target;
+
+  layer.setStyle({ opacity:1, color: "red" });
+};
+
+
+export function onEachHex(trail, layer) {
+  const adm0 = trail.properties.adm0_name;
+  const adm1 = trail.properties.adm1_name;
+  const adm2 = trail.properties.adm2_name;
+  const popP = trail.properties.pop_ls_1.toFixed(0);
+  const stuntingP = trail.properties.stunting_1.toFixed(1);
+  const povertyP = trail.properties.gsap_pov21;
+  const hungerP = trail.properties.hunger_1;
+  const wastingP = trail.properties.wasting_1;
+  const under5mortP = trail.properties.under5_mor;
+  const accesstoHWP = trail.properties.handwashin.toFixed(1);
+  const travTimeP = trail.properties.timeperper.toFixed(1);
+  const agPotP = trail.properties.agpotentia;
+  const conflictP = trail.properties.count_viol;
+  const literacWP = trail.properties.women_lite.toFixed(1);
+  const hungerSource = trail.properties.hungersour;
+  //console.log(countryName);
+  layer.bindPopup("<b>"+ adm0 + " | " + adm1+ " | " + adm2 + "</b><br>Est. Population 2022 (Landscan): <span style='color:black;font-weight:bold'>"+ popP + "</span><br>Prevalence of Poverty ($2.15/day, GSAP): <span style='color:#9B2226;font-weight:bold'>"+ povertyP + "%</span><br>Prevalence of Stunting (DHS): <span style='color:#005F73;font-weight:bold'>"+ stuntingP + "%</span><br> Hunger: <span style='color:#3C4F76;font-weight:bold'>"+ hungerP + "%</span><br>Prevalence of Wasting (DHS): <span style='color:#0A9396;font-weight:bold'>"+ wastingP + "%</span><br>Under 5 Mortality per 100,000 (DHS): <span style='color:#94D2BD;font-weight:bold'>"+ under5mortP + "</span><br> Count of Violence Events (ACLED): <span style='color:#BB3E03;font-weight:bold'>"+ conflictP + "</span><br>Access to Basic Handwashing (DHS): <span style='color:#b8a004;font-weight:bold'>"+ accesstoHWP + "%</span><br>Percent of Women Literate (DHS): <span style='color:#EE9B00;font-weight:bold'>"+ literacWP + "%</span><br>Avg. Minutes in Travel Time to a City: <span style='color:#66507d;font-weight:bold'>"+ travTimeP + "</span><br>Potential Agricultural Growth (FAO): <span style='color:#354d36;font-weight:bold'>"+ agPotP + "</span>"  );
+}
+
+export function getStyle(feature) {
+  return {
+      weight: .3,
+      opacity: .3,
+      fillcolor: 'red',
+      fillOpacity: 0,
+      color: '#dcdee0',
+      smoothFactor:.1
+  };
+}
+
+var scenario = 0
+var scen1_population = 0
+var scen1_idlist = []
+
+export function scenario1() {
+  scenario = 1
+}
+
+export function highlightFeature(e) {
+  if (scenario == 1) {
+  if (scen1_idlist.includes(e.sourceTarget.feature.properties.adm2_id)) {
+    var layer = e.target;
+    layer.setStyle({
+      weight: .3,
+      opacity: .3,
+      fillcolor: 'red',
+      fillOpacity: 0,
+      color: '#dcdee0',
+      smoothFactor:.1
+    })
+    scen1_idlist = scen1_idlist.filter(item => item != e.sourceTarget.feature.properties.adm2_id);
+    scen1_population = scen1_population - e.sourceTarget.feature.properties.pop_ls_1;
+    console.log(scen1_idlist)
+    console.log(scen1_population)
+  }
+  else {
+  var layer = e.target;
+  console.log(e)
+
+  layer.setStyle({
+      weight: 2,
+      color: 'black',
+      dashArray: '',
+      fillOpacity: 0.5
+  });
+
+  layer.bringToFront();
+  scen1_idlist.push(e.sourceTarget.feature.properties.adm2_id)
+  scen1_population = scen1_population + e.sourceTarget.feature.properties.pop_ls_1
+  console.log(scen1_idlist)
+  console.log(scen1_population)
+}}}
+
+function resetHighlight(e) {
+  geojson.resetStyle(e.target);
+}
+
+function onEachFeature(feature, layer) {
+  layer.on({
+      click: highlightFeature
+  });
+}
 
 
 
@@ -169,7 +263,6 @@ const KcrestCountries = () => {
 const KcrestFeaturesFront = () => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
-
   const getData = async () => {
     try {
       const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
@@ -188,10 +281,10 @@ const KcrestFeaturesFront = () => {
     getData();
   }, []);
   //console.log( data );
-
+  const scenarioRef = useRef()
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return <GeoJSON data={data}  onEachFeature={onEachHex}  pathOptions={{opacity:0, fillColor:'white', color:'#dcdee0', fillOpacity:0, weight:1, smoothFactor:.1}} />;
+    return <GeoJSON data={data} ref={scenarioRef} onEachFeature={onEachFeature} style={getStyle} />;
   } else {
     return null;
   }
@@ -319,7 +412,7 @@ const Stunting = forwardRef((undefined, povRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
      // console.log(fcount)
       return {
@@ -366,7 +459,7 @@ const Wasting = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
      // console.log(fcount)
       return {
@@ -414,7 +507,7 @@ const Under5Mort = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
      // console.log(fcount)
       return {
@@ -461,7 +554,7 @@ const Conflict = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
      // console.log(fcount)
       return {
@@ -509,7 +602,7 @@ const Literacy = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}   style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -557,7 +650,7 @@ const Handwashing = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -605,7 +698,7 @@ const AgPotential = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
     const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -662,7 +755,7 @@ const Traveltime = forwardRef((undefined, wastingRef) => {
 
   // render react-leaflet GeoJSON when the data is ready
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
      // console.log(fcount)
       return {
@@ -696,7 +789,7 @@ const Poverty = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const poverty = feature.properties.gsap_pov21;
       return {
         color: "#9B2226",
@@ -719,7 +812,7 @@ const PovertyGhana = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -741,7 +834,7 @@ const HungerGhana = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -772,7 +865,7 @@ const StuntingGhana = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -795,7 +888,7 @@ const WastingGhana = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -818,7 +911,7 @@ const Under5MortGhana = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -841,7 +934,7 @@ const Under5MortGhana = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -864,7 +957,7 @@ const LiteracyGhana = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -887,7 +980,7 @@ const ConflictGhana = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -910,7 +1003,7 @@ const AgPotentialGhana = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -941,7 +1034,7 @@ const TraveltimeGhana = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -987,7 +1080,7 @@ const GhanaCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -1009,7 +1102,7 @@ const HungerLiberia = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -1040,7 +1133,7 @@ const StuntingLiberia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -1063,7 +1156,7 @@ const WastingLiberia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -1086,7 +1179,7 @@ const Under5MortLiberia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -1109,7 +1202,7 @@ const Under5MortLiberia = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -1132,7 +1225,7 @@ const LiteracyLiberia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -1155,7 +1248,7 @@ const ConflictLiberia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -1178,7 +1271,7 @@ const AgPotentialLiberia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -1209,7 +1302,7 @@ const TraveltimeLiberia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -1255,7 +1348,7 @@ const LiberiaCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -1277,7 +1370,7 @@ const HungerSenegal = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -1308,7 +1401,7 @@ const StuntingSenegal = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -1331,7 +1424,7 @@ const WastingSenegal = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -1354,7 +1447,7 @@ const Under5MortSenegal = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -1377,7 +1470,7 @@ const Under5MortSenegal = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -1400,7 +1493,7 @@ const LiteracySenegal = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -1423,7 +1516,7 @@ const ConflictSenegal = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -1446,7 +1539,7 @@ const AgPotentialSenegal = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -1477,7 +1570,7 @@ const TraveltimeSenegal = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -1525,7 +1618,7 @@ const SenegalCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -1547,7 +1640,7 @@ const HungerKenya = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -1578,7 +1671,7 @@ const StuntingKenya = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -1601,7 +1694,7 @@ const WastingKenya = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -1624,7 +1717,7 @@ const Under5MortKenya = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -1647,7 +1740,7 @@ const Under5MortKenya = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -1670,7 +1763,7 @@ const LiteracyKenya = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -1693,7 +1786,7 @@ const ConflictKenya = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -1716,7 +1809,7 @@ const AgPotentialKenya = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -1747,7 +1840,7 @@ const TraveltimeKenya = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -1795,7 +1888,7 @@ const KenyaCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -1817,7 +1910,7 @@ const HungerMalawi = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -1848,7 +1941,7 @@ const StuntingMalawi = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -1871,7 +1964,7 @@ const WastingMalawi = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -1894,7 +1987,7 @@ const Under5MortMalawi = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -1917,7 +2010,7 @@ const Under5MortMalawi = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -1940,7 +2033,7 @@ const LiteracyMalawi = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -1963,7 +2056,7 @@ const ConflictMalawi = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -1986,7 +2079,7 @@ const AgPotentialMalawi = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -2017,7 +2110,7 @@ const TraveltimeMalawi = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -2065,7 +2158,7 @@ const MalawiCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -2087,7 +2180,7 @@ const HungerMadagascar = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -2118,7 +2211,7 @@ const StuntingMadagascar = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -2141,7 +2234,7 @@ const WastingMadagascar = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -2164,7 +2257,7 @@ const Under5MortMadagascar = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -2187,7 +2280,7 @@ const Under5MortMadagascar = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -2210,7 +2303,7 @@ const LiteracyMadagascar = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -2233,7 +2326,7 @@ const ConflictMadagascar = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -2256,7 +2349,7 @@ const AgPotentialMadagascar = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -2287,7 +2380,7 @@ const TraveltimeMadagascar = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -2335,7 +2428,7 @@ const MadagascarCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -2357,7 +2450,7 @@ const HungerMozambique = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -2388,7 +2481,7 @@ const StuntingMozambique = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -2411,7 +2504,7 @@ const WastingMozambique = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -2434,7 +2527,7 @@ const Under5MortMozambique = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -2457,7 +2550,7 @@ const Under5MortMozambique = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -2480,7 +2573,7 @@ const LiteracyMozambique = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -2503,7 +2596,7 @@ const ConflictMozambique = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -2526,7 +2619,7 @@ const AgPotentialMozambique = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -2557,7 +2650,7 @@ const TraveltimeMozambique = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -2605,7 +2698,7 @@ const MozambiqueCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -2627,7 +2720,7 @@ const HungerRwanda = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -2658,7 +2751,7 @@ const StuntingRwanda = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -2681,7 +2774,7 @@ const WastingRwanda = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -2704,7 +2797,7 @@ const Under5MortRwanda = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -2727,7 +2820,7 @@ const Under5MortRwanda = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -2750,7 +2843,7 @@ const LiteracyRwanda = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -2773,7 +2866,7 @@ const ConflictRwanda = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -2796,7 +2889,7 @@ const AgPotentialRwanda = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -2827,7 +2920,7 @@ const TraveltimeRwanda = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -2875,7 +2968,7 @@ const RwandaCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -2897,7 +2990,7 @@ const HungerTanzania = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -2928,7 +3021,7 @@ const StuntingTanzania = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -2951,7 +3044,7 @@ const WastingTanzania = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -2974,7 +3067,7 @@ const Under5MortTanzania = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -2997,7 +3090,7 @@ const Under5MortTanzania = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -3020,7 +3113,7 @@ const LiteracyTanzania = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -3043,7 +3136,7 @@ const ConflictTanzania = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -3066,7 +3159,7 @@ const AgPotentialTanzania = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -3097,7 +3190,7 @@ const TraveltimeTanzania = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -3145,7 +3238,7 @@ const TanzaniaCountry = () => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const poverty = feature.properties.gsap_pov21;
         return {
           color: "#9B2226",
@@ -3167,7 +3260,7 @@ const HungerZambia = forwardRef((undefined, povRef) => {
         } catch (err) {console.error(err.message);}};
       useEffect(() => { getData();  }, []);
       if (data) {
-        return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+        return  <GeoJSON data={data}  style={(feature) => {
           const hunger = feature.properties.hunger_1;
       const colorWork = () => {
         if (hunger > 0) return  "#3C4F76"
@@ -3198,7 +3291,7 @@ const StuntingZambia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const stunting = feature.properties.stunting_1;
       // console.log(fcount)
        return {
@@ -3221,7 +3314,7 @@ const WastingZambia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
@@ -3244,7 +3337,7 @@ const Under5MortZambia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const u5mort = feature.properties.under5_mor;
     // console.log(fcount)
     return {
@@ -3267,7 +3360,7 @@ const Under5MortZambia = forwardRef((undefined, povRef) => {
       } catch (err) {console.error(err.message);}};
     useEffect(() => { getData();  }, []);
     if (data) {
-      return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+      return  <GeoJSON data={data}  style={(feature) => {
         const hw = feature.properties.handwashin;
      // console.log(fcount)
       return {
@@ -3290,7 +3383,7 @@ const LiteracyZambia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const liter = feature.properties.women_lite;
      // console.log(fcount)
       return {
@@ -3313,7 +3406,7 @@ const ConflictZambia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.count_viol;
       // console.log(fcount)
         return {
@@ -3336,7 +3429,7 @@ const AgPotentialZambia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const potent = feature.properties.agpotentia;
      // console.log(fcount)
      const colorWork = () => {
@@ -3367,7 +3460,7 @@ const TraveltimeZambia = forwardRef((undefined, povRef) => {
     } catch (err) {console.error(err.message);}};
   useEffect(() => { getData();  }, []);
   if (data) {
-    return  <GeoJSON data={data}  onEachFeature={onEachHex}  style={(feature) => {
+    return  <GeoJSON data={data}  style={(feature) => {
       const viol = feature.properties.timeperper;
       // console.log(fcount)
        return {
@@ -3501,9 +3594,7 @@ const LeafletMap = () => {
   }  
   
   const toggle=(clickState)=>{
-      //console.log(clickState)
       setClickState(!clickState)};
-      //console.log(clickState)
 
   const toggleInfo=()=>{
         setInfoState(!infoState)};
@@ -3890,6 +3981,16 @@ const LeafletMap = () => {
     }
   };
 
+
+const addScenarioButtons = () => {
+    var x = document.getElementById("scenario-div");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }}
+
+
   const addInfo = () => {
   var x = document.getElementById("info-div");
   if (x.style.display === "none") {
@@ -3907,24 +4008,11 @@ const LeafletMap = () => {
       x.style.display = "none";
     }}
   
-
-  useEffect(() => {
-    if (!map) return;
-    //const map = mapRef.current;
-    L.easyButton("fa-crosshairs", () => {
-      map.locate().on("locationfound", function (e) {
-        setPosition(e.latlng);
-        map.flyTo(e.latlng, 18);
-      });
-    }).addTo(map);
-
-  }, [map]);
-
   useEffect(() => {
     if (!map) return;
     //const map = mapRef.current;
     L.easyButton( "fa-map-marker", () => {
-      setClickState(!clickState);
+      addScenarioButtons()
     }).addTo(map);
 
   }, [map]);
@@ -3969,7 +4057,6 @@ const LeafletMap = () => {
     var country = 'all';
     }
 
-  //console.log("in LM" + JSON.stringify(clickState.tog))
   const [center, setCenter] = useState({ lat: latCent(country), lng: lonCent(country) });
   const zoomLevel = zoomLevelVar(country);
   return (
@@ -3995,7 +4082,7 @@ const LeafletMap = () => {
       </div>
 
     <MapContainer  ref={setMap} center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1}  >  
-    <LocationFinderDummy tog={clickState} />
+    <BuildScenarioOne tog={clickState} />
       {/*The LayersControl tag help us organize our layers into baselayers and tilelayers*/}
       <TileLayer
             attribution='Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
@@ -4045,7 +4132,7 @@ const LeafletMap = () => {
           <FeatureGroup id='countG' ref={feelRef} ><KcrestCountriesFront /></FeatureGroup>
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Features" checked>
-          <FeatureGroup id='popG' ref={popRef} ><KcrestFeaturesFront /></FeatureGroup>
+          <FeatureGroup id='popG' ref={popRef}  ><KcrestFeaturesFront /></FeatureGroup>
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Countries - Base" unchecked>
           <LayerGroup id='countriesGhana' ref={countryRefGhana} ><GhanaCountry /></LayerGroup>
@@ -4383,6 +4470,12 @@ const LeafletMap = () => {
     </MapContainer>
     <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}This tool allows international development practitioners to develop scenarios regarding where they will target international development programs. The tool will also allow users to visualize several key development indicators and summarize them across subsets of administrative areas in their countries of interest. Finally, it will allow users to save scenarios so that they can retrieve those scenarios and review them multiple times. The goal is to ensure that development practitioners have easy access to, and are using, high quality quantitative data as a determinant in their decision making about where to invest their limited resources.  If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com{"\n "}</text></div> 
     <div id="bottom-desc" style={{zIndex: 19999, position: "absolute", bottom: 36, left: 1, width: "100%", textAlign: "center"}}>
+      <div id= "scenario-div" style={{display:"none"}} >
+    <button class="button button14"  onClick={scenario1} type="button">Create Scenario 1</button>   
+    <button class="button button15"  onClick={toggleHunger} type="button">Create Scenario 2</button> 
+    <button class="button button16"  onClick={toggleStunting} type="button">Clear Current Scenario</button> 
+    <button class="button button17"  onClick={toggleStunting} type="button">Run Analysis</button> 
+      </div>
     <button class="button button10"  onClick={togglePov} type="button">Poverty</button>   
     <button class="button button3"  onClick={toggleHunger} type="button">Hunger</button> 
     <button class="button button4"  onClick={toggleStunting} type="button">Stunting</button> 
