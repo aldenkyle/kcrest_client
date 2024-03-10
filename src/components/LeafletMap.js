@@ -1,5 +1,6 @@
-import { React, useState, useEffect, useRef, cloneElement,forwardRef } from "react";
-import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,useMap,FeatureGroup, Marker, LayerGroup,Tooltip } from "react-leaflet";
+import { React, useState, useEffect, useRef, cloneElement,forwardRef, useMemo, useCallback,   } from "react";
+import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,useMap,FeatureGroup, useMapEvent,LayerGroup,Tooltip,Rectangle } from "react-leaflet";
+import { useEventHandlers } from '@react-leaflet/core'
 import { BuildScenarioOne} from "./maputils";
 //import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
@@ -10,7 +11,9 @@ import { GoogleProvider, OpenStreetMapProvider, GeoSearchControl } from 'leaflet
 import 'leaflet-geosearch/dist/geosearch.css';
 import icon from 'leaflet/dist/images/marker-icon.png';
 
-
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 //It is important to import leaflet styles in your component
 import "leaflet/dist/leaflet.css";
@@ -26,23 +29,79 @@ export const handleFeatureClick = (e) => {
   layer.setStyle({ opacity:1, color: "red" });
 };
 
+const POSITION_CLASSES = {
+  bottomleft: 'leaflet-bottom leaflet-left',
+  bottomright: 'leaflet-bottom leaflet-right',
+  topleft: 'leaflet-top leaflet-left',
+  topright: 'leaflet-top leaflet-right',
+}
 
-export function onEachHex(trail, layer) {
-  const adm0 = trail.properties.adm0_name;
-  const adm1 = trail.properties.adm1_name;
-  const adm2 = trail.properties.adm2_name;
-  const popP = trail.properties.pop_ls_1.toFixed(0);
-  const stuntingP = trail.properties.stunting_1.toFixed(1);
-  const povertyP = trail.properties.gsap_pov21;
-  const hungerP = trail.properties.hunger_1;
-  const wastingP = trail.properties.wasting_1;
-  const under5mortP = trail.properties.under5_mor;
-  const accesstoHWP = trail.properties.handwashin.toFixed(1);
-  const travTimeP = trail.properties.timeperper.toFixed(1);
-  const agPotP = trail.properties.agpotentia;
-  const conflictP = trail.properties.count_viol;
-  const literacWP = trail.properties.women_lite.toFixed(1);
-  const hungerSource = trail.properties.hungersour;
+export function onMouseOut2() {
+  var ttdiv = document.getElementById('tooltip2')
+  ttdiv.innerHTML = "Hover over any administrative unit for details"
+}
+
+export function onEachHex(e, layer) {
+  var layer = e.target
+  const adm0 = e.sourceTarget.feature.properties.adm0_name;
+  const adm1 = e.sourceTarget.feature.properties.adm1_name;
+  const adm2 = e.sourceTarget.feature.properties.adm2_name;
+  const popP = e.sourceTarget.feature.properties.pop_ls_1.toFixed(0);
+  const stuntingP = e.sourceTarget.feature.properties.stunting_1.toFixed(1);
+  const povertyP = e.sourceTarget.feature.properties.gsap_pov21;
+  const hungerP = e.sourceTarget.feature.properties.hunger_1;
+  const wastingP = e.sourceTarget.feature.properties.wasting_1;
+  const under5mortP = e.sourceTarget.feature.properties.under5_mor;
+  const accesstoHWP = e.sourceTarget.feature.properties.handwashin.toFixed(1);
+  const travTimeP = e.sourceTarget.feature.properties.timeperper.toFixed(1);
+  const agPotP = e.sourceTarget.feature.properties.agpotentia;
+  const conflictP = e.sourceTarget.feature.properties.count_viol;
+  const literacWP = e.sourceTarget.feature.properties.women_lite.toFixed(1);
+  const hungerSource = e.sourceTarget.feature.properties.hungersour;
+  //console.log(countryName);
+  var ttdiv = document.getElementById('tooltip2')
+  ttdiv.innerHTML = "<b>"+ adm0 + " | " + adm1+ " | " + adm2 + "</b><br>Est. Population 2022 (Landscan): <span style='color:black;font-weight:bold'>"+ popP + "</span><br>Prevalence of Poverty ($2.15/day, GSAP): <span style='color:#9B2226;font-weight:bold'>"+ povertyP + "%</span><br>Prevalence of Stunting (DHS): <span style='color:#005F73;font-weight:bold'>"+ stuntingP + "%</span><br> Hunger: <span style='color:#3C4F76;font-weight:bold'>"+ hungerP + "%</span><br>Prevalence of Wasting (DHS): <span style='color:#0A9396;font-weight:bold'>"+ wastingP + "%</span><br>Under 5 Mortality per 100,000 (DHS): <span style='color:#94D2BD;font-weight:bold'>"+ under5mortP + "</span><br> Count of Violence Events (ACLED): <span style='color:#BB3E03;font-weight:bold'>"+ conflictP + "</span><br>Access to Basic Handwashing (DHS): <span style='color:#b8a004;font-weight:bold'>"+ accesstoHWP + "%</span><br>Percent of Women Literate (DHS): <span style='color:#EE9B00;font-weight:bold'>"+ literacWP + "%</span><br>Avg. Minutes in Travel Time to a City: <span style='color:#66507d;font-weight:bold'>"+ travTimeP + "</span><br>Potential Agricultural Growth (FAO): <span style='color:#354d36;font-weight:bold'>"+ agPotP + "</span>"
+}
+
+
+
+function ToolTipControl({ position }) {
+  const parentMap = useMap()
+
+  // Memoize the minimap so it's not affected by position changes
+  const minimap = useMemo(
+    () => (
+    <div id="tooltip2" ><text class="p1">Hover over any location to see details.</text></div> 
+    ),
+    [],
+  )
+
+  const positionClass =
+    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright
+  return (
+    <div className={positionClass}>
+      <div className="leaflet-control leaflet-bar">{minimap}</div>
+    </div>
+  )
+}
+
+export function onEachHex2(e, layer) {
+  var layer = e.target
+  const adm0 = e.sourceTarget.feature.properties.adm0_name;
+  const adm1 = e.sourceTarget.feature.properties.adm1_name;
+  const adm2 = e.sourceTarget.feature.properties.adm2_name;
+  const popP = e.sourceTarget.feature.properties.pop_ls_1.toFixed(0);
+  const stuntingP = e.sourceTarget.feature.properties.stunting_1.toFixed(1);
+  const povertyP = e.sourceTarget.feature.properties.gsap_pov21;
+  const hungerP = e.sourceTarget.feature.properties.hunger_1;
+  const wastingP = e.sourceTarget.feature.properties.wasting_1;
+  const under5mortP = e.sourceTarget.feature.properties.under5_mor;
+  const accesstoHWP = e.sourceTarget.feature.properties.handwashin.toFixed(1);
+  const travTimeP = e.sourceTarget.feature.properties.timeperper.toFixed(1);
+  const agPotP = e.sourceTarget.feature.properties.agpotentia;
+  const conflictP = e.sourceTarget.feature.properties.count_viol;
+  const literacWP = e.sourceTarget.feature.properties.women_lite.toFixed(1);
+  const hungerSource = e.sourceTarget.feature.properties.hungersour;
   //console.log(countryName);
   layer.bindPopup("<b>"+ adm0 + " | " + adm1+ " | " + adm2 + "</b><br>Est. Population 2022 (Landscan): <span style='color:black;font-weight:bold'>"+ popP + "</span><br>Prevalence of Poverty ($2.15/day, GSAP): <span style='color:#9B2226;font-weight:bold'>"+ povertyP + "%</span><br>Prevalence of Stunting (DHS): <span style='color:#005F73;font-weight:bold'>"+ stuntingP + "%</span><br> Hunger: <span style='color:#3C4F76;font-weight:bold'>"+ hungerP + "%</span><br>Prevalence of Wasting (DHS): <span style='color:#0A9396;font-weight:bold'>"+ wastingP + "%</span><br>Under 5 Mortality per 100,000 (DHS): <span style='color:#94D2BD;font-weight:bold'>"+ under5mortP + "</span><br> Count of Violence Events (ACLED): <span style='color:#BB3E03;font-weight:bold'>"+ conflictP + "</span><br>Access to Basic Handwashing (DHS): <span style='color:#b8a004;font-weight:bold'>"+ accesstoHWP + "%</span><br>Percent of Women Literate (DHS): <span style='color:#EE9B00;font-weight:bold'>"+ literacWP + "%</span><br>Avg. Minutes in Travel Time to a City: <span style='color:#66507d;font-weight:bold'>"+ travTimeP + "</span><br>Potential Agricultural Growth (FAO): <span style='color:#354d36;font-weight:bold'>"+ agPotP + "</span>"  );
 }
@@ -57,14 +116,43 @@ export function getStyle(feature) {
       smoothFactor:.1
   };
 }
-
+ //set up a bunch of vars!
 var scenario = 0
 var scen1_population = 0
+var scen1_povest = 0
+var scen1_hungest = 0
+var scen1_stuntest = 0
+var scen1_wastest = 0
+var scen1_u5mortest = 0
+var scen1_accesstoHWest = 0
+var scen1_womensLitest = 0
+var scen1_conflictEventsEst = 0
+var scen1_agPotentialEst = 0
+var scen1_avgTravTimeEst = 0
+var scen1_Admins = ""
+var scen1_pop_initial = 0
 var scen1_idlist = []
+var admincomb = ""
+var scen2_population = 0
+var scen2_povest = 0
+var scen2_hungest = 0
+var scen2_stuntest = 0
+var scen2_wastest = 0
+var scen2_u5mortest = 0
+var scen2_accesstoHWest = 0
+var scen2_womensLitest = 0
+var scen2_conflictEventsEst = 0
+var scen2_agPotentialEst = 0
+var scen2_avgTravTimeEst = 0
+var scen2_Admins = ""
+var scen2_pop_initial = 0
+var scen2_idlist = []
 
-export function scenario1() {
-  scenario = 1
-}
+
+
+export function addTooltip(e) {
+     onEachHex(e);}
+
 
 export function highlightFeature(e) {
   if (scenario == 1) {
@@ -79,9 +167,32 @@ export function highlightFeature(e) {
       smoothFactor:.1
     })
     scen1_idlist = scen1_idlist.filter(item => item != e.sourceTarget.feature.properties.adm2_id);
+    scen1_pop_initial = scen1_population
     scen1_population = scen1_population - e.sourceTarget.feature.properties.pop_ls_1;
-    console.log(scen1_idlist)
-    console.log(scen1_population)
+    scen1_hungest = 100*((((scen1_hungest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.hunger_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
+    scen1_povest = 100*((((scen1_povest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.gsap_pov21/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
+    scen1_stuntest = 100*((((scen1_stuntest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.stunting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
+    scen1_wastest = 100*((((scen1_wastest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.wasting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
+    scen1_u5mortest = 100*((((scen1_u5mortest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.under5_mor/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
+    scen1_accesstoHWest = 100*((((scen1_accesstoHWest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
+    scen1_womensLitest = 100*((((scen1_womensLitest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
+    scen1_conflictEventsEst = scen1_conflictEventsEst - e.sourceTarget.feature.properties.count_viol
+    scen1_agPotentialEst = scen1_agPotentialEst - e.sourceTarget.feature.properties.agpotentia
+    scen1_avgTravTimeEst = 100*((((scen1_avgTravTimeEst/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
+    admincomb = e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
+    scen1_Admins = scen1_Admins.replace(admincomb, "")
+    console.log("pop " + scen1_population )
+    console.log("hung " + scen1_hungest )
+    console.log("pov " + scen1_povest )
+    console.log("stunt " + scen1_stuntest )
+    console.log("wast " + scen1_wastest )
+    console.log("mort " + scen1_u5mortest )
+    console.log("hw " + scen1_accesstoHWest )
+    console.log("liter " + scen1_womensLitest )
+    console.log("conf " + scen1_conflictEventsEst )
+    console.log("agpotential " + scen1_agPotentialEst )
+    console.log("trav time avg " + scen1_avgTravTimeEst )
+    console.log("admins " + scen1_Admins )
   }
   else {
   var layer = e.target;
@@ -91,23 +202,125 @@ export function highlightFeature(e) {
       weight: 2,
       color: 'black',
       dashArray: '',
-      fillOpacity: 0.5
+      fillOpacity: 0.8
   });
 
   layer.bringToFront();
+  //calculate my features!
   scen1_idlist.push(e.sourceTarget.feature.properties.adm2_id)
+  scen1_pop_initial = scen1_population
   scen1_population = scen1_population + e.sourceTarget.feature.properties.pop_ls_1
-  console.log(scen1_idlist)
-  console.log(scen1_population)
-}}}
+  scen1_hungest = 100*((((scen1_hungest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.hunger_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_povest = 100*((((scen1_povest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.gsap_pov21/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_stuntest = 100*((((scen1_stuntest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.stunting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_wastest = 100*((((scen1_wastest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.wasting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_u5mortest = 100*((((scen1_u5mortest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.under5_mor/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_accesstoHWest = 100*((((scen1_accesstoHWest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_womensLitest = 100*((((scen1_womensLitest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_conflictEventsEst = scen1_conflictEventsEst + e.sourceTarget.feature.properties.count_viol
+  scen1_agPotentialEst = scen1_agPotentialEst + e.sourceTarget.feature.properties.agpotentia
+  scen1_avgTravTimeEst = 100*((((scen1_avgTravTimeEst/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_Admins = scen1_Admins + ", "+ e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
+  console.log("pop " + scen1_population )
+  console.log("hung " + scen1_hungest )
+  console.log("pov " + scen1_povest )
+  console.log("stunt " + scen1_stuntest )
+  console.log("wast " + scen1_wastest )
+  console.log("mort " + scen1_u5mortest )
+  console.log("hw " + scen1_accesstoHWest )
+  console.log("liter " + scen1_womensLitest )
+  console.log("conf " + scen1_conflictEventsEst )
+  console.log("agpotential " + scen1_agPotentialEst )
+  console.log("trav time avg " + scen1_avgTravTimeEst )
+  console.log("admins " + scen1_Admins )
+}}
+if (scenario == 2) {
+  if (scen2_idlist.includes(e.sourceTarget.feature.properties.adm2_id)) {
+    var layer = e.target;
+    layer.setStyle({
+      weight: .3,
+      opacity: .3,
+      fillcolor: 'red',
+      fillOpacity: 0,
+      color: '#dcdee0',
+      smoothFactor:.1
+    })
+    scen2_idlist = scen2_idlist.filter(item => item != e.sourceTarget.feature.properties.adm2_id);
+    scen2_pop_initial = scen2_population
+    scen2_population = scen2_population - e.sourceTarget.feature.properties.pop_ls_1;
+    scen2_hungest = 100*((((scen2_hungest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.hunger_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
+    scen2_povest = 100*((((scen2_povest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.gsap_pov21/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
+    scen2_stuntest = 100*((((scen2_stuntest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.stunting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
+    scen2_wastest = 100*((((scen2_wastest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.wasting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
+    scen2_u5mortest = 100*((((scen2_u5mortest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.under5_mor/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
+    scen2_accesstoHWest = 100*((((scen2_accesstoHWest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
+    scen2_womensLitest = 100*((((scen2_womensLitest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
+    scen2_conflictEventsEst = scen2_conflictEventsEst - e.sourceTarget.feature.properties.count_viol
+    scen2_agPotentialEst = scen2_agPotentialEst - e.sourceTarget.feature.properties.agpotentia
+    scen2_avgTravTimeEst = 100*((((scen2_avgTravTimeEst/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
+    admincomb = e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
+    scen2_Admins = scen2_Admins.replace(admincomb, "")
+    console.log("pop " + scen2_population )
+    console.log("hung " + scen2_hungest )
+    console.log("pov " + scen2_povest )
+    console.log("stunt " + scen2_stuntest )
+    console.log("wast " + scen2_wastest )
+    console.log("mort " + scen2_u5mortest )
+    console.log("hw " + scen2_accesstoHWest )
+    console.log("liter " + scen2_womensLitest )
+    console.log("conf " + scen2_conflictEventsEst )
+    console.log("agpotential " + scen2_agPotentialEst )
+    console.log("trav time avg " + scen2_avgTravTimeEst )
+    console.log("admins " + scen2_Admins )
+  }
+  else {
+  var layer = e.target;
+  console.log(e)
 
-function resetHighlight(e) {
-  geojson.resetStyle(e.target);
+  layer.setStyle({
+      weight: 3,
+      color: 'white',
+      dashArray: '',
+      fillOpacity:0.7
+  });
+
+  layer.bringToFront();
+  //calculate my features!
+  scen2_idlist.push(e.sourceTarget.feature.properties.adm2_id)
+  scen2_pop_initial = scen2_population
+  scen2_population = scen2_population + e.sourceTarget.feature.properties.pop_ls_1
+  scen2_hungest = 100*((((scen2_hungest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.hunger_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_povest = 100*((((scen2_povest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.gsap_pov21/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_stuntest = 100*((((scen2_stuntest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.stunting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_wastest = 100*((((scen2_wastest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.wasting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_u5mortest = 100*((((scen2_u5mortest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.under5_mor/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_accesstoHWest = 100*((((scen2_accesstoHWest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_womensLitest = 100*((((scen2_womensLitest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_conflictEventsEst = scen2_conflictEventsEst + e.sourceTarget.feature.properties.count_viol
+  scen2_agPotentialEst = scen2_agPotentialEst + e.sourceTarget.feature.properties.agpotentia
+  scen2_avgTravTimeEst = 100*((((scen2_avgTravTimeEst/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_Admins = scen2_Admins + ", "+ e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
+  console.log("pop " + scen2_population )
+  console.log("hung " + scen2_hungest )
+  console.log("pov " + scen2_povest )
+  console.log("stunt " + scen2_stuntest )
+  console.log("wast " + scen2_wastest )
+  console.log("mort " + scen2_u5mortest )
+  console.log("hw " + scen2_accesstoHWest )
+  console.log("liter " + scen2_womensLitest )
+  console.log("conf " + scen2_conflictEventsEst )
+  console.log("agpotential " + scen2_agPotentialEst )
+  console.log("trav time avg " + scen2_avgTravTimeEst )
+  console.log("admins " + scen2_Admins )
+}}
 }
+
 
 function onEachFeature(feature, layer) {
   layer.on({
-      click: highlightFeature
+      click: highlightFeature,
+      mouseover: addTooltip,
+      mouseout: onMouseOut2
   });
 }
 
@@ -289,6 +502,37 @@ const KcrestFeaturesFront = () => {
     return null;
   }
 };
+
+const KcrestScenario2 = () => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {
+      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
+
+      //jsonData is an array cotaining the json object
+      const jsonData = await response.json();
+      //Accessing the json object and then obtaining the geojson object
+      //which is the value of st_asgeojson key
+      setData(jsonData[0].json_build_object);
+      //console.log(jsonData[0].json_build_object)
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+  //console.log( data );
+  const scenarioRef = useRef()
+  // render react-leaflet GeoJSON when the data is ready
+  if (data) {
+    return <GeoJSON data={data} ref={scenarioRef} onEachFeature={onEachFeature} style={getStyle} />;
+  } else {
+    return null;
+  }
+};
+
 
 
 const KcrestCountriesFront = () => {
@@ -3530,6 +3774,7 @@ const LeafletMap = () => {
   const feelRef = useRef()
   const countryRef = useRef()
   const popRef = useRef()
+  const scen2Ref = useRef()
   const layersRef = useRef();
   const [feelState, setFeeltate] = useState(false);
   const hungerRef = useRef();
@@ -3588,6 +3833,7 @@ const LeafletMap = () => {
     else if (country2 == 'Tanzania') {mapC.addLayer(countryRefTanzania.current);mapC.addLayer(povRefTanzania.current);}
     else if (country2 == 'Zambia') {mapC.addLayer(countryRefZambia.current);mapC.addLayer(povRefZambia.current);}
     else {mapC.addLayer(countryRef.current);mapC.addLayer(povRef.current);}
+    PointsToFront()
     //var url = urlToQuery()
     //map.remove()
     //LeafletMap()
@@ -3946,8 +4192,6 @@ const LeafletMap = () => {
     }
   };
 
-
-
   const togglePov = () => {
     const country3 = document.getElementById('country').value
     if (country3 == 'all') {var povLayer = povRef.current; var baseLayer = countryRef.current}
@@ -3980,6 +4224,113 @@ const LeafletMap = () => {
       document.getElementsByClassName("button10")[0].classList.remove("test_skill");
     }
   };
+
+  function resetHighlight(e) {
+    if (scenario == 1) {
+    var featLayer = popRef.current}
+    else {var featLayer = scen2Ref.current}
+    console.log(featLayer)
+    featLayer.setStyle({
+      weight: .3,
+      opacity: .3,
+      fillcolor: 'red',
+      fillOpacity: 0,
+      color: '#dcdee0',
+      smoothFactor:.1
+    })
+    if (scenario == 1) {
+      scen1_idlist = []
+      scen1_population = 0
+      scen1_povest = 0
+      scen1_hungest = 0
+      scen1_stuntest = 0
+      scen1_wastest = 0
+      scen1_u5mortest = 0
+      scen1_accesstoHWest = 0
+      scen1_womensLitest = 0
+      scen1_conflictEventsEst = 0
+      scen1_agPotentialEst = 0
+      scen1_avgTravTimeEst = 0
+      scen1_Admins = ""
+      scen1_pop_initial = 0
+
+    }
+    else {
+      scen2_idlist = []
+      scen2_population = 0
+      scen2_povest = 0
+      scen2_hungest = 0
+      scen2_stuntest = 0
+      scen2_wastest = 0
+      scen2_u5mortest = 0
+      scen2_accesstoHWest = 0
+      scen2_womensLitest = 0
+      scen2_conflictEventsEst = 0
+      scen2_agPotentialEst = 0
+      scen2_avgTravTimeEst = 0
+      scen2_Admins = ""
+      scen2_pop_initial = 0
+    }
+  }
+
+  function scenario1(popRef) {
+    //task: bring right layer to front!
+    console.log("hi")
+    scenario = 1
+    ScenToFront()
+    }
+  
+  function scenario2() {
+    scenario = 2
+    ScenToFront()
+    //task: bring right layer to front!
+  }
+
+
+
+const showReport = () => {
+    //open and close report
+    console.log("Report was clicked")
+    var x = document.getElementById("report-div");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+   //add stuff to report
+   var y = document.getElementById("report-inner-div");
+   y.innerHTML = ""
+   if (scen1_idlist.length > 0 & scen2_idlist.length > 0) {
+    y.innerHTML = y.innerHTML + "User has selected " + noAdminsSelected + " administrative units!" 
+  }
+    else if (scenario == 1) {
+    y.innerHTML = "<br><u><b>Scenario 1 Details</u></b><br>This scenario selected " + scen1_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen1_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
+    var tablestuff = [['Prevalence of Poverty (GSAP)', scen1_povest.toFixed(1)],["Hunger", scen1_hungest.toFixed(1)],["Prevalence of Stunting", scen1_stuntest.toFixed(1)],["Prevalence of Wasting", scen1_wastest.toFixed(1)],["Under 5 Mortality", scen1_u5mortest.toFixed(1)],["Conflict Events", scen1_conflictEventsEst], ["Access to Basic Handwashing", scen1_accesstoHWest.toFixed(1)], ["Percent of Women Literate", scen1_womensLitest.toFixed(1)], ["Agricultural Potential", scen1_agPotentialEst], ["Avg. Travel Time to Nearest City", scen1_avgTravTimeEst.toFixed(1)]]
+    var thtml = '<table>'
+    for (var i = 0; i < tablestuff.length; i++) {
+      thtml += '<tr><td>' + tablestuff[i][0] + '</td><td>' + tablestuff[i][1] + '</td></tr>';
+    }
+    thtml += '</table>'
+    y.innerHTML += thtml
+    y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in this scenario include: " + scen1_Admins.slice(2) + "."
+    }
+    else if (scenario == 2) {
+      y.innerHTML = "<br><u><b>Scenario 2 Details</u></b><br>This scenario selected " + scen2_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen2_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
+      var tablestuff = [['Prevalence of Poverty (GSAP)', scen2_povest.toFixed(1)],["Hunger", scen2_hungest.toFixed(1)],["Prevalence of Stunting", scen2_stuntest.toFixed(1)],["Prevalence of Wasting", scen2_wastest.toFixed(1)],["Under 5 Mortality", scen2_u5mortest.toFixed(1)],["Conflict Events", scen2_conflictEventsEst], ["Access to Basic Handwashing", scen2_accesstoHWest.toFixed(1)], ["Percent of Women Literate", scen2_womensLitest.toFixed(1)], ["Agricultural Potential", scen2_agPotentialEst], ["Avg. Travel Time to Nearest City", scen2_avgTravTimeEst.toFixed(1)]]
+      var thtml = '<table>'
+      for (var i = 0; i < tablestuff.length; i++) {
+        thtml += '<tr><td>' + tablestuff[i][0] + '</td><td>' + tablestuff[i][1] + '</td></tr>';
+      }
+      thtml += '</table>'
+      y.innerHTML += thtml
+      y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in this scenario include: " + scen2_Admins.slice(2) + "."
+      }
+      else if (scenario == 0) {
+        y.innerHTML = "<br><u><b>No scenarios have been developed, click Create Scenario 1 to start building a targeting scenario</u></b>"
+        }
+    console.log(x)
+  }
+
 
 
 const addScenarioButtons = () => {
@@ -4017,6 +4368,23 @@ const addScenarioButtons = () => {
 
   }, [map]);
 
+  const  ScenToFront = () => {
+      if (map && popRef.current) {
+        const mapC = map;
+        console.log("Fronting Correct Scenario" + scenario)
+
+        if (scenario == 1) {
+        const popLayer = popRef.current;
+        mapC.removeLayer(popLayer);
+        mapC.addLayer(popLayer);}
+        else if (scenario == 2) {
+          const popLayer = scen2Ref.current;
+          mapC.removeLayer(popLayer);
+          mapC.addLayer(popLayer)}
+       ;};
+        }
+       
+  
 
   const  PointsToFront = () => {
     setTimeout(function(){
@@ -4027,6 +4395,8 @@ const addScenarioButtons = () => {
         //const feelLayer = feelRef.current;
         //mapC.removeLayer(feelLayer);
         //mapC.addLayer(feelLayer);
+        var lc = document.getElementsByClassName('leaflet-control-layers');
+        lc[0].style.visibility = 'hidden';
         mapC.removeLayer(popLayer);
         mapC.addLayer(popLayer);}
      },1000);
@@ -4056,14 +4426,19 @@ const addScenarioButtons = () => {
     }catch(e){
     var country = 'all';
     }
+  
+  //hide the layers control
+  const  HideLayersControl = () => {
+  var lc = document.getElementsByClassName('leaflet-control-layers');
+  lc[0].style.visibility = 'hidden';}
+
 
   const [center, setCenter] = useState({ lat: latCent(country), lng: lonCent(country) });
   const zoomLevel = zoomLevelVar(country);
   return (
     <>
     <div id="head-desc" style={{zIndex: 20000, position: "absolute", top: 1, left: 0, width: "100%"}}>
-      <h1>Scenario Builder for Development Programs<br></br>
-        Select a Country:  
+      <h1>Scenario Builder for Development Programs<br></br> 
       <select name="country" id="country">
         <option value="Ghana">Ghana</option>
         <option value="Liberia">Liberia</option>
@@ -4082,18 +4457,12 @@ const addScenarioButtons = () => {
       </div>
 
     <MapContainer  ref={setMap} center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1}  >  
-    <BuildScenarioOne tog={clickState} />
       {/*The LayersControl tag help us organize our layers into baselayers and tilelayers*/}
       <TileLayer
             attribution='Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
             url="https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer/tile/{z}/{y}/{x}"
             opacity={0.5} 
-            maxZoom={21}/>
-      <TileLayer
-            attribution='Esri &mdash; Source: DCGIS&copy'
-            url="https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Ortho2019_WebMercator/MapServer/tile/{z}/{y}/{x}"
-            opacity={0.5}
-            maxZoom={21} />     
+            maxZoom={21}/>   
       <LayersControl ref={layersRef} position="topright">
       <LayersControl.Overlay name="Countries - Base" checked>
           <LayerGroup id='countriesG' ref={countryRef} ><KcrestCountries /></LayerGroup>
@@ -4133,6 +4502,9 @@ const addScenarioButtons = () => {
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Features" checked>
           <FeatureGroup id='popG' ref={popRef}  ><KcrestFeaturesFront /></FeatureGroup>
+        </LayersControl.Overlay>
+        <LayersControl.Overlay name="Scenario 2" checked>
+          <FeatureGroup id='popG' ref={scen2Ref}  ><KcrestScenario2 /></FeatureGroup>
         </LayersControl.Overlay>
         <LayersControl.Overlay name="Countries - Base" unchecked>
           <LayerGroup id='countriesGhana' ref={countryRefGhana} ><GhanaCountry /></LayerGroup>
@@ -4468,13 +4840,15 @@ const addScenarioButtons = () => {
       <PointsToFront/>
       <Search provider={new OpenStreetMapProvider({ })} />
     </MapContainer>
+    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div"></div></div> 
+    <div id="tooltip2" ><text class="p1">Hover over any location to see details.</text></div>
     <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}This tool allows international development practitioners to develop scenarios regarding where they will target international development programs. The tool will also allow users to visualize several key development indicators and summarize them across subsets of administrative areas in their countries of interest. Finally, it will allow users to save scenarios so that they can retrieve those scenarios and review them multiple times. The goal is to ensure that development practitioners have easy access to, and are using, high quality quantitative data as a determinant in their decision making about where to invest their limited resources.  If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com{"\n "}</text></div> 
     <div id="bottom-desc" style={{zIndex: 19999, position: "absolute", bottom: 36, left: 1, width: "100%", textAlign: "center"}}>
       <div id= "scenario-div" style={{display:"none"}} >
     <button class="button button14"  onClick={scenario1} type="button">Create Scenario 1</button>   
-    <button class="button button15"  onClick={toggleHunger} type="button">Create Scenario 2</button> 
-    <button class="button button16"  onClick={toggleStunting} type="button">Clear Current Scenario</button> 
-    <button class="button button17"  onClick={toggleStunting} type="button">Run Analysis</button> 
+    <button class="button button15"  onClick={scenario2} type="button">Create Scenario 2</button> 
+    <button class="button button16"  onClick={resetHighlight} type="button">Clear Current Scenario</button> 
+    <button class="button button17"  onClick={showReport} type="button">Run Analysis</button> 
       </div>
     <button class="button button10"  onClick={togglePov} type="button">Poverty</button>   
     <button class="button button3"  onClick={toggleHunger} type="button">Hunger</button> 

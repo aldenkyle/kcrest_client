@@ -9,9 +9,11 @@
   font-family:'Gill Sans MT'
 }
 
+.leaflet-control-container .leaflet-top.leaflet-left { position: absolute; left: 10px; top: 90px;}
+.leaflet-control-container .leaflet-top.leaflet-right { position: absolute; right: 10px; top: 90px;}
+.leaflet-control-layers .leaflet-control {visibility: 'hidden'}
 
-.leaflet-control-container .leaflet-top.leaflet-left { position: absolute; left: 10px; top: 90px}
-.leaflet-control-container .leaflet-top.leaflet-right { position: absolute; right: 10px; top: 90px}
+
 
 .App-logo {
   height: 40vmin;
@@ -60,6 +62,34 @@ body::-webkit-scrollbar{
   z-index: 300000000;
   border-radius: 8px;
   padding: 20px;
+}
+
+#tooltip2 {
+  position: absolute; 
+  right: 10px;
+  top: 100px;
+  line-height: 1;
+  text-align:left;
+  background-color:white;
+  z-index: 300000000;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+
+#report-div {
+  position:absolute;
+  width: 40%;
+  top: 20%;
+  left: 35%;
+  height: 50%;
+  line-height: 1;
+  text-align:left;
+  background-color:white;
+  z-index: 300000000;
+  border-radius: 8px;
+  padding: 20px;
+  overflow-y: scroll;
 }
 
 #legend {
@@ -302,7 +332,18 @@ label {
   border: 5px solid white;
 }
 
-
+.info {
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 5px;
+}
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
+}
 
 /* Style the container */
 .container {

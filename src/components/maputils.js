@@ -13,23 +13,6 @@ export const myIcon = new L.Icon({
   iconSize: [24,36],    
 });
 
-function createButton(context, func) {
-  var button = document.createElement("input");
-  button.type = "button";
-  button.value = "im a button";
-
-  var selectPanel = document.getElementById("bottom-desc");
-  selectPanel.appendChild(button);
-}
-
-export const BuildScenarioOne = (clickState) => {
-  console.log(clickState)
-  //here is where I will add lasso button, run analysis, clear selection button
-  if (clickState) {
-  console.log(document.getElementById("bottom-desc"))  
-  //createButton()
-}
-};
 
 
 
