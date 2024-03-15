@@ -46,16 +46,16 @@ export function onEachHex(e, layer) {
   const adm0 = e.sourceTarget.feature.properties.adm0_name;
   const adm1 = e.sourceTarget.feature.properties.adm1_name;
   const adm2 = e.sourceTarget.feature.properties.adm2_name;
-  const popP = e.sourceTarget.feature.properties.pop_ls_1.toFixed(0);
+  const popP = numberWithCommas(e.sourceTarget.feature.properties.pop_ls_1.toFixed(0));
   const stuntingP = e.sourceTarget.feature.properties.stunting_1.toFixed(1);
   const povertyP = e.sourceTarget.feature.properties.gsap_pov21;
   const hungerP = e.sourceTarget.feature.properties.hunger_1;
   const wastingP = e.sourceTarget.feature.properties.wasting_1;
-  const under5mortP = e.sourceTarget.feature.properties.under5_mor;
+  const under5mortP = e.sourceTarget.feature.properties.under5_mor + " per 100,000"
   const accesstoHWP = e.sourceTarget.feature.properties.handwashin.toFixed(1);
   const travTimeP = e.sourceTarget.feature.properties.timeperper.toFixed(1);
-  const agPotP = e.sourceTarget.feature.properties.agpotentia;
-  const conflictP = e.sourceTarget.feature.properties.count_viol;
+  const agPotP = numberWithCommas(e.sourceTarget.feature.properties.agpotentia);
+  const conflictP = numberWithCommas(e.sourceTarget.feature.properties.count_viol);
   const literacWP = e.sourceTarget.feature.properties.women_lite.toFixed(1);
   const hungerSource = e.sourceTarget.feature.properties.hungersour;
   //console.log(countryName);
@@ -177,7 +177,7 @@ export function highlightFeature(e) {
     scen1_accesstoHWest = 100*((((scen1_accesstoHWest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
     scen1_womensLitest = 100*((((scen1_womensLitest/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
     scen1_conflictEventsEst = scen1_conflictEventsEst - e.sourceTarget.feature.properties.count_viol
-    scen1_agPotentialEst = scen1_agPotentialEst - e.sourceTarget.feature.properties.agpotentia
+    scen1_agPotentialEst = scen1_agPotentialEst - (e.sourceTarget.feature.properties.agpotentia*1)
     scen1_avgTravTimeEst = 100*((((scen1_avgTravTimeEst/100) * scen1_pop_initial) - ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen1_population+1))
     admincomb = e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
     scen1_Admins = scen1_Admins.replace(admincomb, "")
@@ -200,9 +200,9 @@ export function highlightFeature(e) {
 
   layer.setStyle({
       weight: 2,
-      color: 'black',
+      color: '#363636',
       dashArray: '',
-      fillOpacity: 0.8
+      fillOpacity: 0.6
   });
 
   layer.bringToFront();
@@ -218,7 +218,7 @@ export function highlightFeature(e) {
   scen1_accesstoHWest = 100*((((scen1_accesstoHWest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
   scen1_womensLitest = 100*((((scen1_womensLitest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
   scen1_conflictEventsEst = scen1_conflictEventsEst + e.sourceTarget.feature.properties.count_viol
-  scen1_agPotentialEst = scen1_agPotentialEst + e.sourceTarget.feature.properties.agpotentia
+  scen1_agPotentialEst = scen1_agPotentialEst +  (e.sourceTarget.feature.properties.agpotentia*1)
   scen1_avgTravTimeEst = 100*((((scen1_avgTravTimeEst/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
   scen1_Admins = scen1_Admins + ", "+ e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
   console.log("pop " + scen1_population )
@@ -256,7 +256,7 @@ if (scenario == 2) {
     scen2_accesstoHWest = 100*((((scen2_accesstoHWest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
     scen2_womensLitest = 100*((((scen2_womensLitest/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
     scen2_conflictEventsEst = scen2_conflictEventsEst - e.sourceTarget.feature.properties.count_viol
-    scen2_agPotentialEst = scen2_agPotentialEst - e.sourceTarget.feature.properties.agpotentia
+    scen2_agPotentialEst = scen2_agPotentialEst -  (e.sourceTarget.feature.properties.agpotentia*1)
     scen2_avgTravTimeEst = 100*((((scen2_avgTravTimeEst/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
     admincomb = e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
     scen2_Admins = scen2_Admins.replace(admincomb, "")
@@ -279,9 +279,9 @@ if (scenario == 2) {
 
   layer.setStyle({
       weight: 3,
-      color: 'white',
+      color: '#7d6c4a',
       dashArray: '',
-      fillOpacity:0.7
+      fillOpacity:0.6
   });
 
   layer.bringToFront();
@@ -297,7 +297,7 @@ if (scenario == 2) {
   scen2_accesstoHWest = 100*((((scen2_accesstoHWest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
   scen2_womensLitest = 100*((((scen2_womensLitest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
   scen2_conflictEventsEst = scen2_conflictEventsEst + e.sourceTarget.feature.properties.count_viol
-  scen2_agPotentialEst = scen2_agPotentialEst + e.sourceTarget.feature.properties.agpotentia
+  scen2_agPotentialEst = scen2_agPotentialEst + (e.sourceTarget.feature.properties.agpotentia*1)
   scen2_avgTravTimeEst = 100*((((scen2_avgTravTimeEst/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
   scen2_Admins = scen2_Admins + ", "+ e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
   console.log("pop " + scen2_population )
@@ -3762,7 +3762,18 @@ const Search = (props) => {
   return null // don't want anything to show up from this comp
 }
 
+const LeafletMapScen1 = () => {
+  return (
 
+    <MapContainer   center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1}  >  
+      {/*The LayersControl tag help us organize our layers into baselayers and tilelayers*/}
+      <TileLayer
+            attribution='Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
+            url="https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer/tile/{z}/{y}/{x}"
+            opacity={0.5} 
+            maxZoom={21}/>   
+      </MapContainer>)
+};
 
 
 
@@ -4286,6 +4297,20 @@ const LeafletMap = () => {
     //task: bring right layer to front!
   }
 
+function greater(a,b) {
+  if (Number(a)>Number(b)) {
+    return "<b>></b>"
+  }
+  else if (b>a) {return "<b><</b>"}
+  else {return"="}
+}
+
+function bolderStart(a,b) {
+  if (Number(a)>Number(b)) {
+    return "<b>"}
+  else {return ""}
+};
+
 
 
 const showReport = () => {
@@ -4301,29 +4326,52 @@ const showReport = () => {
    var y = document.getElementById("report-inner-div");
    y.innerHTML = ""
    if (scen1_idlist.length > 0 & scen2_idlist.length > 0) {
-    y.innerHTML = y.innerHTML + "User has selected " + noAdminsSelected + " administrative units!" 
-  }
+    y.innerHTML = "<br><u><b>Compare Scenario Details</u><br><br>" 
+    var tablestuff = [
+    ['Population (Landscan 2022)',bolderStart(scen1_population.toFixed(0), scen2_population.toFixed(0)) + numberWithCommas(scen1_population), greater(scen1_population.toFixed(0), scen2_population.toFixed(0)), bolderStart(scen2_population.toFixed(0), scen1_population.toFixed(0)) +  numberWithCommas(scen2_population)],
+    ["Number of Administrative Units",bolderStart(scen1_idlist.length, scen2_idlist.length) +scen1_idlist.length,  greater(scen1_idlist.length, scen2_idlist.length ), bolderStart(scen2_idlist.length, scen1_idlist.length) +scen2_idlist.length ],
+    ['Prevalence of Poverty (GSAP)', bolderStart(scen1_povest.toFixed(0), scen2_povest.toFixed(0)) + scen1_povest.toFixed(1),  greater(scen1_povest, scen2_povest), bolderStart(scen2_povest.toFixed(0), scen1_povest.toFixed(0)) + scen2_povest.toFixed(1) ],
+    ["Hunger", bolderStart(scen1_hungest.toFixed(0), scen2_hungest.toFixed(0)) +scen1_hungest.toFixed(1), greater(scen1_hungest, scen2_hungest), bolderStart(scen2_hungest.toFixed(0), scen1_hungest.toFixed(0)) + scen2_hungest.toFixed(1)],
+    ["Prevalence of Stunting",bolderStart(scen1_stuntest.toFixed(0), scen2_stuntest.toFixed(0)) + scen1_stuntest.toFixed(1),greater(scen1_stuntest, scen2_stuntest),bolderStart(scen2_stuntest.toFixed(0), scen1_stuntest.toFixed(0)) + scen2_stuntest.toFixed(1)],
+    ["Prevalence of Wasting", bolderStart(scen1_wastest.toFixed(0), scen2_wastest.toFixed(0)) +scen1_wastest.toFixed(1),greater(scen1_wastest, scen2_wastest),bolderStart(scen2_wastest.toFixed(0), scen1_wastest.toFixed(0)) + scen2_wastest.toFixed(1)],
+    ["Under 5 Mortality",bolderStart(scen1_u5mortest.toFixed(0), scen2_u5mortest.toFixed(0)) + scen1_u5mortest.toFixed(1),greater(scen1_u5mortest, scen2_u5mortest),bolderStart(scen2_u5mortest.toFixed(0), scen1_u5mortest.toFixed(0)) + scen2_u5mortest.toFixed(1)],
+    ["Conflict Events",bolderStart(scen1_conflictEventsEst.toFixed(0), scen2_conflictEventsEst.toFixed(0)) + scen1_conflictEventsEst, greater(scen1_conflictEventsEst, scen2_conflictEventsEst), bolderStart(scen2_conflictEventsEst.toFixed(0), scen1_conflictEventsEst.toFixed(0)) + scen2_conflictEventsEst], 
+    ["Access to Basic Handwashing",bolderStart(scen1_accesstoHWest.toFixed(0), scen2_accesstoHWest.toFixed(0)) + scen1_accesstoHWest.toFixed(1),greater(scen1_accesstoHWest, scen2_accesstoHWest),bolderStart(scen2_accesstoHWest.toFixed(0), scen1_accesstoHWest.toFixed(0)) + scen2_accesstoHWest.toFixed(1)],
+     ["Percent of Women Literate",bolderStart(scen1_womensLitest.toFixed(0), scen2_womensLitest.toFixed(0)) + scen1_womensLitest.toFixed(1),greater(scen1_womensLitest, scen2_womensLitest),bolderStart(scen2_womensLitest.toFixed(0), scen1_womensLitest.toFixed(0)) + scen2_womensLitest.toFixed(1)], 
+     ["Agricultural Potential",bolderStart(scen1_agPotentialEst, scen2_agPotentialEst) + scen1_agPotentialEst, greater(scen1_agPotentialEst, scen2_agPotentialEst),bolderStart(scen2_agPotentialEst, scen1_agPotentialEst) + scen2_agPotentialEst], 
+     ["Avg. Travel Time to Nearest City", bolderStart(scen1_avgTravTimeEst.toFixed(1), scen2_avgTravTimeEst.toFixed(1)) +scen1_avgTravTimeEst.toFixed(1), greater(scen1_avgTravTimeEst, scen2_avgTravTimeEst), bolderStart(scen2_avgTravTimeEst.toFixed(1), scen1_avgTravTimeEst.toFixed(1)) + scen2_avgTravTimeEst.toFixed(1)]]
+    var thtml = '<table id="compare-table">  <tr><th><center>Indicator</center></th><th><center>Scenario 1</center></th><th></th><th><center>Scenario 2</center></th></tr>'
+    for (var i = 0; i < tablestuff.length; i++) {
+      thtml += '<tr><td>' + tablestuff[i][0] + '</td><td><center>' + tablestuff[i][1] + '</center></td><td>' + tablestuff[i][2] + '</td><td><center>' + tablestuff[i][3] + '</center></td></tr>';
+    }
+    thtml += '</table>'
+    y.innerHTML += thtml
+    y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in Scenario 1: " + scen1_Admins.slice(2) + "."
+    y.innerHTML += "<br><br>The administrative unit(s) included in Scenario 2 are: " + scen2_Admins.slice(2) + "."
+    }
     else if (scenario == 1) {
     y.innerHTML = "<br><u><b>Scenario 1 Details</u></b><br>This scenario selected " + scen1_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen1_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
     var tablestuff = [['Prevalence of Poverty (GSAP)', scen1_povest.toFixed(1)],["Hunger", scen1_hungest.toFixed(1)],["Prevalence of Stunting", scen1_stuntest.toFixed(1)],["Prevalence of Wasting", scen1_wastest.toFixed(1)],["Under 5 Mortality", scen1_u5mortest.toFixed(1)],["Conflict Events", scen1_conflictEventsEst], ["Access to Basic Handwashing", scen1_accesstoHWest.toFixed(1)], ["Percent of Women Literate", scen1_womensLitest.toFixed(1)], ["Agricultural Potential", scen1_agPotentialEst], ["Avg. Travel Time to Nearest City", scen1_avgTravTimeEst.toFixed(1)]]
-    var thtml = '<table>'
+    var thtml = '<table id="compare-table">  <tr><th><center>Indicator</center></th><th><center>Scenario 1</center></th></tr>'
     for (var i = 0; i < tablestuff.length; i++) {
       thtml += '<tr><td>' + tablestuff[i][0] + '</td><td>' + tablestuff[i][1] + '</td></tr>';
     }
     thtml += '</table>'
     y.innerHTML += thtml
-    y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in this scenario include: " + scen1_Admins.slice(2) + "."
+    y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in Scenario 1: " + scen1_Admins.slice(2) + "."
+    y.innerHTML += LeafletMapScen1
     }
     else if (scenario == 2) {
       y.innerHTML = "<br><u><b>Scenario 2 Details</u></b><br>This scenario selected " + scen2_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen2_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
       var tablestuff = [['Prevalence of Poverty (GSAP)', scen2_povest.toFixed(1)],["Hunger", scen2_hungest.toFixed(1)],["Prevalence of Stunting", scen2_stuntest.toFixed(1)],["Prevalence of Wasting", scen2_wastest.toFixed(1)],["Under 5 Mortality", scen2_u5mortest.toFixed(1)],["Conflict Events", scen2_conflictEventsEst], ["Access to Basic Handwashing", scen2_accesstoHWest.toFixed(1)], ["Percent of Women Literate", scen2_womensLitest.toFixed(1)], ["Agricultural Potential", scen2_agPotentialEst], ["Avg. Travel Time to Nearest City", scen2_avgTravTimeEst.toFixed(1)]]
-      var thtml = '<table>'
+      var thtml = '<table id="scen2-table">'
+      var thtml = '<table id="compare-table">  <tr><th><center>Indicator</center></th><th><center>Scenario 2</center></th></tr>'
       for (var i = 0; i < tablestuff.length; i++) {
         thtml += '<tr><td>' + tablestuff[i][0] + '</td><td>' + tablestuff[i][1] + '</td></tr>';
       }
       thtml += '</table>'
       y.innerHTML += thtml
-      y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in this scenario include: " + scen2_Admins.slice(2) + "."
+      y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in Scenario 2: "  + scen2_Admins.slice(2) + "."
       }
       else if (scenario == 0) {
         y.innerHTML = "<br><u><b>No scenarios have been developed, click Create Scenario 1 to start building a targeting scenario</u></b>"
@@ -4362,9 +4410,9 @@ const addScenarioButtons = () => {
   useEffect(() => {
     if (!map) return;
     //const map = mapRef.current;
-    L.easyButton( "fa-map-marker", () => {
+    L.easyButton( "fa-map", () => {
       addScenarioButtons()
-    }).addTo(map);
+    }, 'Create Targeting Scenarios').addTo(map);
 
   }, [map]);
 
@@ -4405,9 +4453,9 @@ const addScenarioButtons = () => {
   useEffect(() => {
     if (!map) return;
     //const map = mapRef.current;
-    L.easyButton("fa-map", () => {
+    L.easyButton("fa-bars", () => {
       addLegend()
-    }).addTo(map);
+    }, 'View Legend').addTo(map);
 
   }, [map]);
 
@@ -4417,7 +4465,7 @@ const addScenarioButtons = () => {
     console.log(map)
     L.easyButton("fa-info-circle", () => {
       addInfo()
-    }).addTo(map);
+    }, 'Review Application Details').addTo(map);
 
   }, [map]);
  
@@ -4861,17 +4909,17 @@ const addScenarioButtons = () => {
     <button class="button button11"  onClick={toggleAgpot} type="button">Agricultural Potential</button> 
     <button class="button button12"  onClick={toggleTrav} type="button">Avg. Travel Time to Cities</button> </div>
     <div id="legend" style={{display:"none"}}><button id="close" class="button close" onClick={addLegend}>x</button><b>Legend</b><br></br><br></br>
-    <i style={{background:"#9B2226"}}></i><span2>Poverty</span2><br></br>
-    <i style={{background:"#3C4F76"}}></i><span2>Hunger</span2><br></br>
-    <i style={{background:"#005F73"}}></i><span2>Stunting</span2><br></br>
-    <i style={{background:"#0A9396"}}></i><span2>Wasting</span2><br></br>
-    <i style={{background:"#94D2BD"}}></i><span2>Under 5 Mortality</span2><br></br>
-    <i style={{background:"#b8a004"}}></i><span2>Access to Basic Handwashing Station</span2><br></br>
-    <i style={{background:"#EE9B00"}}></i><span2>Women's Literacy</span2><br></br>
-    <i style={{background:"#BB3E03"}}></i><span2>Count of Conflict Events</span2><br></br>
-    <i style={{background:"#354d36"}}></i><span2>Agricultural Potential</span2><br></br>
-    <i style={{background:"#66507d"}}></i><span2>Avg. Travel Time to Cities</span2><br></br>
-    <i style={{background:"#gray"}}></i><span2>No Data Available</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #9B2226,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Poverty</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #3C4F76,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Hunger</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #005F73,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Stunting</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #0A9396,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Wasting</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #94D2BD,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Under 5 Mortality</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #b8a004,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Access to Basic Handwashing Station</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #EE9B00,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Women's Literacy</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #BB3E03,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Count of Conflict Events</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #354d36,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Agricultural Potential</span2><br></br>
+    <i style={{backgroundImage: "linear-gradient(to left, #66507d,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Avg. Travel Time to Cities</span2><br></br>
+    <i style={{background: "gray"}}></i><span2>&nbsp;&nbsp;No Data Available</span2><br></br>
     </div>
     </>
   );

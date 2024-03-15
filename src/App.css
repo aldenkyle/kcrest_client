@@ -81,7 +81,7 @@ body::-webkit-scrollbar{
   position:absolute;
   width: 40%;
   top: 20%;
-  left: 35%;
+  left: 30%;
   height: 50%;
   line-height: 1;
   text-align:left;
@@ -91,6 +91,31 @@ body::-webkit-scrollbar{
   padding: 20px;
   overflow-y: scroll;
 }
+
+#compare-table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#compare-table td, #compare-table th {
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+
+#compare-table tr:nth-child(even){background-color: #f2f2f2;}
+
+#compare-table tr:hover {background-color: #ddd;}
+
+#compare-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #005F73;
+  color: white;
+}
+
+
 
 #legend {
   width: 200px;
@@ -111,12 +136,15 @@ span2 {
 }
 
 i {
-  width: 12px;
+  width: 48px;
   height: 12px;
-  border-radius: 12px;
+  border-radius: 0px;
   float: left;
-  margin: 0 10px 0 0;
+  margin: 0 0 0 4;
   opacity: 1;
+  border-style: solid;
+  border-width: 1px;
+  border-color:#e8e6e6;
 }
 
 .i2 {
@@ -310,7 +338,7 @@ label {
   margin-right: 5px;
 }
 .button15 {
-  background-color: #363636;
+  background-color: #7d6c4a;
   padding: 8px 12px;
   margin-left: 5px;
   margin-right: 5px;
