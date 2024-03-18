@@ -51,6 +51,21 @@ body::-webkit-scrollbar{
   background-color:#005F7395;
 }
 
+#head-desc2 {
+  width: 100%;
+  line-height: 1;
+  text-align:center;
+  background-color:#005F7395;
+}
+
+#head-desc3 {
+  width: 100%;
+  line-height: 1;
+  text-align:center;
+  background-color:#A8008495;
+}
+
+
 #info-div {
   position:absolute;
   width: 30%;

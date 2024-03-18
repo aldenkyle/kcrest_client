@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useRef, cloneElement,forwardRef, useMemo, useCallback,   } from "react";
+import { React, useState, useEffect, useRef, cloneElement,forwardRef, useMemo, useCallback, RefObject  } from "react";
 import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,useMap,FeatureGroup, useMapEvent,LayerGroup,Tooltip,Rectangle } from "react-leaflet";
 import { useEventHandlers } from '@react-leaflet/core'
 import { BuildScenarioOne} from "./maputils";
@@ -63,27 +63,6 @@ export function onEachHex(e, layer) {
   ttdiv.innerHTML = "<b>"+ adm0 + " | " + adm1+ " | " + adm2 + "</b><br>Est. Population 2022 (Landscan): <span style='color:black;font-weight:bold'>"+ popP + "</span><br>Prevalence of Poverty ($2.15/day, GSAP): <span style='color:#9B2226;font-weight:bold'>"+ povertyP + "%</span><br>Prevalence of Stunting (DHS): <span style='color:#005F73;font-weight:bold'>"+ stuntingP + "%</span><br> Hunger: <span style='color:#3C4F76;font-weight:bold'>"+ hungerP + "%</span><br>Prevalence of Wasting (DHS): <span style='color:#0A9396;font-weight:bold'>"+ wastingP + "%</span><br>Under 5 Mortality per 100,000 (DHS): <span style='color:#94D2BD;font-weight:bold'>"+ under5mortP + "</span><br> Count of Violence Events (ACLED): <span style='color:#BB3E03;font-weight:bold'>"+ conflictP + "</span><br>Access to Basic Handwashing (DHS): <span style='color:#b8a004;font-weight:bold'>"+ accesstoHWP + "%</span><br>Percent of Women Literate (DHS): <span style='color:#EE9B00;font-weight:bold'>"+ literacWP + "%</span><br>Avg. Minutes in Travel Time to a City: <span style='color:#66507d;font-weight:bold'>"+ travTimeP + "</span><br>Potential Agricultural Growth (FAO): <span style='color:#354d36;font-weight:bold'>"+ agPotP + "</span>"
 }
 
-
-
-function ToolTipControl({ position }) {
-  const parentMap = useMap()
-
-  // Memoize the minimap so it's not affected by position changes
-  const minimap = useMemo(
-    () => (
-    <div id="tooltip2" ><text class="p1">Hover over any location to see details.</text></div> 
-    ),
-    [],
-  )
-
-  const positionClass =
-    (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright
-  return (
-    <div className={positionClass}>
-      <div className="leaflet-control leaflet-bar">{minimap}</div>
-    </div>
-  )
-}
 
 export function onEachHex2(e, layer) {
   var layer = e.target
@@ -472,6 +451,68 @@ const KcrestCountries = () => {
     return null;
   }
 };
+
+
+const KcrestScen1 = () => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {
+      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
+
+      //jsonData is an array cotaining the json object
+      const jsonData = await response.json();
+      //Accessing the json object and then obtaining the geojson object
+      //which is the value of st_asgeojson key
+      setData(jsonData[0].json_build_object);
+      //console.log(jsonData[0].json_build_object)
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+  //console.log( "I called scenario 1 for the report map" );
+  const scenario1Ref = useRef()
+  // render react-leaflet GeoJSON when the data is ready
+  if (data) {
+    return <GeoJSON data={data} pathOptions={{opacity:1, color:'white', fillOpacity:0, weight:1}} />;
+  } else {
+    return null;
+  }
+};
+
+const KcrestScen2 = () => {
+  // create state variable to hold data when it is fetched
+  const [data, setData] = useState();
+  const getData = async () => {
+    try {
+      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
+
+      //jsonData is an array cotaining the json object
+      const jsonData = await response.json();
+      //Accessing the json object and then obtaining the geojson object
+      //which is the value of st_asgeojson key
+      setData(jsonData[0].json_build_object);
+      //console.log(jsonData[0].json_build_object)
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
+  //console.log( "I called scenario 1 for the report map" );
+  const scenario1Ref = useRef()
+  // render react-leaflet GeoJSON when the data is ready
+  if (data) {
+    return <GeoJSON data={data} pathOptions={{opacity:1, color:'white', fillOpacity:0, weight:1}} />;
+  } else {
+    return null;
+  }
+};
+
 
 const KcrestFeaturesFront = () => {
   // create state variable to hold data when it is fetched
@@ -3762,23 +3803,188 @@ const Search = (props) => {
   return null // don't want anything to show up from this comp
 }
 
-const LeafletMapScen1 = () => {
-  return (
-
-    <MapContainer   center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1}  >  
-      {/*The LayersControl tag help us organize our layers into baselayers and tilelayers*/}
-      <TileLayer
-            attribution='Esri &mdash; Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community'
-            url="https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer/tile/{z}/{y}/{x}"
-            opacity={0.5} 
-            maxZoom={21}/>   
-      </MapContainer>)
-};
 
 
 
 // Using the GeoJSON tag in a Map container
 const LeafletMap = () => {
+  const scen1Ref = useRef()
+  const mapRef = useRef()
+  const scen2Ref2 = useRef()
+  const mapRef2 = useRef()
+  const [scn1State,setScn1State] = useState(false)
+
+    function resetHighlightScen1d() {
+      var featLayer = scen1Ref.current.getLayers()[0].getLayers()
+      var max_lat = 0;
+      var min_lat = 0;
+      var max_lon = 0;
+      var min_lon = 0; 
+      for (let i = 0; i < featLayer.length; i++) {
+        if (scen1_idlist.includes(featLayer[i].feature.properties.adm2_id)) {
+        //console.log(featLayer[i].getBounds())
+        featLayer[i].setStyle({
+          weight: 1,
+          opacity: .7,
+          fillColor: '#005F73',
+          fillOpacity: .7,
+          color: '#dcdee0',
+          smoothFactor:.1
+        })
+        if (max_lat == 0 ) {max_lat = featLayer[i].getBounds()._northEast.lat} else if
+        (featLayer[i].getBounds()._northEast.lat > max_lat) 
+          {max_lat = featLayer[i].getBounds()._northEast.lat};
+
+        if (max_lon == 0 ) {max_lon = featLayer[i].getBounds()._northEast.lng} else if
+         (featLayer[i].getBounds()._northEast.lng > max_lon) 
+        {max_lon = featLayer[i].getBounds()._northEast.lng};
+
+        if  (min_lon == 0 ) {min_lon = featLayer[i].getBounds()._southWest.lng} else if
+         (featLayer[i].getBounds()._southWest.lng < min_lon) 
+        {min_lon = featLayer[i].getBounds()._southWest.lng};
+
+        if  (min_lat == 0 ) {min_lat = featLayer[i].getBounds()._southWest.lat} else if
+         (featLayer[i].getBounds()._southWest.lat < min_lat) 
+        {min_lat = featLayer[i].getBounds()._southWest.lat};
+      } else {
+          featLayer[i].setStyle({
+            weight: 0,
+            opacity: 0,
+            fillColor: 'gray',
+            fillOpacity: 0,
+            color: '#dcdee0',
+            smoothFactor:.1
+        }  )}
+      }
+      var cent_lat = (min_lat + max_lat)/2
+      var cent_lon = (min_lon + max_lon)/2
+      var mapLayer = mapRef.current
+      mapLayer.setView([cent_lat,cent_lon],5)
+      //console.log(mapLayer)
+      var lc = document.getElementsByClassName('leaflet-control-layers');
+      lc[1].style.visibility = 'hidden';
+    };
+
+    function resetHighlightScen2d() {
+      var featLayer = scen2Ref2.current.getLayers()[0].getLayers()
+      var max_lat = 0;
+      var min_lat = 0;
+      var max_lon = 0;
+      var min_lon = 0; 
+      for (let i = 0; i < featLayer.length; i++) {
+        if (scen2_idlist.includes(featLayer[i].feature.properties.adm2_id)) {
+        //console.log(featLayer[i].getBounds())
+        featLayer[i].setStyle({
+          weight: 1,
+          opacity: .7,
+          fillColor: '#A80084',
+          fillOpacity: .7,
+          color: '#dcdee0',
+          smoothFactor:.1
+        })
+        if (max_lat == 0 ) {max_lat = featLayer[i].getBounds()._northEast.lat} else if
+        (featLayer[i].getBounds()._northEast.lat > max_lat) 
+          {max_lat = featLayer[i].getBounds()._northEast.lat};
+
+        if (max_lon == 0 ) {max_lon = featLayer[i].getBounds()._northEast.lng} else if
+         (featLayer[i].getBounds()._northEast.lng > max_lon) 
+        {max_lon = featLayer[i].getBounds()._northEast.lng};
+
+        if  (min_lon == 0 ) {min_lon = featLayer[i].getBounds()._southWest.lng} else if
+         (featLayer[i].getBounds()._southWest.lng < min_lon) 
+        {min_lon = featLayer[i].getBounds()._southWest.lng};
+
+        if  (min_lat == 0 ) {min_lat = featLayer[i].getBounds()._southWest.lat} else if
+         (featLayer[i].getBounds()._southWest.lat < min_lat) 
+        {min_lat = featLayer[i].getBounds()._southWest.lat};
+      } else {
+          featLayer[i].setStyle({
+            weight: 0,
+            opacity: 0,
+            fillColor: 'gray',
+            fillOpacity: 0,
+            color: '#dcdee0',
+            smoothFactor:.1
+        }  )}
+      }
+      var cent_lat = (min_lat + max_lat)/2
+      var cent_lon = (min_lon + max_lon)/2
+      var mapLayer = mapRef2.current
+      mapLayer.setView([cent_lat,cent_lon],5)
+      //console.log(mapLayer)
+      var lc = document.getElementsByClassName('leaflet-control-layers');
+      lc[2].style.visibility = 'hidden';
+    };
+
+  var SimpleMap1 = () => {
+    console.log("does this happen?")
+    //const [mapRef, setMapRef] = useState(null);
+    try{
+      var country = document.getElementById('country').value()
+      }catch(e){
+      var country = 'all';
+      }
+    const [center, setCenter] = useState({ lat: latCent(country), lng: lonCent(country) });
+    const zoomLevel = zoomLevelVar(country);
+    const layersRef2 = useRef();
+    
+    
+     return ( 
+      <>
+      <div id="head-desc2" style={{top: 20, left: 0, width: "100%"}}>
+      <h1>Scenario 1 Map<br></br></h1> </div> 
+        <MapContainer id='map-container1' ref={mapRef} center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1} zoomControl={false} layersControl={false} style={{height: "300px", width: "100%"}}>
+        <TileLayer
+              attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}"
+              ext='png'
+              opacity={0.8} 
+              maxZoom={10}/>   
+          {/* Additional map layers or components can be added here */}
+          <LayersControl ref={layersRef2} position="topright">
+          <LayersControl.Overlay name="Features" checked>
+            <FeatureGroup id='scen1' ref={scen1Ref}  ><KcrestScen1 /></FeatureGroup>
+          </LayersControl.Overlay>
+            </LayersControl>
+        </MapContainer>
+        </>
+    );
+  };  
+
+  var SimpleMap2 = () => {
+    //console.log("does this happen?")
+    //const [mapRef, setMapRef] = useState(null);
+    try{
+      var country = document.getElementById('country').value()
+      }catch(e){
+      var country = 'all';
+      }
+    const [center, setCenter] = useState({ lat: latCent(country), lng: lonCent(country) });
+    const zoomLevel = zoomLevelVar(country);
+    const layersRef2 = useRef();
+    
+    
+     return ( 
+      <>
+      <div id="head-desc3" style={{top: 20, left: 0, width: "100%"}}>
+      <h1>Scenario 2 Map<br></br></h1> </div> 
+        <MapContainer id='map-container1' ref={mapRef2} center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1} zoomControl={false} layersControl={false} style={{height: "300px", width: "100%"}}>
+        <TileLayer
+              attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}"
+              ext='png'
+              opacity={0.8} 
+              maxZoom={10}/>   
+          {/* Additional map layers or components can be added here */}
+          <LayersControl ref={layersRef2} position="topright">
+          <LayersControl.Overlay name="Features" checked>
+            <FeatureGroup id='scen2' ref={scen2Ref2}  ><KcrestScen2 /></FeatureGroup>
+          </LayersControl.Overlay>
+            </LayersControl>
+        </MapContainer>
+        </>
+    );
+  };  
 
   const [map, setMap] = useState(null);
   const [position, setPosition] = useState(null);
@@ -4314,8 +4520,19 @@ function bolderStart(a,b) {
 
 
 const showReport = () => {
+    window.dispatchEvent(new Event('resize'));  
+    console.log(scen1Ref.current)
+    try {if (scen1Ref.current.getLayers()[0].getLayers()) {
+    resetHighlightScen1d();
+    resetHighlightScen2d();}}
+    catch {
+      setTimeout(function(){
+        resetHighlightScen1d();
+        resetHighlightScen2d();
+       },10000);
+    }
+
     //open and close report
-    console.log("Report was clicked")
     var x = document.getElementById("report-div");
     if (x.style.display === "none") {
       x.style.display = "block";
@@ -4349,6 +4566,8 @@ const showReport = () => {
     y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in Scenario 1: " + scen1_Admins.slice(2) + "."
     y.innerHTML += "<br><br>The administrative unit(s) included in Scenario 2 are: " + scen2_Admins.slice(2) + "."
     }
+    //add stuff to report if scenario 1 only
+    
     else if (scenario == 1) {
     y.innerHTML = "<br><u><b>Scenario 1 Details</u></b><br>This scenario selected " + scen1_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen1_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
     var tablestuff = [['Prevalence of Poverty (GSAP)', scen1_povest.toFixed(1)],["Hunger", scen1_hungest.toFixed(1)],["Prevalence of Stunting", scen1_stuntest.toFixed(1)],["Prevalence of Wasting", scen1_wastest.toFixed(1)],["Under 5 Mortality", scen1_u5mortest.toFixed(1)],["Conflict Events", scen1_conflictEventsEst], ["Access to Basic Handwashing", scen1_accesstoHWest.toFixed(1)], ["Percent of Women Literate", scen1_womensLitest.toFixed(1)], ["Agricultural Potential", scen1_agPotentialEst], ["Avg. Travel Time to Nearest City", scen1_avgTravTimeEst.toFixed(1)]]
@@ -4359,8 +4578,8 @@ const showReport = () => {
     thtml += '</table>'
     y.innerHTML += thtml
     y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in Scenario 1: " + scen1_Admins.slice(2) + "."
-    y.innerHTML += LeafletMapScen1
     }
+    //add stuff to report if scenario 2 only
     else if (scenario == 2) {
       y.innerHTML = "<br><u><b>Scenario 2 Details</u></b><br>This scenario selected " + scen2_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen2_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
       var tablestuff = [['Prevalence of Poverty (GSAP)', scen2_povest.toFixed(1)],["Hunger", scen2_hungest.toFixed(1)],["Prevalence of Stunting", scen2_stuntest.toFixed(1)],["Prevalence of Wasting", scen2_wastest.toFixed(1)],["Under 5 Mortality", scen2_u5mortest.toFixed(1)],["Conflict Events", scen2_conflictEventsEst], ["Access to Basic Handwashing", scen2_accesstoHWest.toFixed(1)], ["Percent of Women Literate", scen2_womensLitest.toFixed(1)], ["Agricultural Potential", scen2_agPotentialEst], ["Avg. Travel Time to Nearest City", scen2_avgTravTimeEst.toFixed(1)]]
@@ -4376,7 +4595,7 @@ const showReport = () => {
       else if (scenario == 0) {
         y.innerHTML = "<br><u><b>No scenarios have been developed, click Create Scenario 1 to start building a targeting scenario</u></b>"
         }
-    console.log(x)
+    //console.log(x)
   }
 
 
@@ -4888,7 +5107,7 @@ const addScenarioButtons = () => {
       <PointsToFront/>
       <Search provider={new OpenStreetMapProvider({ })} />
     </MapContainer>
-    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div"></div></div> 
+    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div"></div><div id="report-inner-div-map1"><SimpleMap1></SimpleMap1><SimpleMap2></SimpleMap2></div></div> 
     <div id="tooltip2" ><text class="p1">Hover over any location to see details.</text></div>
     <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}This tool allows international development practitioners to develop scenarios regarding where they will target international development programs. The tool will also allow users to visualize several key development indicators and summarize them across subsets of administrative areas in their countries of interest. Finally, it will allow users to save scenarios so that they can retrieve those scenarios and review them multiple times. The goal is to ensure that development practitioners have easy access to, and are using, high quality quantitative data as a determinant in their decision making about where to invest their limited resources.  If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com{"\n "}</text></div> 
     <div id="bottom-desc" style={{zIndex: 19999, position: "absolute", bottom: 36, left: 1, width: "100%", textAlign: "center"}}>
