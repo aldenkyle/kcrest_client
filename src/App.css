@@ -44,6 +44,13 @@ body::-webkit-scrollbar{
   }
 }
 
+@media print {
+  report-inner-div {
+    height: 100%;
+  }
+}
+
+
 #head-desc {
   width: 100%;
   line-height: 1;

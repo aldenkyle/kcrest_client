@@ -1,7 +1,9 @@
 import { React, useState, useEffect, useRef, cloneElement,forwardRef, useMemo, useCallback, RefObject  } from "react";
 import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,useMap,FeatureGroup, useMapEvent,LayerGroup,Tooltip,Rectangle } from "react-leaflet";
-import { useEventHandlers } from '@react-leaflet/core'
-import { BuildScenarioOne} from "./maputils";
+import jsPDF from 'jspdf';
+import html2canvas from "html2canvas";
+import { useReactToPrint } from 'react-to-print';
+
 //import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
 import "leaflet-easybutton/src/easy-button.js";
@@ -3812,6 +3814,7 @@ const LeafletMap = () => {
   const mapRef = useRef()
   const scen2Ref2 = useRef()
   const mapRef2 = useRef()
+  const reportRef = useRef();
   const [scn1State,setScn1State] = useState(false)
 
     function resetHighlightScen1d() {
@@ -3968,7 +3971,7 @@ const LeafletMap = () => {
       <>
       <div id="head-desc3" style={{top: 20, left: 0, width: "100%"}}>
       <h1>Scenario 2 Map<br></br></h1> </div> 
-        <MapContainer id='map-container1' ref={mapRef2} center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1} zoomControl={false} layersControl={false} style={{height: "300px", width: "100%"}}>
+        <MapContainer id='map-container2' ref={mapRef2} center={center} zoom={zoomLevel} maxZoom={21} tapTolerance={1} zoomControl={false} layersControl={false} style={{height: "300px", width: "100%"}}>
         <TileLayer
               attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.{ext}"
@@ -4526,10 +4529,14 @@ const showReport = () => {
     resetHighlightScen1d();
     resetHighlightScen2d();}}
     catch {
-      setTimeout(function(){
+      try {setTimeout(function(){
         resetHighlightScen1d();
         resetHighlightScen2d();
-       },10000);
+       },10000);}
+       catch {setTimeout(function(){
+        resetHighlightScen1d();
+        resetHighlightScen2d();
+       },10000);}
     }
 
     //open and close report
@@ -4567,9 +4574,20 @@ const showReport = () => {
     y.innerHTML += "<br><br>The administrative unit(s) included in Scenario 2 are: " + scen2_Admins.slice(2) + "."
     }
     //add stuff to report if scenario 1 only
-    
     else if (scenario == 1) {
-    y.innerHTML = "<br><u><b>Scenario 1 Details</u></b><br>This scenario selected " + scen1_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen1_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
+    var mapC2 = document.getElementById("map-container2");
+    if (mapC2.style.display === "none") {
+      mapC2.style.display = "block";
+    } else {
+      mapC2.style.display = "none";
+    }
+    var headC2 = document.getElementById("head-desc3");
+    if (headC2.style.display === "none") {
+      headC2.style.display = "block";
+    } else {
+      headC2.style.display = "none";
+    }
+  y.innerHTML = "<br><u><b>Scenario 1 Details</u></b><br>This scenario selected " + scen1_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen1_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
     var tablestuff = [['Prevalence of Poverty (GSAP)', scen1_povest.toFixed(1)],["Hunger", scen1_hungest.toFixed(1)],["Prevalence of Stunting", scen1_stuntest.toFixed(1)],["Prevalence of Wasting", scen1_wastest.toFixed(1)],["Under 5 Mortality", scen1_u5mortest.toFixed(1)],["Conflict Events", scen1_conflictEventsEst], ["Access to Basic Handwashing", scen1_accesstoHWest.toFixed(1)], ["Percent of Women Literate", scen1_womensLitest.toFixed(1)], ["Agricultural Potential", scen1_agPotentialEst], ["Avg. Travel Time to Nearest City", scen1_avgTravTimeEst.toFixed(1)]]
     var thtml = '<table id="compare-table">  <tr><th><center>Indicator</center></th><th><center>Scenario 1</center></th></tr>'
     for (var i = 0; i < tablestuff.length; i++) {
@@ -4581,6 +4599,18 @@ const showReport = () => {
     }
     //add stuff to report if scenario 2 only
     else if (scenario == 2) {
+    var mapC1 = document.getElementById("map-container1");
+    if (mapC1.style.display === "none") {
+      mapC1.style.display = "block";
+    } else {
+      mapC1.style.display = "none";
+    }
+    var headC1 = document.getElementById("head-desc2");
+    if (headC1.style.display === "none") {
+      headC1.style.display = "block";
+    } else {
+      headC1.style.display = "none";
+    }
       y.innerHTML = "<br><u><b>Scenario 2 Details</u></b><br>This scenario selected " + scen2_idlist.length + " administrative unit(s) and has a population of approximately "+ numberWithCommas(scen2_population) +" people. The following table shows summary statistics for our ten indicators of interest across the selected areas.<br><br>" 
       var tablestuff = [['Prevalence of Poverty (GSAP)', scen2_povest.toFixed(1)],["Hunger", scen2_hungest.toFixed(1)],["Prevalence of Stunting", scen2_stuntest.toFixed(1)],["Prevalence of Wasting", scen2_wastest.toFixed(1)],["Under 5 Mortality", scen2_u5mortest.toFixed(1)],["Conflict Events", scen2_conflictEventsEst], ["Access to Basic Handwashing", scen2_accesstoHWest.toFixed(1)], ["Percent of Women Literate", scen2_womensLitest.toFixed(1)], ["Agricultural Potential", scen2_agPotentialEst], ["Avg. Travel Time to Nearest City", scen2_avgTravTimeEst.toFixed(1)]]
       var thtml = '<table id="scen2-table">'
@@ -4688,6 +4718,24 @@ const addScenarioButtons = () => {
 
   }, [map]);
  
+  const printDocument = () => {
+    const input = document.getElementById('report-inner-div');
+    html2canvas(input)
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'JPEG', 0, 0);
+        // pdf.output('dataurlnewwindow');
+        pdf.save("Scenario Builder Result.pdf");
+      })
+    ;
+  }
+
+  const handlePrint = useReactToPrint({
+    content: () => reportRef.current,
+  });
+
+
   try{
     var country = document.getElementById('country').value()
     }catch(e){
@@ -5107,7 +5155,7 @@ const addScenarioButtons = () => {
       <PointsToFront/>
       <Search provider={new OpenStreetMapProvider({ })} />
     </MapContainer>
-    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div"></div><div id="report-inner-div-map1"><SimpleMap1></SimpleMap1><SimpleMap2></SimpleMap2></div></div> 
+    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div" ref={reportRef} ></div><div id="report-inner-div-map1"><SimpleMap1></SimpleMap1><SimpleMap2></SimpleMap2><button onClick={handlePrint}>Print</button></div></div> 
     <div id="tooltip2" ><text class="p1">Hover over any location to see details.</text></div>
     <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}This tool allows international development practitioners to develop scenarios regarding where they will target international development programs. The tool will also allow users to visualize several key development indicators and summarize them across subsets of administrative areas in their countries of interest. Finally, it will allow users to save scenarios so that they can retrieve those scenarios and review them multiple times. The goal is to ensure that development practitioners have easy access to, and are using, high quality quantitative data as a determinant in their decision making about where to invest their limited resources.  If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com{"\n "}</text></div> 
     <div id="bottom-desc" style={{zIndex: 19999, position: "absolute", bottom: 36, left: 1, width: "100%", textAlign: "center"}}>
