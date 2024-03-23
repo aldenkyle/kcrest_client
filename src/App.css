@@ -52,6 +52,7 @@ body::-webkit-scrollbar{
 
 
 #head-desc {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   width: 100%;
   line-height: 1;
   text-align:center;
@@ -59,6 +60,7 @@ body::-webkit-scrollbar{
 }
 
 #head-desc2 {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   width: 100%;
   line-height: 1;
   text-align:center;
@@ -66,6 +68,7 @@ body::-webkit-scrollbar{
 }
 
 #head-desc3 {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   width: 100%;
   line-height: 1;
   text-align:center;
@@ -76,17 +79,20 @@ body::-webkit-scrollbar{
 #info-div {
   position:absolute;
   width: 30%;
-  top: 30%;
+  top: 20%;
   left: 35%;
+  height: 55%;
   line-height: 1;
   text-align:left;
   background-color:white;
   z-index: 300000000;
   border-radius: 8px;
   padding: 20px;
+  overflow-y: scroll;
 }
 
 #tooltip2 {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   position: absolute; 
   right: 10px;
   top: 100px;
@@ -100,11 +106,12 @@ body::-webkit-scrollbar{
 
 
 #report-div {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   position:absolute;
   width: 40%;
   top: 20%;
   left: 30%;
-  height: 50%;
+  height: 60%;
   line-height: 1;
   text-align:left;
   background-color:white;
@@ -114,13 +121,26 @@ body::-webkit-scrollbar{
   overflow-y: scroll;
 }
 
+#report-div-print {
+  position:absolute;
+  margin: 100px;
+  width: 900px; /* width: 7in; */
+  line-height: 1;
+  text-align:left;
+  background-color:white;
+  z-index: -100;
+  border-radius: 8px;
+  padding: 20px;
+}
+
 #compare-table {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
 #compare-table td, #compare-table th {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   border: 1px solid #ddd;
   padding: 4px;
 }
@@ -130,6 +150,7 @@ body::-webkit-scrollbar{
 #compare-table tr:hover {background-color: #ddd;}
 
 #compare-table th {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
@@ -140,6 +161,7 @@ body::-webkit-scrollbar{
 
 
 #legend {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   width: 200px;
   position:absolute;
   bottom: 11%;
@@ -237,6 +259,7 @@ input[type=textarea]{
 
 /* Style inputs, select elements and textareas */
 select{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   width: 100%;
   padding: 6px;
   border: 1px solid #ccc;
@@ -255,6 +278,7 @@ label {
 
 /* Style the submit button */
 .button {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: white;
   border: none;
   border-radius: 4px;
@@ -372,6 +396,12 @@ label {
   margin-right: 5px;
 }
 .button17 {
+  background-color: #363636;
+  padding: 8px 12px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.button18 {
   background-color: #363636;
   padding: 8px 12px;
   margin-left: 5px;

@@ -1,11 +1,14 @@
 import { React, useState, useEffect, useRef, cloneElement,forwardRef, useMemo, useCallback, RefObject  } from "react";
-import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,useMap,FeatureGroup, useMapEvent,LayerGroup,Tooltip,Rectangle } from "react-leaflet";
+import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,useMap,FeatureGroup, useMapEvent,LayerGroup,Tooltip,Pane } from "react-leaflet";
 import jsPDF from 'jspdf';
 import html2canvas from "html2canvas";
 import { useReactToPrint } from 'react-to-print';
 
+import { SimpleMapScreenshoter } from "leaflet-simple-map-screenshoter";
+
 //import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
+import 'leaflet-easyprint';
 import "leaflet-easybutton/src/easy-button.js";
 import "leaflet-easybutton/src/easy-button.css";
 import "font-awesome/css/font-awesome.min.css";
@@ -3992,6 +3995,8 @@ const LeafletMap = () => {
   const [map, setMap] = useState(null);
   const [position, setPosition] = useState(null);
   const feelRef = useRef()
+  const labelsRef = useRef()
+  const lineRef = useRef()
   const countryRef = useRef()
   const popRef = useRef()
   const scen2Ref = useRef()
@@ -4015,6 +4020,7 @@ const LeafletMap = () => {
   const [PovState, setPovState] = useState(false);
   const travRef = useRef();
   const [travState, setTravState] = useState(false);
+  const [labelState, setLabelState] = useState(false);
   const agpotRef = useRef();
   const [agpotState, setAgpotState] = useState(false);
   const [clickState, setClickState] = useState(false);
@@ -4175,6 +4181,29 @@ const LeafletMap = () => {
     }
    
   };
+
+  const toggleLabels = () => {
+    if (map && travRef.current && !labelState) {
+      const mapC = map;
+      const labelLayer = labelsRef.current
+      mapC.addLayer(labelLayer);
+      const feelLayer = feelRef.current;
+      feelLayer.bringToFront()
+      setLabelState(!labelState);
+      removeOutlines()
+      document.getElementsByClassName("button18")[0].classList.add("test_skill");
+    } else if (map && travRef.current && labelState) {
+       const mapC = map;
+      const labelLayer = labelsRef.current;
+      mapC.removeLayer(labelLayer);
+      const feelLayer = feelRef.current;
+      feelLayer.bringToFront()
+      setLabelState(!labelState);
+      document.getElementsByClassName("button18")[0].classList.remove("test_skill");
+    }
+   
+  };
+
   const toggleAgpot = () => {
     const country3 = document.getElementById('country').value
     if (country3 == 'all') {var agpotLayer = agpotRef.current; var baseLayer = countryRef.current}
@@ -4521,6 +4550,9 @@ function bolderStart(a,b) {
 };
 
 
+const defsSourcing = " <span style='color:black;font-size:11px;font-family:Gill Sans,Gill Sans MT, Calibri, sans-serif;'><b>Analytic Caveats:</b><br>1. For several datasets, data was only available at the first-order administrative level. For the purposes of this application, we assign each second-order administrative unit the value of the first order-administrative unit in the cases where data is not available. <br>2. Two datasets should not be compared across countries: Hunger and Agricultural potential as they may use different datasets and methods depending on the selected countries.<br>3. Summary values are population weighted averages based on Landscan 2022 population estimates for each administrative unit.<br><br> <b>Sources and Definitions:</b><br> <b>Population:</b> Sims, K., Reith, A., Bright, E., Kaufman, J., Pyle, J., Epting, J., Gonzales, J., Adams, D., Powell, E., Urban, M., & Rose, A. (2023). LandScan Global 2022 [Data set]. Oak Ridge National Laboratory. https://doi.org/10.48690/1529167 <br><br><b>Administrative Boundaries:</b> FieldMaps, geoBoundaries, U.S. Department of State, U.S. Geological Survey. (2024, January 2). Data. Fieldmaps.io. Retrieved March 23, 2024, from https://fieldmaps.io/data, geometries simplified for this application<br><br><b>Conflict Events - Count of Political Violence events per administrative district:</b> ACLED, Raleigh, C., Kishi, R. & Linke, A. Political instability patterns are obscured by conflict dataset scope conditions, sources, and coding choices. Humanit Soc Sci Commun 10, 74 (2023). https://doi.org/10.1057/s41599-023-01559-4, acleddata.com<br><br><b>Avg. Travel Time To Cities - Derived from MAP travel time to cities dataset by calculating a Landscan population weighted average of the travel time to cities for each administrative district:</b> Accessibility to Healthcare | MAP. (2018, January 10). Malaria Atlas Project. Retrieved March 23, 2024, from https://malariaatlas.org/project-resources/accessibility-to-healthcare/<br><br><b>Poverty -  Poverty Headcount Ratio at US$ 2.15/day 2017 PPP (2019 line-up):</b> Global Subnational Atlas of Poverty (version June 2023) [Data set]. World Bank Group<br><br><b>Stunting - Percentage of children stunted (below -2 SD of height for age according to the WHO standard):</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Wasting - Percentage of children wasted (below -2 SD of weight for height according to the WHO standard):</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Agricultural Potential - The Agricultural Potential component provides the maximum agricultural income smallholders in a region can attain if performing at maximum capacity (their own, as well as of the markets, productive infrastructure, and basic services surrounding them). Agricultural income potential is determined by both the biophysical factors that impact agricultural production and the economic factors that influence crop prices:</b> Food and Agriculture Organization (FAO). (2024, February 2). HiH Agricultural Typologies. Agricultural Potential Datasets. Retrieved March 23, 2024, from https://data.apps.fao.org/?lang=en, datasets were retrieved for each relevant country.<br><br><b>Hunger - This application uses different sources for hunger:</b> for Kenya, Tanzania and Malawi, we use Percent of People Experiencing IPC Phase 2 or Above (2023) from the IPC, for Liberia, Rwanda, Madagascar, Mozambique, and Zambia we use the Prevalence of Moderate or Severe Food Insecurity from FAO surveys using the Food Insecurity Experience Scale (FIES):</b> The Integrated Food Security Phase Classification (IPC). (2024). IPC Country Analysis | IPC. IPC Country Analysis | IPC - Integrated Food Security Phase Classification. Retrieved March 23, 2024, from https://www.ipcinfo.org/ipc-country-analysis/en/?maptype=77106 or Cafiero, C., Gheri, F., Kepple, A.W., Rosero Moncayo, J. and Viviani, S. 2022. Access to food in 2021:</b> Filling data gaps. Results of twenty national surveys using the Food Insecurity Experience Scale (FIES). Rome. https://doi.org/10.4060/cc0721en<br><br><b>Under 5 Mortality Ratio - Probability of dying before the fifth birthday in the five or ten years preceding the survey, per 1,000 live births. Estimates are given for ten year periods for all characteristics, but for five year periods only for the national total, by residence, and by sex.:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Women's Literacy - Percentage of women who are literate:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Access to Handwashing - Percentage of households with a basic handwashing facility, defined as a handwashing facility with soap and water available:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024</span>"
+
+
 
 const showReport = () => {
     window.dispatchEvent(new Event('resize'));  
@@ -4548,6 +4580,8 @@ const showReport = () => {
     }
    //add stuff to report
    var y = document.getElementById("report-inner-div");
+   var z = document.getElementById("reportSourcing")
+   z.innerHTML = defsSourcing
    y.innerHTML = ""
    if (scen1_idlist.length > 0 & scen2_idlist.length > 0) {
     y.innerHTML = "<br><u><b>Compare Scenario Details</u><br><br>" 
@@ -4641,6 +4675,7 @@ const addScenarioButtons = () => {
 
   const addInfo = () => {
   var x = document.getElementById("info-div");
+  x.innerHTML = "<span style='color:black;font-size:12px;font-family:Gill Sans,Gill Sans MT, Calibri, sans-serif;'><b>About</b><br>This tool allows international development practitioners to develop scenarios regarding where they will target international development programs. First, users can visualize several key development indicators across different geographies. Next, they can summarize those indicators across subsets of administrative areas in their countries of interest and print the results to share with colleagues. The goal is to ensure that development practitioners have easy access to, and are using, high quality quantitative data as a determinant in their decision making about where to invest their limited resources.  If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com<br><br></span>" + defsSourcing
   if (x.style.display === "none") {
     x.style.display = "block";
   } else {
@@ -4735,6 +4770,34 @@ const addScenarioButtons = () => {
     content: () => reportRef.current,
   });
 
+  function MapPrint(props) {
+    const map = useMap();
+    useEffect(() => {
+      const control = L.easyPrint({
+        ...props
+      });
+      map.addControl(control)
+      return () => {
+        map.removeControl(control);
+      }
+    }, [map]);
+  
+  
+    return null;
+  }
+  //lets try the browser leaflet thing
+  function BrowserPrint(props) {
+    const map = useMap();
+    useEffect(() => {
+      const control = L.browserPrint({
+       
+      });
+      map.addControl(control)
+      return () => {
+        map.removeControl(control);
+      }
+    }, [map]);}
+  
 
   try{
     var country = document.getElementById('country').value()
@@ -4778,6 +4841,21 @@ const addScenarioButtons = () => {
             url="https://fly.maptiles.arcgis.com/arcgis/rest/services/World_Imagery_Firefly/MapServer/tile/{z}/{y}/{x}"
             opacity={0.5} 
             maxZoom={21}/>   
+      <Pane name="LabelPane" style={{zIndex:650}}> 
+      <LayersControl.Overlay name="Labels" unchecked>
+          <TileLayer
+            ref={labelsRef}
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url= "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"
+            maxZoom={21}/>  
+             <TileLayer
+            ref={lineRef}
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url= "https://tiles.stadiamaps.com/tiles/stamen_terrain_lines/{z}/{x}/{y}{r}.{ext}"
+            ext =  'png'
+            maxZoom={21}/>  
+        </LayersControl.Overlay>
+      </Pane>
       <LayersControl ref={layersRef} position="topright">
       <LayersControl.Overlay name="Countries - Base" checked>
           <LayerGroup id='countriesG' ref={countryRef} ><KcrestCountries /></LayerGroup>
@@ -5155,9 +5233,9 @@ const addScenarioButtons = () => {
       <PointsToFront/>
       <Search provider={new OpenStreetMapProvider({ })} />
     </MapContainer>
-    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div" ref={reportRef} ></div><div id="report-inner-div-map1"><SimpleMap1></SimpleMap1><SimpleMap2></SimpleMap2><button onClick={handlePrint}>Print</button></div></div> 
+    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div" ref={reportRef} ></div><div id="report-inner-div-map1"><SimpleMap1></SimpleMap1><SimpleMap2></SimpleMap2><button onClick={printDocument}>Print</button></div><div id="reportSourcing"></div></div> 
     <div id="tooltip2" ><text class="p1">Hover over any location to see details.</text></div>
-    <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}This tool allows international development practitioners to develop scenarios regarding where they will target international development programs. The tool will also allow users to visualize several key development indicators and summarize them across subsets of administrative areas in their countries of interest. Finally, it will allow users to save scenarios so that they can retrieve those scenarios and review them multiple times. The goal is to ensure that development practitioners have easy access to, and are using, high quality quantitative data as a determinant in their decision making about where to invest their limited resources.  If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com{"\n "}</text></div> 
+    <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}{"\n "}</text></div> 
     <div id="bottom-desc" style={{zIndex: 19999, position: "absolute", bottom: 36, left: 1, width: "100%", textAlign: "center"}}>
       <div id= "scenario-div" style={{display:"none"}} >
     <button class="button button14"  onClick={scenario1} type="button">Create Scenario 1</button>   
@@ -5174,7 +5252,8 @@ const addScenarioButtons = () => {
     <button class="button button8"  onClick={toggleLiteracy} type="button">Women's Literacy</button> 
     <button class="button button9"  onClick={toggleConflict} type="button">Conflict Events</button> 
     <button class="button button11"  onClick={toggleAgpot} type="button">Agricultural Potential</button> 
-    <button class="button button12"  onClick={toggleTrav} type="button">Avg. Travel Time to Cities</button> </div>
+    <button class="button button12"  onClick={toggleTrav} type="button">Avg. Travel Time to Cities</button> 
+    <button class="button button18"  onClick={toggleLabels} type="button">Labels</button> </div>
     <div id="legend" style={{display:"none"}}><button id="close" class="button close" onClick={addLegend}>x</button><b>Legend</b><br></br><br></br>
     <i style={{backgroundImage: "linear-gradient(to left, #9B2226,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Poverty</span2><br></br>
     <i style={{backgroundImage: "linear-gradient(to left, #3C4F76,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Hunger</span2><br></br>
