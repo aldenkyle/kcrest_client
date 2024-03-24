@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,us
 import jsPDF from 'jspdf';
 import html2canvas from "html2canvas";
 import { useReactToPrint } from 'react-to-print';
+import "leaflet-lasso";
 
 import { SimpleMapScreenshoter } from "leaflet-simple-map-screenshoter";
 
@@ -45,6 +46,7 @@ export function onMouseOut2() {
   var ttdiv = document.getElementById('tooltip2')
   ttdiv.innerHTML = "Hover over any administrative unit for details"
 }
+ 
 
 export function onEachHex(e, layer) {
   var layer = e.target
@@ -137,9 +139,12 @@ var scen2_idlist = []
 export function addTooltip(e) {
      onEachHex(e);}
 
+var selector = "False"
 
 export function highlightFeature(e) {
+  if (selector == "False") {
   if (scenario == 1) {
+    //if the id list includes the feature already
   if (scen1_idlist.includes(e.sourceTarget.feature.properties.adm2_id)) {
     var layer = e.target;
     layer.setStyle({
@@ -178,8 +183,10 @@ export function highlightFeature(e) {
     console.log("trav time avg " + scen1_avgTravTimeEst )
     console.log("admins " + scen1_Admins )
   }
+   //if the id doesnt include the id
   else {
   var layer = e.target;
+  if (e.sourceTarget.feature.properties.adm0_name == country.value || country.value =='all') {
   console.log(e)
 
   layer.setStyle({
@@ -191,6 +198,7 @@ export function highlightFeature(e) {
 
   layer.bringToFront();
   //calculate my features!
+  
   scen1_idlist.push(e.sourceTarget.feature.properties.adm2_id)
   scen1_pop_initial = scen1_population
   scen1_population = scen1_population + e.sourceTarget.feature.properties.pop_ls_1
@@ -217,7 +225,7 @@ export function highlightFeature(e) {
   console.log("agpotential " + scen1_agPotentialEst )
   console.log("trav time avg " + scen1_avgTravTimeEst )
   console.log("admins " + scen1_Admins )
-}}
+}}}
 if (scenario == 2) {
   if (scen2_idlist.includes(e.sourceTarget.feature.properties.adm2_id)) {
     var layer = e.target;
@@ -258,6 +266,7 @@ if (scenario == 2) {
     console.log("admins " + scen2_Admins )
   }
   else {
+    if (e.sourceTarget.feature.properties.adm0_name == country.value || country.value =='all') {
   var layer = e.target;
   console.log(e)
 
@@ -296,17 +305,111 @@ if (scenario == 2) {
   console.log("agpotential " + scen2_agPotentialEst )
   console.log("trav time avg " + scen2_avgTravTimeEst )
   console.log("admins " + scen2_Admins )
+}}}
 }}
-}
 
+export function highlightFeature2(e) {
+  if (selector == "True") {
+  if (scenario == 1) {
+  if (scen1_idlist.includes(e.sourceTarget.feature.properties.adm2_id)) {
+  }
+  else {
+    if (e.sourceTarget.feature.properties.adm0_name == country.value || country.value =='all') {
+  var layer = e.target;
+  console.log(e)
+
+  layer.setStyle({
+      weight: 2,
+      color: '#363636',
+      dashArray: '',
+      fillOpacity: 0.6
+  });
+
+  layer.bringToFront();
+  //calculate my features!
+  scen1_idlist.push(e.sourceTarget.feature.properties.adm2_id)
+  scen1_pop_initial = scen1_population
+  scen1_population = scen1_population + e.sourceTarget.feature.properties.pop_ls_1
+  scen1_hungest = 100*((((scen1_hungest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.hunger_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_povest = 100*((((scen1_povest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.gsap_pov21/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_stuntest = 100*((((scen1_stuntest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.stunting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_wastest = 100*((((scen1_wastest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.wasting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_u5mortest = 100*((((scen1_u5mortest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.under5_mor/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_accesstoHWest = 100*((((scen1_accesstoHWest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_womensLitest = 100*((((scen1_womensLitest/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_conflictEventsEst = scen1_conflictEventsEst + e.sourceTarget.feature.properties.count_viol
+  scen1_agPotentialEst = scen1_agPotentialEst +  (e.sourceTarget.feature.properties.agpotentia*1)
+  scen1_avgTravTimeEst = 100*((((scen1_avgTravTimeEst/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
+  scen1_Admins = scen1_Admins + ", "+ e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
+  console.log("pop " + scen1_population )
+  console.log("hung " + scen1_hungest )
+  console.log("pov " + scen1_povest )
+  console.log("stunt " + scen1_stuntest )
+  console.log("wast " + scen1_wastest )
+  console.log("mort " + scen1_u5mortest )
+  console.log("hw " + scen1_accesstoHWest )
+  console.log("liter " + scen1_womensLitest )
+  console.log("conf " + scen1_conflictEventsEst )
+  console.log("agpotential " + scen1_agPotentialEst )
+  console.log("trav time avg " + scen1_avgTravTimeEst )
+  console.log("admins " + scen1_Admins )
+}}}
+if (scenario == 2) {
+  if (scen2_idlist.includes(e.sourceTarget.feature.properties.adm2_id)) {
+  }
+  else {
+    if (e.sourceTarget.feature.properties.adm0_name == country.value || country.value =='all') {
+  var layer = e.target;
+  console.log(e)
+
+  layer.setStyle({
+      weight: 3,
+      color: '#7d6c4a',
+      dashArray: '',
+      fillOpacity:0.6
+  });
+
+  layer.bringToFront();
+  //calculate my features!
+  scen2_idlist.push(e.sourceTarget.feature.properties.adm2_id)
+  scen2_pop_initial = scen2_population
+  scen2_population = scen2_population + e.sourceTarget.feature.properties.pop_ls_1
+  scen2_hungest = 100*((((scen2_hungest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.hunger_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_povest = 100*((((scen2_povest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.gsap_pov21/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_stuntest = 100*((((scen2_stuntest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.stunting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_wastest = 100*((((scen2_wastest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.wasting_1/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_u5mortest = 100*((((scen2_u5mortest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.under5_mor/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_accesstoHWest = 100*((((scen2_accesstoHWest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.handwashin/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_womensLitest = 100*((((scen2_womensLitest/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.women_lite/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_conflictEventsEst = scen2_conflictEventsEst + e.sourceTarget.feature.properties.count_viol
+  scen2_agPotentialEst = scen2_agPotentialEst + (e.sourceTarget.feature.properties.agpotentia*1)
+  scen2_avgTravTimeEst = 100*((((scen2_avgTravTimeEst/100) * scen2_pop_initial) + ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen2_population)
+  scen2_Admins = scen2_Admins + ", "+ e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
+  console.log("pop " + scen2_population )
+  console.log("hung " + scen2_hungest )
+  console.log("pov " + scen2_povest )
+  console.log("stunt " + scen2_stuntest )
+  console.log("wast " + scen2_wastest )
+  console.log("mort " + scen2_u5mortest )
+  console.log("hw " + scen2_accesstoHWest )
+  console.log("liter " + scen2_womensLitest )
+  console.log("conf " + scen2_conflictEventsEst )
+  console.log("agpotential " + scen2_agPotentialEst )
+  console.log("trav time avg " + scen2_avgTravTimeEst )
+  console.log("admins " + scen2_Admins )
+}}}
+}}
 
 function onEachFeature(feature, layer) {
   layer.on({
       click: highlightFeature,
       mouseover: addTooltip,
       mouseout: onMouseOut2
+  }); 
+    layer.on({
+      mouseover: highlightFeature2,
   });
-}
+  }
 
 
 
@@ -3808,9 +3911,6 @@ const Search = (props) => {
   return null // don't want anything to show up from this comp
 }
 
-
-
-
 // Using the GeoJSON tag in a Map container
 const LeafletMap = () => {
   const scen1Ref = useRef()
@@ -4023,7 +4123,7 @@ const LeafletMap = () => {
   const [labelState, setLabelState] = useState(false);
   const agpotRef = useRef();
   const [agpotState, setAgpotState] = useState(false);
-  const [clickState, setClickState] = useState(false);
+ 
   const [infoState, setInfoState] = useState(false);
   const countryRefGhana = useRef();  const povRefGhana = useRef(); const hungerRefGhana = useRef(); const stuntingRefGhana = useRef(); const wastingRefGhana = useRef();const u5mortRefGhana = useRef(); const conflictRefGhana = useRef();const literacyRefGhana = useRef();const handwashingRefGhana = useRef(); const travRefGhana = useRef(); const agpotRefGhana = useRef();
   const countryRefLiberia = useRef();const povRefLiberia = useRef();const hungerRefLiberia = useRef();const stuntingRefLiberia = useRef();const wastingRefLiberia = useRef(); const u5mortRefLiberia = useRef(); const conflictRefLiberia = useRef(); const literacyRefLiberia = useRef(); const handwashingRefLiberia = useRef(); const travRefLiberia = useRef(); const agpotRefLiberia = useRef();
@@ -4065,13 +4165,6 @@ const LeafletMap = () => {
     //LeafletMap()
   }  
   
-  const toggle=(clickState)=>{
-      setClickState(!clickState)};
-
-  const toggleInfo=()=>{
-        setInfoState(!infoState)};
-
-
         
   const removeLayers = () => {
           const mapC = map;
@@ -4526,11 +4619,15 @@ const LeafletMap = () => {
     //task: bring right layer to front!
     console.log("hi")
     scenario = 1
+    document.getElementsByClassName("button14")[0].classList.add("test_skill");
+    document.getElementsByClassName("button15")[0].classList.remove("test_skill");
     ScenToFront()
     }
   
   function scenario2() {
     scenario = 2
+    document.getElementsByClassName("button15")[0].classList.add("test_skill");
+    document.getElementsByClassName("button14")[0].classList.remove("test_skill");
     ScenToFront()
     //task: bring right layer to front!
   }
@@ -4552,6 +4649,18 @@ function bolderStart(a,b) {
 
 const defsSourcing = " <span style='color:black;font-size:11px;font-family:Gill Sans,Gill Sans MT, Calibri, sans-serif;'><b>Analytic Caveats:</b><br>1. For several datasets, data was only available at the first-order administrative level. For the purposes of this application, we assign each second-order administrative unit the value of the first order-administrative unit in the cases where data is not available. <br>2. Two datasets should not be compared across countries: Hunger and Agricultural potential as they may use different datasets and methods depending on the selected countries.<br>3. Summary values are population weighted averages based on Landscan 2022 population estimates for each administrative unit.<br><br> <b>Sources and Definitions:</b><br> <b>Population:</b> Sims, K., Reith, A., Bright, E., Kaufman, J., Pyle, J., Epting, J., Gonzales, J., Adams, D., Powell, E., Urban, M., & Rose, A. (2023). LandScan Global 2022 [Data set]. Oak Ridge National Laboratory. https://doi.org/10.48690/1529167 <br><br><b>Administrative Boundaries:</b> FieldMaps, geoBoundaries, U.S. Department of State, U.S. Geological Survey. (2024, January 2). Data. Fieldmaps.io. Retrieved March 23, 2024, from https://fieldmaps.io/data, geometries simplified for this application<br><br><b>Conflict Events - Count of Political Violence events per administrative district:</b> ACLED, Raleigh, C., Kishi, R. & Linke, A. Political instability patterns are obscured by conflict dataset scope conditions, sources, and coding choices. Humanit Soc Sci Commun 10, 74 (2023). https://doi.org/10.1057/s41599-023-01559-4, acleddata.com<br><br><b>Avg. Travel Time To Cities - Derived from MAP travel time to cities dataset by calculating a Landscan population weighted average of the travel time to cities for each administrative district:</b> Accessibility to Healthcare | MAP. (2018, January 10). Malaria Atlas Project. Retrieved March 23, 2024, from https://malariaatlas.org/project-resources/accessibility-to-healthcare/<br><br><b>Poverty -  Poverty Headcount Ratio at US$ 2.15/day 2017 PPP (2019 line-up):</b> Global Subnational Atlas of Poverty (version June 2023) [Data set]. World Bank Group<br><br><b>Stunting - Percentage of children stunted (below -2 SD of height for age according to the WHO standard):</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Wasting - Percentage of children wasted (below -2 SD of weight for height according to the WHO standard):</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Agricultural Potential - The Agricultural Potential component provides the maximum agricultural income smallholders in a region can attain if performing at maximum capacity (their own, as well as of the markets, productive infrastructure, and basic services surrounding them). Agricultural income potential is determined by both the biophysical factors that impact agricultural production and the economic factors that influence crop prices:</b> Food and Agriculture Organization (FAO). (2024, February 2). HiH Agricultural Typologies. Agricultural Potential Datasets. Retrieved March 23, 2024, from https://data.apps.fao.org/?lang=en, datasets were retrieved for each relevant country.<br><br><b>Hunger - This application uses different sources for hunger:</b> for Kenya, Tanzania and Malawi, we use Percent of People Experiencing IPC Phase 2 or Above (2023) from the IPC, for Liberia, Rwanda, Madagascar, Mozambique, and Zambia we use the Prevalence of Moderate or Severe Food Insecurity from FAO surveys using the Food Insecurity Experience Scale (FIES):</b> The Integrated Food Security Phase Classification (IPC). (2024). IPC Country Analysis | IPC. IPC Country Analysis | IPC - Integrated Food Security Phase Classification. Retrieved March 23, 2024, from https://www.ipcinfo.org/ipc-country-analysis/en/?maptype=77106 or Cafiero, C., Gheri, F., Kepple, A.W., Rosero Moncayo, J. and Viviani, S. 2022. Access to food in 2021:</b> Filling data gaps. Results of twenty national surveys using the Food Insecurity Experience Scale (FIES). Rome. https://doi.org/10.4060/cc0721en<br><br><b>Under 5 Mortality Ratio - Probability of dying before the fifth birthday in the five or ten years preceding the survey, per 1,000 live births. Estimates are given for ten year periods for all characteristics, but for five year periods only for the national total, by residence, and by sex.:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Women's Literacy - Percentage of women who are literate:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Access to Handwashing - Percentage of households with a basic handwashing facility, defined as a handwashing facility with soap and water available:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024</span>"
 
+const AreaSelect = () => {
+  if (map && selector == "False") {
+    selector = "True"
+    console.log(selector + " cs")
+    document.getElementsByClassName("button19")[0].classList.add("test_skill");
+    document.getElementsByClassName("button19")[0].innerHTML = "Stop Selecting by Hover"
+  } else if (map &&  selector == "True") {
+    selector = "False"
+    console.log(selector + " cs")
+    document.getElementsByClassName("button19")[0].classList.remove("test_skill");
+    document.getElementsByClassName("button19")[0].innerHTML = "Add Admins by Hovering"
+  }};
 
 
 const showReport = () => {
@@ -5240,6 +5349,7 @@ const addScenarioButtons = () => {
       <div id= "scenario-div" style={{display:"none"}} >
     <button class="button button14"  onClick={scenario1} type="button">Create Scenario 1</button>   
     <button class="button button15"  onClick={scenario2} type="button">Create Scenario 2</button> 
+    <button class="button button19"  onClick={AreaSelect} type="button">Add Admins by Hovering</button> 
     <button class="button button16"  onClick={resetHighlight} type="button">Clear Current Scenario</button> 
     <button class="button button17"  onClick={showReport} type="button">Run Analysis</button> 
       </div>

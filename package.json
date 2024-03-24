@@ -9,6 +9,7 @@
     "leaflet-easybutton": "^2.4.0",
     "leaflet-easyprint": "^2.1.9",
     "leaflet-geosearch": "^3.10.2",
+    "leaflet-lasso": "^2.2.13",
     "leaflet-simple-map-screenshoter": "^0.5.0",
     "leaflet.browser.print": "^2.0.2",
     "npm": "^10.2.3",
