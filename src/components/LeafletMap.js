@@ -4,7 +4,7 @@ import jsPDF from 'jspdf';
 import html2canvas from "html2canvas";
 import { useReactToPrint } from 'react-to-print';
 import {useScreenshot, createFileName} from 'use-react-screenshot';
-import {   Document,  Page,  Text,  Image as ImageRPDF,  StyleSheet,  Font , PDFDownloadLink, View, usePDF} from "@react-pdf/renderer";
+import {   Document,  Page,  Text,  Image as ImageRPDF,  StyleSheet,  Font , PDFDownloadLink, View, usePDF, pdf} from "@react-pdf/renderer";
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
 import ReactPDF from '@react-pdf/renderer';
@@ -540,7 +540,7 @@ const KcrestCountries = () => {
 
   const getData = async () => {
     try {
-      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
+      const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/all.json");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -571,7 +571,7 @@ const KcrestScen1 = () => {
   const [data, setData] = useState();
   const getData = async () => {
     try {
-      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
+      const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/all.json");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -601,7 +601,7 @@ const KcrestScen2 = () => {
   const [data, setData] = useState();
   const getData = async () => {
     try {
-      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
+      const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/all.json");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -632,7 +632,7 @@ const KcrestFeaturesFront = () => {
   const [data, setData] = useState();
   const getData = async () => {
     try {
-      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
+      const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/all.json");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -662,7 +662,7 @@ const KcrestScenario2 = () => {
   const [data, setData] = useState();
   const getData = async () => {
     try {
-      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/all");
+      const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/all.json");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -4803,6 +4803,13 @@ const showReport = () => {
   return ("hi I am the data")  
   }
 
+  const generatePdfDocument = async (documentData,fileName) => {
+    const blob = await pdf((
+        <MyDocument/>
+    )).toBlob();
+    saveAs(blob, "latestDownload.pdf");};
+
+
   const showUpdatePDF = () => {
     console.log(mapRef.current.getSize().x);
     //const _PageSize= { 	height: mapRef.current.getSize().y, width: mapRef.current.getSize().x }
@@ -4823,16 +4830,14 @@ const showReport = () => {
     //printDocument()
     //easyPrinter()
     var mapC1 = document.getElementById("map-container2");
-    setTimeout(function(){
     setDetails([]);
-   
+    //generatePdfDocument();
     var pdfButton = document.getElementById("downloadPDF-report");
     if (pdfButton.style.display === "none") {
       pdfButton.style.display = "block";
     } else {
       pdfButton.style.display = "none";
     }
-    ;},2000)
     //refix map rendering whihc breaks when I update the state
     console.log(scen2_idlist.length)
     if (scen2_idlist.length == 0) {
@@ -5887,7 +5892,7 @@ const addScenarioButtons = () => {
     <div id="get-PDF-report"><button class="button button20" onClick={showUpdatePDF} type="button">Create PDF Output</button><br></br><br></br></div>
     <div id="downloadPDF-report" style={{display:"none"}}>
    <PDFDownloadLink
-  document={<MyDocument data={updatePDFData}/>}
+  document={<MyDocument data={scenarioDetails}/>}
   fileName="movielist.pdf"
   style={{
     backgroundColor: "#363636",
