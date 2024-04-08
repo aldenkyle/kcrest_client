@@ -192,7 +192,7 @@ export function highlightFeature(e) {
   else {
   var layer = e.target;
   if (e.sourceTarget.feature.properties.adm0_name == country.value || country.value =='all') {
-  console.log(e)
+  //console.log(e)
 
   layer.setStyle({
       weight: 2,
@@ -218,18 +218,18 @@ export function highlightFeature(e) {
   scen1_agPotentialEst = scen1_agPotentialEst +  (e.sourceTarget.feature.properties.agpotentia*1)
   scen1_avgTravTimeEst = 100*((((scen1_avgTravTimeEst/100) * scen1_pop_initial) + ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/scen1_population)
   scen1_Admins = scen1_Admins + ", "+ e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
-  console.log("pop " + scen1_population )
-  console.log("hung " + scen1_hungest )
-  console.log("pov " + scen1_povest )
-  console.log("stunt " + scen1_stuntest )
-  console.log("wast " + scen1_wastest )
-  console.log("mort " + scen1_u5mortest )
-  console.log("hw " + scen1_accesstoHWest )
-  console.log("liter " + scen1_womensLitest )
-  console.log("conf " + scen1_conflictEventsEst )
-  console.log("agpotential " + scen1_agPotentialEst )
-  console.log("trav time avg " + scen1_avgTravTimeEst )
-  console.log("admins " + scen1_Admins )
+  //console.log("pop " + scen1_population )
+  //console.log("hung " + scen1_hungest )
+  //console.log("pov " + scen1_povest )
+  //console.log("stunt " + scen1_stuntest )
+ // console.log("wast " + scen1_wastest )
+  //console.log("mort " + scen1_u5mortest )
+  //console.log("hw " + scen1_accesstoHWest )
+  //console.log("liter " + scen1_womensLitest )
+  //console.log("conf " + scen1_conflictEventsEst )
+  //console.log("agpotential " + scen1_agPotentialEst )
+  //console.log("trav time avg " + scen1_avgTravTimeEst )
+  //console.log("admins " + scen1_Admins )
 }}}
 if (scenario == 2) {
   if (scen2_idlist.includes(e.sourceTarget.feature.properties.adm2_id)) {
@@ -257,18 +257,18 @@ if (scenario == 2) {
     scen2_avgTravTimeEst = 100*((((scen2_avgTravTimeEst/100) * scen2_pop_initial) - ((e.sourceTarget.feature.properties.timeperper/100) * e.sourceTarget.feature.properties.pop_ls_1))/(scen2_population+1))
     admincomb = e.sourceTarget.feature.properties.adm0_name +"|"+e.sourceTarget.feature.properties.adm1_name+"|"+e.sourceTarget.feature.properties.adm2_name
     scen2_Admins = scen2_Admins.replace(admincomb, "")
-    console.log("pop " + scen2_population )
-    console.log("hung " + scen2_hungest )
-    console.log("pov " + scen2_povest )
-    console.log("stunt " + scen2_stuntest )
-    console.log("wast " + scen2_wastest )
-    console.log("mort " + scen2_u5mortest )
-    console.log("hw " + scen2_accesstoHWest )
-    console.log("liter " + scen2_womensLitest )
-    console.log("conf " + scen2_conflictEventsEst )
-    console.log("agpotential " + scen2_agPotentialEst )
-    console.log("trav time avg " + scen2_avgTravTimeEst )
-    console.log("admins " + scen2_Admins )
+    //console.log("pop " + scen2_population )
+    //console.log("hung " + scen2_hungest )
+    //console.log("pov " + scen2_povest )
+    //console.log("stunt " + scen2_stuntest )
+    //console.log("wast " + scen2_wastest )
+   // console.log("mort " + scen2_u5mortest )
+    //console.log("hw " + scen2_accesstoHWest )
+    //console.log("liter " + scen2_womensLitest )
+    //console.log("conf " + scen2_conflictEventsEst )
+    //console.log("agpotential " + scen2_agPotentialEst )
+    //console.log("trav time avg " + scen2_avgTravTimeEst )
+    //console.log("admins " + scen2_Admins )
   }
   else {
     if (e.sourceTarget.feature.properties.adm0_name == country.value || country.value =='all') {
@@ -420,30 +420,30 @@ function onEachFeature(feature, layer) {
 
 const urlToQuery = () => {
   var cntry = document.getElementById('country').value;
-  var urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/all";
+  var urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/all.json";
   if (cntry == 'Ghana')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/ghana" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json" }
   else if (cntry == 'Senegal')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/senegal" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json" }
   else if (cntry == 'Liberia')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/liberia" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json" }
   else if (cntry == 'Kenya')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/kenya" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json" }
   else if (cntry == 'Rwanda')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json" }
   else if (cntry == 'Tanzania')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json" }
   else if (cntry == 'Mozambique')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json" }
   else if (cntry == 'Malawi')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/malawi" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json" }
   else if (cntry == 'Madagascar')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json" }
   else if (cntry == 'Zambia')
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/zambia" }
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json" }
   else
-  {urlQ = "https://kcrest-server-38b9724c4a82.herokuapp.com/all" }
-  console.log(urlQ)
+  {urlQ = "https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/all.json" }
+  //console.log(urlQ)
   return urlQ
 }
 
@@ -1204,7 +1204,7 @@ const PovertyGhana = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1226,7 +1226,7 @@ const HungerGhana = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -1257,7 +1257,7 @@ const StuntingGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1280,7 +1280,7 @@ const WastingGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1303,7 +1303,7 @@ const Under5MortGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1326,7 +1326,7 @@ const Under5MortGhana = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1349,7 +1349,7 @@ const LiteracyGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1372,7 +1372,7 @@ const ConflictGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1395,7 +1395,7 @@ const AgPotentialGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1426,7 +1426,7 @@ const TraveltimeGhana = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1450,7 +1450,7 @@ const GhanaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/ghana");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/ghana.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -1472,7 +1472,7 @@ const GhanaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1494,7 +1494,7 @@ const HungerLiberia = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -1525,7 +1525,7 @@ const StuntingLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1548,7 +1548,7 @@ const WastingLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1571,7 +1571,7 @@ const Under5MortLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1594,7 +1594,7 @@ const Under5MortLiberia = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1617,7 +1617,7 @@ const LiteracyLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1640,7 +1640,7 @@ const ConflictLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1663,7 +1663,7 @@ const AgPotentialLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1694,7 +1694,7 @@ const TraveltimeLiberia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1718,7 +1718,7 @@ const LiberiaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/liberia");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/liberia.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -1740,7 +1740,7 @@ const LiberiaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1762,7 +1762,7 @@ const HungerSenegal = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -1793,7 +1793,7 @@ const StuntingSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1816,7 +1816,7 @@ const WastingSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1839,7 +1839,7 @@ const Under5MortSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1862,7 +1862,7 @@ const Under5MortSenegal = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -1885,7 +1885,7 @@ const LiteracySenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1908,7 +1908,7 @@ const ConflictSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1931,7 +1931,7 @@ const AgPotentialSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1962,7 +1962,7 @@ const TraveltimeSenegal = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -1986,7 +1986,7 @@ const SenegalCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/senegal");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/senegal.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -2010,7 +2010,7 @@ const SenegalCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2032,7 +2032,7 @@ const HungerKenya = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -2063,7 +2063,7 @@ const StuntingKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2086,7 +2086,7 @@ const WastingKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2109,7 +2109,7 @@ const Under5MortKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2132,7 +2132,7 @@ const Under5MortKenya = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2155,7 +2155,7 @@ const LiteracyKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2178,7 +2178,7 @@ const ConflictKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2201,7 +2201,7 @@ const AgPotentialKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2232,7 +2232,7 @@ const TraveltimeKenya = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2256,7 +2256,7 @@ const KenyaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kenya");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kenya.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -2280,7 +2280,7 @@ const KenyaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2302,7 +2302,7 @@ const HungerMalawi = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -2333,7 +2333,7 @@ const StuntingMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2356,7 +2356,7 @@ const WastingMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2379,7 +2379,7 @@ const Under5MortMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2402,7 +2402,7 @@ const Under5MortMalawi = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2425,7 +2425,7 @@ const LiteracyMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2448,7 +2448,7 @@ const ConflictMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2471,7 +2471,7 @@ const AgPotentialMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2502,7 +2502,7 @@ const TraveltimeMalawi = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2526,7 +2526,7 @@ const MalawiCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/malawi");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/malawi.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -2550,7 +2550,7 @@ const MalawiCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2572,7 +2572,7 @@ const HungerMadagascar = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -2603,7 +2603,7 @@ const StuntingMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2626,7 +2626,7 @@ const WastingMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2649,7 +2649,7 @@ const Under5MortMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2672,7 +2672,7 @@ const Under5MortMadagascar = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2695,7 +2695,7 @@ const LiteracyMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2718,7 +2718,7 @@ const ConflictMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2741,7 +2741,7 @@ const AgPotentialMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2772,7 +2772,7 @@ const TraveltimeMadagascar = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2796,7 +2796,7 @@ const MadagascarCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/madagascar");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/madagascar.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -2820,7 +2820,7 @@ const MadagascarCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2842,7 +2842,7 @@ const HungerMozambique = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -2873,7 +2873,7 @@ const StuntingMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2896,7 +2896,7 @@ const WastingMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2919,7 +2919,7 @@ const Under5MortMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2942,7 +2942,7 @@ const Under5MortMozambique = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -2965,7 +2965,7 @@ const LiteracyMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -2988,7 +2988,7 @@ const ConflictMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3011,7 +3011,7 @@ const AgPotentialMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3042,7 +3042,7 @@ const TraveltimeMozambique = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3066,7 +3066,7 @@ const MozambiqueCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/mozambique");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/mozambique.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -3090,7 +3090,7 @@ const MozambiqueCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3112,7 +3112,7 @@ const HungerRwanda = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -3143,7 +3143,7 @@ const StuntingRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3166,7 +3166,7 @@ const WastingRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3189,7 +3189,7 @@ const Under5MortRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3212,7 +3212,7 @@ const Under5MortRwanda = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3235,7 +3235,7 @@ const LiteracyRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3258,7 +3258,7 @@ const ConflictRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3281,7 +3281,7 @@ const AgPotentialRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3312,7 +3312,7 @@ const TraveltimeRwanda = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3336,7 +3336,7 @@ const RwandaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/rwanda");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/rwanda.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -3360,7 +3360,7 @@ const RwandaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3382,7 +3382,7 @@ const HungerTanzania = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -3413,7 +3413,7 @@ const StuntingTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3436,7 +3436,7 @@ const WastingTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3459,7 +3459,7 @@ const Under5MortTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3482,7 +3482,7 @@ const Under5MortTanzania = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3505,7 +3505,7 @@ const LiteracyTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3528,7 +3528,7 @@ const ConflictTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3551,7 +3551,7 @@ const AgPotentialTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3582,7 +3582,7 @@ const TraveltimeTanzania = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3606,7 +3606,7 @@ const TanzaniaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/tanzania");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/tanzania.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -3630,7 +3630,7 @@ const TanzaniaCountry = () => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3652,7 +3652,7 @@ const HungerZambia = forwardRef((undefined, povRef) => {
       // create state variable to hold data when it is fetched
       const [data, setData] = useState();
       const getData = async () => {
-        try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+        try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
           const jsonData = await response.json();
           setData(jsonData[0].json_build_object);
         } catch (err) {console.error(err.message);}};
@@ -3683,7 +3683,7 @@ const StuntingZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3706,7 +3706,7 @@ const WastingZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3729,7 +3729,7 @@ const Under5MortZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3752,7 +3752,7 @@ const Under5MortZambia = forwardRef((undefined, povRef) => {
     // create state variable to hold data when it is fetched
     const [data, setData] = useState();
     const getData = async () => {
-      try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+      try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
       } catch (err) {console.error(err.message);}};
@@ -3775,7 +3775,7 @@ const LiteracyZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3798,7 +3798,7 @@ const ConflictZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3821,7 +3821,7 @@ const AgPotentialZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3852,7 +3852,7 @@ const TraveltimeZambia = forwardRef((undefined, povRef) => {
   // create state variable to hold data when it is fetched
   const [data, setData] = useState();
   const getData = async () => {
-    try {const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+    try {const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
       const jsonData = await response.json();
       setData(jsonData[0].json_build_object);
     } catch (err) {console.error(err.message);}};
@@ -3876,7 +3876,7 @@ const ZambiaCountry = () => {
     const [data, setData] = useState(); 
     const getData = async () => {
       try {
-        const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/zambia");
+        const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/zambia.json");
         const jsonData = await response.json();
         setData(jsonData[0].json_build_object);
         //console.log(jsonData[0].json_build_object)
@@ -3927,14 +3927,18 @@ const LeafletMap = () => {
   const [map1Image, setMap1Image] = useState();
 
     function resetHighlightScen1d() {
+      console.log("did I make it here to reset highlight")
+      console.log(scen1Ref.current)
       var featLayer = scen1Ref.current.getLayers()[0].getLayers()
+ 
+      console.log(scen1Ref.current.getLayers()[0].getLayers()[0].feature.properties)
       var max_lat = 0;
       var min_lat = 0;
       var max_lon = 0;
       var min_lon = 0; 
       for (let i = 0; i < featLayer.length; i++) {
         if (scen1_idlist.includes(featLayer[i].feature.properties.adm2_id)) {
-        //console.log(featLayer[i].getBounds())
+        console.log(featLayer[i].feature.properties.adm2_id)
         featLayer[i].setStyle({
           weight: 1,
           opacity: .7,
@@ -4028,17 +4032,10 @@ const LeafletMap = () => {
       lc[2].style.visibility = 'hidden';
     };
 
-  const easyPrinter = () => {
-    const mr = mapRef.current
-    var printPlugin = L.easyPrint({
-      hidden: true,
-      sizeModes: ['A4Portrait']
-    }).addTo(mr); 
-    printPlugin.printMap('A4Portrait', 'MyFileName.png');
-  }
 
   var SimpleMap1 = () => {
     //const [mapRef, setMapRef] = useState(null);
+    //console.log("loading internal map 1")
     try{
       var country = document.getElementById('country').value()
       }catch(e){
@@ -4695,13 +4692,11 @@ const showReport = () => {
     resetHighlightScen2d();}}
     catch {
       try {setTimeout(function(){
+        console.log("I'm getting triggered")
         resetHighlightScen1d();
         resetHighlightScen2d();
-       },10000);}
-       catch {setTimeout(function(){
-        resetHighlightScen1d();
-        resetHighlightScen2d();
-       },10000);}
+       },5000);}
+       catch {console.log("Resetting map didnt work");}
     }
 
     //open and close report
@@ -4810,18 +4805,22 @@ const showReport = () => {
     saveAs(blob, "latestDownload.pdf");};
 
 
-  const showUpdatePDF = () => {
-    console.log(mapRef.current.getSize().x);
-    //const _PageSize= { 	height: mapRef.current.getSize().y, width: mapRef.current.getSize().x }
-    const _PageSize= { 	height: 694, width: 663}
+  const showUpdatePDF =  async () => {
+    //console.log(mapRef.current.getSize().x);
+    console.log(document.getElementById('report-inner-div-map1').clientWidth)
+    var wd =  document.getElementById('report-inner-div-map1').clientWidth
+    var hth = document.getElementById('report-inner-div-map1').clientHeight
+    const _PageSize= { 	height: hth, width: wd}
+    var haveResult = "no"
     setTimeout(function(){
     domtoimage.toPng(document.getElementById('report-inner-div-map1'), _PageSize)
     //.then(function (blob) {
     //  window.saveAs(blob, 'my-node.png');})
     .then(function (dataUrl) {
-      img1.src = dataUrl;
       img1a = dataUrl;
-      //document.getElementById('screenshot').src = dataUrl;
+      //console.log(img1a)
+      setDetails(["mapsReset"]);
+      haveResult = "yes";
     })  ;},1000)
     //console.log(img1a)
     //MapPrint()
@@ -4829,14 +4828,12 @@ const showReport = () => {
     //downloadScreenshot()
     //printDocument()
     //easyPrinter()
-    var mapC1 = document.getElementById("map-container2");
-    setDetails([]);
     //generatePdfDocument();
     var pdfButton = document.getElementById("downloadPDF-report");
     if (pdfButton.style.display === "none") {
-      pdfButton.style.display = "block";
+       pdfButton.style.display = "block";
     } else {
-      pdfButton.style.display = "none";
+       pdfButton.style.display = "none";
     }
     //refix map rendering whihc breaks when I update the state
     console.log(scen2_idlist.length)
@@ -4844,9 +4841,13 @@ const showReport = () => {
     document.getElementById("head-desc3").style.display = "none"
     var mc2 = document.getElementById("map-container2");
     mc2.style.display = "none"
+    
+    //resetHighlightScen1d();
+    //resetHighlightScen2d();
   }
 
   }
+
 
 
 Font.register({
@@ -4924,19 +4925,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   row1: {
-    width: '27%',
+    width: '45%',
   },
   row2: {
-    width: '15%',
+    width: '20%',
   },
   row3: {
-    width: '15%',
+    width: '10%',
   },
   row4: {
     width: '20%',
-  },
-  row5: {
-    width: '27%',
   },
   row1a: {
     width: '65%',
@@ -4946,102 +4944,265 @@ const styles = StyleSheet.create({
   },
 });
 
+function compareElements(a,b) {
+if (a>b) {return ">"}
+else if (b>a) {return "<"}
+else {return "="}
+}
 
 function MyDocument(props) {
-  console.log(styles.body)
+  //console.log(styles.body)
   if (scen1_idlist.length > 0 & scen2_idlist.length > 0) {
   return(
   <Document>
-    <Page style={{paddingTop: 35,paddingBottom: 65, paddingHorizontal: 35,}}>
-      <Text style={styles.title}>User Defined Scenario Result</Text>
-      <Text style={styles.author}>Produced by International Development Targeting Scenario Builder Tool</Text>
-      <Text style={styles.subtitle}>
-      Compare 2 User-Developed Scenarios
-      </Text>
-      <Text style={styles.text}>
-
-      </Text>
-      <Text style={styles.text}>
-        Es, pues, de saber, que este sobredicho hidalgo, los ratos que estaba
-      </Text>
-      <Text style={styles.text}>
-        Con estas y semejantes razones perdía el pobre caballero el juicio, y
-      </Text>
-      <Text style={styles.text}>
-        En resolución, él se enfrascó tanto en su lectura, que se le pasaban las
-      </Text>
-      <Text style={styles.subtitle}>
-        List of Administrative Units Selected by the User for Scenario 1:
-      </Text>
-      <Text style={styles.text}>
-      {scen1_Admins.slice(2)}
-      </Text>
-      <Text style={styles.subtitle}>
-        List of Administrative Units Selected by the User for Scenario 2:
-      </Text>
-      <Text style={styles.text}>
-      {scen2_Admins.slice(2)}
-      </Text>
-      <Text style={styles.subtitle}>
-        Analytic Caveats:
-      </Text>
-      <Text style={styles.text}>
-      1. For several datasets, data was only available at the first-order administrative level. For the purposes of this application, we assign each second-order administrative unit the value of the first order-administrative unit in the cases where data is not available.
-      </Text>
-      <Text style={styles.text}>
-      2. Two datasets should not be compared across countries: Hunger and Agricultural potential as they may use different datasets and methods depending on the selected countries.
-      </Text>
-      <Text style={styles.text}>
-      3. Summary values are population weighted averages based on Landscan 2022 population estimates for each administrative unit.
-      </Text>
-      <Text style={styles.subtitle}>
-      Sources and Definitions:
-      </Text>
-      <Text style={styles.text}>
-      Population: Sims, K., Reith, A., Bright, E., Kaufman, J., Pyle, J., Epting, J., Gonzales, J., Adams, D., Powell, E., Urban, M., & Rose, A. (2023). LandScan Global 2022 [Data set]. Oak Ridge National Laboratory. https://doi.org/10.48690/1529167
-      </Text>
-      <Text style={styles.text}>
-      Administrative Boundaries: FieldMaps, geoBoundaries, U.S. Department of State, U.S. Geological Survey. (2024, January 2). Data. Fieldmaps.io. Retrieved March 23, 2024, from https://fieldmaps.io/data, geometries simplified for this application
-      </Text>
-      <Text style={styles.text}>
-      Conflict Events - Count of Political Violence events per administrative district: ACLED, Raleigh, C., Kishi, R. & Linke, A. Political instability patterns are obscured by conflict dataset scope conditions, sources, and coding choices. Humanit Soc Sci Commun 10, 74 (2023). https://doi.org/10.1057/s41599-023-01559-4, acleddata.com
-      </Text>
-      <Text style={styles.text}>
-      Avg. Travel Time To Cities - Derived from MAP travel time to cities dataset by calculating a Landscan population weighted average of the travel time to cities for each administrative district: Accessibility to Healthcare | MAP. (2018, January 10). Malaria Atlas Project. Retrieved March 23, 2024, from https://malariaatlas.org/project-resources/accessibility-to-healthcare/
-      </Text>
-      <Text style={styles.text}>
-      Poverty - Poverty Headcount Ratio at US$ 2.15/day 2017 PPP (2019 line-up): Global Subnational Atlas of Poverty (version June 2023) [Data set]. World Bank Group
-      </Text>
-      <Text style={styles.text}>
-      Stunting - Percentage of children stunted (below -2 SD of height for age according to the WHO standard): Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
-      </Text>
-      <Text style={styles.text}>
-      Wasting - Percentage of children wasted (below -2 SD of weight for height according to the WHO standard): Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
-      </Text>
-      <Text style={styles.text}>
-      Agricultural Potential - The Agricultural Potential component provides the maximum agricultural income smallholders in a region can attain if performing at maximum capacity (their own, as well as of the markets, productive infrastructure, and basic services surrounding them). Agricultural income potential is determined by both the biophysical factors that impact agricultural production and the economic factors that influence crop prices: Food and Agriculture Organization (FAO). (2024, February 2). HiH Agricultural Typologies. Agricultural Potential Datasets. Retrieved March 23, 2024, from https://data.apps.fao.org/?lang=en, datasets were retrieved for each relevant country.
-      </Text>
-      <Text style={styles.text}>
-      Hunger - This application uses different sources for hunger: for Kenya, Tanzania and Malawi, we use Percent of People Experiencing IPC Phase 2 or Above (2023) from the IPC, for Liberia, Rwanda, Madagascar, Mozambique, and Zambia we use the Prevalence of Moderate or Severe Food Insecurity from FAO surveys using the Food Insecurity Experience Scale (FIES): The Integrated Food Security Phase Classification (IPC). (2024). IPC Country Analysis | IPC. IPC Country Analysis | IPC - Integrated Food Security Phase Classification. Retrieved March 23, 2024, from https://www.ipcinfo.org/ipc-country-analysis/en/?maptype=77106 or Cafiero, C., Gheri, F., Kepple, A.W., Rosero Moncayo, J. and Viviani, S. 2022. Access to food in 2021: Filling data gaps. Results of twenty national surveys using the Food Insecurity Experience Scale (FIES). Rome. https://doi.org/10.4060/cc0721en
-      </Text>
-      <Text style={styles.text}>
-      Under 5 Mortality Ratio - Probability of dying before the fifth birthday in the five or ten years preceding the survey, per 1,000 live births. Estimates are given for ten year periods for all characteristics, but for five year periods only for the national total, by residence, and by sex.: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
-      </Text>
-      <Text style={styles.text}>
-      Women's Literacy - Percentage of women who are literate: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
-      </Text>
-      <Text style={styles.text}>
-      Access to Handwashing - Percentage of households with a basic handwashing facility, defined as a handwashing facility with soap and water available: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
-      </Text>
-      <ImageRPDF
-        style={styles.image}
-        src="/images/quijote2.png"
-      />
-      <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
-        `${pageNumber} / ${totalPages}`
-      )} fixed />
-    </Page>
-  </Document>);}
+     <Page style={styles.body}>
+          <Text style={styles.title}>User Defined Scenario Result</Text>
+          <Text style={styles.author}>Produced by International Development Targeting Scenario Builder Tool</Text>
+          <Text style={styles.subtitle}>
+          The user selected two scenarios. The first scenario included {scen1_idlist.length} administrative unit(s) and has a population of approximately {numberWithCommas(scen1_population)} people. The second scenario included {scen2_idlist.length} administrative unit(s) and has a population of approximately {numberWithCommas(scen2_population)} people.  The following table shows summary statistics for our ten indicators of interest across the selected areas.
+          </Text>
+          <View style={styles.table}>
+          <View style={[styles.row, styles.bold, styles.header]}>
+              <Text style={styles.row1}>Indicator</Text>
+              <Text style={styles.row2}>Scenario 1</Text>
+              <Text style={styles.row3}></Text>
+              <Text style={styles.row4}>Scenario 4</Text>
+              </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Population Estimate</Text>
+          </Text> 
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(numberWithCommas((scen1_population).toFixed(0)))}</Text>
+          </Text>   
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_population, scen2_population)}</Text>
+          </Text>   
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(numberWithCommas((scen2_population).toFixed(0)))}</Text>
+          </Text>        
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Number of Administrative Units</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_idlist.length)}</Text>
+          </Text>          
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_idlist.length, scen2_idlist.length)}</Text>
+          </Text> 
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{scen2_idlist.length}</Text>
+          </Text>   
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Prevalence of Poverty</Text>
+          </Text> 
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_povest).toFixed(1)}%</Text>
+          </Text>   
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_povest, scen2_povest)}</Text>
+          </Text>   
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_povest).toFixed(1)}%</Text>
+          </Text>        
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Hunger</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_hungest).toFixed(1)}%</Text>
+          </Text>          
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_hungest, scen2_hungest)}</Text>
+          </Text> 
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_hungest).toFixed(1)}%</Text>
+          </Text>   
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Prevalence of Stunting</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_stuntest).toFixed(1)}%</Text>
+          </Text> 
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_stuntest, scen2_stuntest)}</Text>
+          </Text> 
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_stuntest).toFixed(1)}%</Text>
+          </Text>         
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Prevalence of Wasting</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_wastest).toFixed(1)}%</Text>
+          </Text>   
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_wastest, scen2_wastest)}</Text>
+          </Text> 
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_wastest).toFixed(1)}%</Text>
+          </Text>          
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Under 5 Mortaility per 10,000</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_u5mortest).toFixed(1)}</Text>
+          </Text>     
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_u5mortest, scen2_u5mortest)}</Text>
+          </Text>     
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_u5mortest).toFixed(1)}</Text>
+          </Text>  
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Conflict Events</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_conflictEventsEst).toFixed(0)}</Text>
+          </Text>  
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_conflictEventsEst, scen2_conflictEventsEst)}</Text>
+          </Text>  
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_conflictEventsEst).toFixed(0)}</Text>
+          </Text>         
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Access to Basic Handwashing</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_accesstoHWest).toFixed(1)}%</Text>
+          </Text>   
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_accesstoHWest, scen2_accesstoHWest)}</Text>
+          </Text> 
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_accesstoHWest).toFixed(1)}%</Text>
+          </Text>       
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Percent of Women Literate</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_womensLitest).toFixed(1)}%</Text>
+          </Text>
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_womensLitest, scen2_womensLitest)}</Text>
+          </Text>  
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_womensLitest).toFixed(1)}%</Text>
+          </Text>          
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Agricultural Potential</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_agPotentialEst).toFixed(0)}</Text>
+          </Text> 
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_agPotentialEst, scen2_agPotentialEst)}</Text>
+          </Text> 
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_agPotentialEst).toFixed(0)}</Text>
+          </Text>          
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1}>
+            <Text style={styles.textTable}>Avg. Travel Time To Nearest City</Text>
+          </Text>
+          <Text style={styles.row2}>
+            <Text style={styles.textTable}>{(scen1_avgTravTimeEst).toFixed(1)} minutes</Text>
+          </Text>  
+          <Text style={styles.row3}>
+            <Text style={styles.textTable}>{compareElements(scen1_avgTravTimeEst, scen2_avgTravTimeEst)}</Text>
+          </Text> 
+          <Text style={styles.row4}>
+            <Text style={styles.textTable}>{(scen2_avgTravTimeEst).toFixed(1)} minutes</Text>
+          </Text>         
+          </View>
+          </View>
+          <ImageRPDF
+            style={styles.image}
+            src= {img1a}
+          />
+          <Text style={styles.subtitle}>
+            List of Administrative Units Selected by the User:
+          </Text>
+          <Text style={styles.text}>
+            {scen1_Admins.slice(2)}{scen2_Admins.slice(2)}
+          </Text>
+          <Text style={styles.subtitle}>
+            Analytic Caveats:
+          </Text>
+          <Text style={styles.text}>
+          1. For several datasets, data was only available at the first-order administrative level. For the purposes of this application, we assign each second-order administrative unit the value of the first order-administrative unit in the cases where data is not available.
+          </Text>
+          <Text style={styles.text}>
+          2. Two datasets should not be compared across countries: Hunger and Agricultural potential as they may use different datasets and methods depending on the selected countries.
+          </Text>
+          <Text style={styles.text}>
+          3. Summary values are population weighted averages based on Landscan 2022 population estimates for each administrative unit.
+          </Text>
+          <Text style={styles.subtitle}>
+          Sources and Definitions:
+          </Text>
+          <Text style={styles.text}>
+          Population: Sims, K., Reith, A., Bright, E., Kaufman, J., Pyle, J., Epting, J., Gonzales, J., Adams, D., Powell, E., Urban, M., & Rose, A. (2023). LandScan Global 2022 [Data set]. Oak Ridge National Laboratory. https://doi.org/10.48690/1529167
+          </Text>
+          <Text style={styles.text}>
+          Administrative Boundaries: FieldMaps, geoBoundaries, U.S. Department of State, U.S. Geological Survey. (2024, January 2). Data. Fieldmaps.io. Retrieved March 23, 2024, from https://fieldmaps.io/data, geometries simplified for this application
+          </Text>
+          <Text style={styles.text}>
+          Conflict Events - Count of Political Violence events per administrative district: ACLED, Raleigh, C., Kishi, R. & Linke, A. Political instability patterns are obscured by conflict dataset scope conditions, sources, and coding choices. Humanit Soc Sci Commun 10, 74 (2023). https://doi.org/10.1057/s41599-023-01559-4, acleddata.com
+          </Text>
+          <Text style={styles.text}>
+          Avg. Travel Time To Cities - Derived from MAP travel time to cities dataset by calculating a Landscan population weighted average of the travel time to cities for each administrative district: Accessibility to Healthcare | MAP. (2018, January 10). Malaria Atlas Project. Retrieved March 23, 2024, from https://malariaatlas.org/project-resources/accessibility-to-healthcare/
+          </Text>
+          <Text style={styles.text}>
+          Poverty - Poverty Headcount Ratio at US$ 2.15/day 2017 PPP (2019 line-up): Global Subnational Atlas of Poverty (version June 2023) [Data set]. World Bank Group
+          </Text>
+          <Text style={styles.text}>
+          Stunting - Percentage of children stunted (below -2 SD of height for age according to the WHO standard): Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.text}>
+          Wasting - Percentage of children wasted (below -2 SD of weight for height according to the WHO standard): Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.text}>
+          Agricultural Potential - The Agricultural Potential component provides the maximum agricultural income smallholders in a region can attain if performing at maximum capacity (their own, as well as of the markets, productive infrastructure, and basic services surrounding them). Agricultural income potential is determined by both the biophysical factors that impact agricultural production and the economic factors that influence crop prices: Food and Agriculture Organization (FAO). (2024, February 2). HiH Agricultural Typologies. Agricultural Potential Datasets. Retrieved March 23, 2024, from https://data.apps.fao.org/?lang=en, datasets were retrieved for each relevant country.
+          </Text>
+          <Text style={styles.text}>
+          Hunger - This application uses different sources for hunger: for Kenya, Tanzania and Malawi, we use Percent of People Experiencing IPC Phase 2 or Above (2023) from the IPC, for Liberia, Rwanda, Madagascar, Mozambique, and Zambia we use the Prevalence of Moderate or Severe Food Insecurity from FAO surveys using the Food Insecurity Experience Scale (FIES): The Integrated Food Security Phase Classification (IPC). (2024). IPC Country Analysis | IPC. IPC Country Analysis | IPC - Integrated Food Security Phase Classification. Retrieved March 23, 2024, from https://www.ipcinfo.org/ipc-country-analysis/en/?maptype=77106 or Cafiero, C., Gheri, F., Kepple, A.W., Rosero Moncayo, J. and Viviani, S. 2022. Access to food in 2021: Filling data gaps. Results of twenty national surveys using the Food Insecurity Experience Scale (FIES). Rome. https://doi.org/10.4060/cc0721en
+          </Text>
+          <Text style={styles.text}>
+          Under 5 Mortality Ratio - Probability of dying before the fifth birthday in the five or ten years preceding the survey, per 1,000 live births. Estimates are given for ten year periods for all characteristics, but for five year periods only for the national total, by residence, and by sex.: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.text}>
+          Women's Literacy - Percentage of women who are literate: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.text}>
+          Access to Handwashing - Percentage of households with a basic handwashing facility, defined as a handwashing facility with soap and water available: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
+            `${pageNumber} / ${totalPages}`
+          )} fixed />
+        </Page>
+      </Document>);}
   else {
     {
       return(
@@ -5236,6 +5397,40 @@ const addScenarioButtons = () => {
       x.style.display = "none";
     }}
   
+
+  useEffect(() => {
+      if (!map) return;
+      //const map = mapRef.current;
+     console.log("I have an effect that triggers on scenarioDetails change")
+     if (scen2_idlist == 0) {
+      console.log("No Scen2 Admins")
+      console.log(document.getElementById("map-container2").style.display)
+      document.getElementById("map-container2").style.display = "none"
+      document.getElementById("head-desc3").style.display = "none"
+      if (scen1_idlist.length > 0) {
+        console.log("I need to fix scenario 1 map, but need to wait until the SimpleMap1 is reinitiated")
+        setTimeout(function(){
+        resetHighlightScen1d()
+        }, 5000)}
+     }
+     if (scen1_idlist == 0) {
+      console.log("No Scen1 Admins")
+      console.log(document.getElementById("map-container1").style.display)
+      document.getElementById("map-container1").style.display = "none"
+      document.getElementById("head-desc2").style.display = "none"
+      if (scen2_idlist.length > 0) {
+        console.log("I need to fix scenario 2 map, but need to wait until the SimpleMap1 is reinitiated")
+        setTimeout(function(){
+        resetHighlightScen2d()
+        }, 5000)}
+     }
+     if (scen1_idlist.length > 0 & scen2_idlist.length > 0) {
+      setTimeout(function(){
+        resetHighlightScen1d()
+        resetHighlightScen2d()
+        }, 5000)}
+    }, [scenarioDetails]);  
+
   useEffect(() => {
     if (!map) return;
     //const map = mapRef.current;
@@ -5406,6 +5601,7 @@ const addScenarioButtons = () => {
 //using html2canvas
   const printDocument = () => {
     const input = document.getElementById('report-inner-div-map1');
+    setTimeout(function(){
     html2canvas(input)
       .then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
@@ -5413,7 +5609,7 @@ const addScenarioButtons = () => {
         pdf.addImage(imgData, 'JPEG', 0, 0);
         // pdf.output('dataurlnewwindow');
         pdf.save("Scenario Builder Result.pdf");
-      })
+      }), 1000})
     ;
   }
 
