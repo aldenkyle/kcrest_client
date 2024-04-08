@@ -3,7 +3,10 @@ import { MapContainer, TileLayer, LayersControl, GeoJSON, Popup, CircleMarker,us
 import jsPDF from 'jspdf';
 import html2canvas from "html2canvas";
 import { useReactToPrint } from 'react-to-print';
-import {   Document,  Page,  Text,  Image,  StyleSheet,  Font , PDFDownloadLink} from "@react-pdf/renderer";
+import {useScreenshot, createFileName} from 'use-react-screenshot';
+import {   Document,  Page,  Text,  Image as ImageRPDF,  StyleSheet,  Font , PDFDownloadLink, View, usePDF} from "@react-pdf/renderer";
+import domtoimage from 'dom-to-image';
+import { saveAs } from 'file-saver';
 import ReactPDF from '@react-pdf/renderer';
 import { SimpleMapScreenshoter } from "leaflet-simple-map-screenshoter";
 
@@ -103,6 +106,8 @@ export function getStyle(feature) {
   };
 }
  //set up a bunch of vars!
+var img1 = new Image()
+var img1a = ""
 var scenario = 0
 var scen1_population = 0
 var scen1_povest = 0
@@ -1285,7 +1290,7 @@ const WastingGhana = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/10,
           smoothFactor: .1
@@ -1553,7 +1558,7 @@ const WastingLiberia = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/5,
           smoothFactor: .1
@@ -1821,7 +1826,7 @@ const WastingSenegal = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/15,
           smoothFactor: .1
@@ -2091,7 +2096,7 @@ const WastingKenya = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/23,
           smoothFactor: .1
@@ -2361,7 +2366,7 @@ const WastingMalawi = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/5,
           smoothFactor: .1
@@ -2631,7 +2636,7 @@ const WastingMadagascar = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/15,
           smoothFactor: .1
@@ -2901,7 +2906,7 @@ const WastingMozambique = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/10,
           smoothFactor: .1
@@ -3171,7 +3176,7 @@ const WastingRwanda = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/3,
           smoothFactor: .1
@@ -3441,7 +3446,7 @@ const WastingTanzania = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/8,
           smoothFactor: .1
@@ -3711,7 +3716,7 @@ const WastingZambia = forwardRef((undefined, povRef) => {
       const wasting = feature.properties.wasting_1;
       // console.log(fcount)
         return {
-          color: "#005F73",
+          color: "#0A9396",
           weight: 0, 
           fillOpacity: wasting/8,
           smoothFactor: .1
@@ -3918,7 +3923,8 @@ const LeafletMap = () => {
   const scen2Ref2 = useRef()
   const mapRef2 = useRef()
   const reportRef = useRef();
-  const [scn1State,setScn1State] = useState(false)
+  const mapsRef = useRef();
+  const [map1Image, setMap1Image] = useState();
 
     function resetHighlightScen1d() {
       var featLayer = scen1Ref.current.getLayers()[0].getLayers()
@@ -4022,8 +4028,16 @@ const LeafletMap = () => {
       lc[2].style.visibility = 'hidden';
     };
 
+  const easyPrinter = () => {
+    const mr = mapRef.current
+    var printPlugin = L.easyPrint({
+      hidden: true,
+      sizeModes: ['A4Portrait']
+    }).addTo(mr); 
+    printPlugin.printMap('A4Portrait', 'MyFileName.png');
+  }
+
   var SimpleMap1 = () => {
-    console.log("does this happen?")
     //const [mapRef, setMapRef] = useState(null);
     try{
       var country = document.getElementById('country').value()
@@ -4033,8 +4047,6 @@ const LeafletMap = () => {
     const [center, setCenter] = useState({ lat: latCent(country), lng: lonCent(country) });
     const zoomLevel = zoomLevelVar(country);
     const layersRef2 = useRef();
-    
-    
      return ( 
       <>
       <div id="head-desc2" style={{top: 20, left: 0, width: "100%"}}>
@@ -4058,7 +4070,6 @@ const LeafletMap = () => {
   };  
 
   var SimpleMap2 = () => {
-    //console.log("does this happen?")
     //const [mapRef, setMapRef] = useState(null);
     try{
       var country = document.getElementById('country').value()
@@ -4123,6 +4134,8 @@ const LeafletMap = () => {
   const [labelState, setLabelState] = useState(false);
   const agpotRef = useRef();
   const [agpotState, setAgpotState] = useState(false);
+  const [scenarioDetails, setDetails] = useState([]);
+  const [show, setHide] = useState(false);
  
   const [infoState, setInfoState] = useState(false);
   const countryRefGhana = useRef();  const povRefGhana = useRef(); const hungerRefGhana = useRef(); const stuntingRefGhana = useRef(); const wastingRefGhana = useRef();const u5mortRefGhana = useRef(); const conflictRefGhana = useRef();const literacyRefGhana = useRef();const handwashingRefGhana = useRef(); const travRefGhana = useRef(); const agpotRefGhana = useRef();
@@ -4650,6 +4663,12 @@ function bolderStart(a,b) {
   else {return ""}
 };
 
+function getStyle(id, name)
+{
+    var element = document.getElementById(id);
+    return element.currentStyle ? element.currentStyle[name] : window.getComputedStyle ? window.getComputedStyle(element, null).getPropertyValue(name) : null;
+}
+
 
 const defsSourcing = " <span style='color:black;font-size:11px;font-family:Gill Sans,Gill Sans MT, Calibri, sans-serif;'><b><br>Analytic Caveats:</b><br>1. For several datasets, data was only available at the first-order administrative level. For the purposes of this application, we assign each second-order administrative unit the value of the first order-administrative unit in the cases where data is not available. <br>2. Two datasets should not be compared across countries: Hunger and Agricultural potential as they may use different datasets and methods depending on the selected countries.<br>3. Summary values are population weighted averages based on Landscan 2022 population estimates for each administrative unit.<br><br> <b>Sources and Definitions:</b><br> <b>Population:</b> Sims, K., Reith, A., Bright, E., Kaufman, J., Pyle, J., Epting, J., Gonzales, J., Adams, D., Powell, E., Urban, M., & Rose, A. (2023). LandScan Global 2022 [Data set]. Oak Ridge National Laboratory. https://doi.org/10.48690/1529167 <br><br><b>Administrative Boundaries:</b> FieldMaps, geoBoundaries, U.S. Department of State, U.S. Geological Survey. (2024, January 2). Data. Fieldmaps.io. Retrieved March 23, 2024, from https://fieldmaps.io/data, geometries simplified for this application<br><br><b>Conflict Events - Count of Political Violence events per administrative district:</b> ACLED, Raleigh, C., Kishi, R. & Linke, A. Political instability patterns are obscured by conflict dataset scope conditions, sources, and coding choices. Humanit Soc Sci Commun 10, 74 (2023). https://doi.org/10.1057/s41599-023-01559-4, acleddata.com<br><br><b>Avg. Travel Time To Cities - Derived from MAP travel time to cities dataset by calculating a Landscan population weighted average of the travel time to cities for each administrative district:</b> Accessibility to Healthcare | MAP. (2018, January 10). Malaria Atlas Project. Retrieved March 23, 2024, from https://malariaatlas.org/project-resources/accessibility-to-healthcare/<br><br><b>Poverty -  Poverty Headcount Ratio at US$ 2.15/day 2017 PPP (2019 line-up):</b> Global Subnational Atlas of Poverty (version June 2023) [Data set]. World Bank Group<br><br><b>Stunting - Percentage of children stunted (below -2 SD of height for age according to the WHO standard):</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Wasting - Percentage of children wasted (below -2 SD of weight for height according to the WHO standard):</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Agricultural Potential - The Agricultural Potential component provides the maximum agricultural income smallholders in a region can attain if performing at maximum capacity (their own, as well as of the markets, productive infrastructure, and basic services surrounding them). Agricultural income potential is determined by both the biophysical factors that impact agricultural production and the economic factors that influence crop prices:</b> Food and Agriculture Organization (FAO). (2024, February 2). HiH Agricultural Typologies. Agricultural Potential Datasets. Retrieved March 23, 2024, from https://data.apps.fao.org/?lang=en, datasets were retrieved for each relevant country.<br><br><b>Hunger - This application uses different sources for hunger:</b> for Kenya, Tanzania and Malawi, we use Percent of People Experiencing IPC Phase 2 or Above (2023) from the IPC, for Liberia, Rwanda, Madagascar, Mozambique, and Zambia we use the Prevalence of Moderate or Severe Food Insecurity from FAO surveys using the Food Insecurity Experience Scale (FIES):</b> The Integrated Food Security Phase Classification (IPC). (2024). IPC Country Analysis | IPC. IPC Country Analysis | IPC - Integrated Food Security Phase Classification. Retrieved March 23, 2024, from https://www.ipcinfo.org/ipc-country-analysis/en/?maptype=77106 or Cafiero, C., Gheri, F., Kepple, A.W., Rosero Moncayo, J. and Viviani, S. 2022. Access to food in 2021:</b> Filling data gaps. Results of twenty national surveys using the Food Insecurity Experience Scale (FIES). Rome. https://doi.org/10.4060/cc0721en<br><br><b>Under 5 Mortality Ratio - Probability of dying before the fifth birthday in the five or ten years preceding the survey, per 1,000 live births. Estimates are given for ten year periods for all characteristics, but for five year periods only for the national total, by residence, and by sex.:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Women's Literacy - Percentage of women who are literate:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024<br><br><b>Access to Handwashing - Percentage of households with a basic handwashing facility, defined as a handwashing facility with soap and water available:</b> Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024</span>"
 
@@ -4665,6 +4684,7 @@ const AreaSelect = () => {
     document.getElementsByClassName("button19")[0].classList.remove("test_skill");
     document.getElementsByClassName("button19")[0].innerHTML = "Add Admins by Hovering"
   }};
+
 
 
 const showReport = () => {
@@ -4723,9 +4743,13 @@ const showReport = () => {
     //add stuff to report if scenario 1 only
     else if (scenario == 1) {
     var mapC2 = document.getElementById("map-container2");
+    console.log(mapC2)
     if (mapC2.style.display === "none") {
       mapC2.style.display = "block";
-    } else {
+    } else if (mapC2.style.display == "") {
+      mapC2.style.display = "none";
+    }
+    else {
       mapC2.style.display = "none";
     }
     var headC2 = document.getElementById("head-desc3");
@@ -4775,163 +4799,50 @@ const showReport = () => {
     //console.log(x)
   }
 
-var report_div = document.getElementById("report-inner-div")
-//more work on the PDF Export
-const MyDocument = () => (
-  <Document>
-    <Page style={styles.body}>
-      <Text style={styles.title}>Scenario Builder for Development Programs</Text>
-      <Text style={styles.author}>Scenario {scenario} Details</Text>
-      <Text style={styles.subtitle}>
-        Capítulo I: Que trata de la condición y ejercicio del famoso hidalgo D.
-        Quijote de la Mancha
-      </Text>
-      <Text style={styles.text}>
-     Figuring this out tomorrow
-      </Text>
-      <Text style={styles.text}>
-        Es, pues, de saber, que este sobredicho hidalgo, los ratos que estaba
-        ocioso (que eran los más del año) se daba a leer libros de caballerías
-        con tanta afición y gusto, que olvidó casi de todo punto el ejercicio de
-        la caza, y aun la administración de su hacienda; y llegó a tanto su
-        curiosidad y desatino en esto, que vendió muchas hanegas de tierra de
-        sembradura, para comprar libros de caballerías en que leer; y así llevó
-        a su casa todos cuantos pudo haber dellos; y de todos ningunos le
-        parecían tan bien como los que compuso el famoso Feliciano de Silva:
-        porque la claridad de su prosa, y aquellas intrincadas razones suyas, le
-        parecían de perlas; y más cuando llegaba a leer aquellos requiebros y
-        cartas de desafío, donde en muchas partes hallaba escrito: la razón de
-        la sinrazón que a mi razón se hace, de tal manera mi razón enflaquece,
-        que con razón me quejo de la vuestra fermosura, y también cuando leía:
-        los altos cielos que de vuestra divinidad divinamente con las estrellas
-        se fortifican, y os hacen merecedora del merecimiento que merece la
-        vuestra grandeza.
-      </Text>
-      <Text style={styles.text}>
-        Con estas y semejantes razones perdía el pobre caballero el juicio, y
-        desvelábase por entenderlas, y desentrañarles el sentido, que no se lo
-        sacara, ni las entendiera el mismo Aristóteles, si resucitara para sólo
-        ello. No estaba muy bien con las heridas que don Belianis daba y
-        recibía, porque se imaginaba que por grandes maestros que le hubiesen
-        curado, no dejaría de tener el rostro y todo el cuerpo lleno de
-        cicatrices y señales; pero con todo alababa en su autor aquel acabar su
-        libro con la promesa de aquella inacabable aventura, y muchas veces le
-        vino deseo de tomar la pluma, y darle fin al pie de la letra como allí
-        se promete; y sin duda alguna lo hiciera, y aun saliera con ello, si
-        otros mayores y continuos pensamientos no se lo estorbaran. Tuvo muchas
-        veces competencia con el cura de su lugar (que era hombre docto graduado
-        en Sigüenza), sobre cuál había sido mejor caballero, Palmerín de
-        Inglaterra o Amadís de Gaula; mas maese Nicolás, barbero del mismo
-        pueblo, decía que ninguno llegaba al caballero del Febo, y que si alguno
-        se le podía comparar, era don Galaor, hermano de Amadís de Gaula, porque
-        tenía muy acomodada condición para todo; que no era caballero
-        melindroso, ni tan llorón como su hermano, y que en lo de la valentía no
-        le iba en zaga.
-      </Text>
-      <Text style={styles.text}>
-        En resolución, él se enfrascó tanto en su lectura, que se le pasaban las
-        noches leyendo de claro en claro, y los días de turbio en turbio, y así,
-        del poco dormir y del mucho leer, se le secó el cerebro, de manera que
-        vino a perder el juicio. Llenósele la fantasía de todo aquello que leía
-        en los libros, así de encantamientos, como de pendencias, batallas,
-        desafíos, heridas, requiebros, amores, tormentas y disparates
-        imposibles, y asentósele de tal modo en la imaginación que era verdad
-        toda aquella máquina de aquellas soñadas invenciones que leía, que para
-        él no había otra historia más cierta en el mundo.
-      </Text>
-      <Text style={styles.subtitle} break>
-        Capítulo II: Que trata de la primera salida que de su tierra hizo el
-        ingenioso Don Quijote
-      </Text>
-      <Image
-        style={styles.image}
-        src="/images/quijote2.png"
-      />
-      <Text style={styles.text}>
-        Hechas, pues, estas prevenciones, no quiso aguardar más tiempo a poner
-        en efeto su pensamiento, apretándole a ello la falta que él pensaba que
-        hacía en el mundo su tardanza, según eran los agravios que pensaba
-        deshacer, tuertos que enderezar, sinrazones que emendar y abusos que
-        mejorar y deudas que satisfacer. Y así, sin dar parte a persona alguna
-        de su intención y sin que nadie le viese, una mañana, antes del día, que
-        era uno de los calurosos del mes de Julio, se armó de todas sus armas,
-        subió sobre Rocinante, puesta su mal compuesta celada, embrazó su
-        adarga, tomó su lanza y por la puerta falsa de un corral salió al campo
-        con grandísimo contento y alborozo de ver con cuánta facilidad había
-        dado principio a su buen deseo. Mas apenas se vio en el campo cuando le
-        asaltó un pensamiento terrible, y tal, que por poco le hiciera dejar la
-        comenzada empresa; y fue que le vino a la memoria que no era armado
-        caballero, y que, conforme a ley de caballería, ni podía ni debía tomar
-        armas con ningún caballero; y puesto que lo fuera, había de llevar armas
-        blancas, como novel caballero, sin empresa en el escudo, hasta que por
-        su esfuerzo la ganase. Estos pensamientos le hicieron titubear en su
-        propósito; mas pudiendo más su locura que otra razón alguna, propuso de
-        hacerse armar caballero del primero que topase, a imitación de otros
-        muchos que así lo hicieron, según él había leído en los libros que tal
-        le tenían. En lo de las armas blancas, pensaba limpiarlas de manera, en
-        teniendo lugar, que lo fuesen más que un arminio; y con esto se quietó18
-        y prosiguió su camino, sin llevar otro que aquel que su caballo quería,
-        creyendo que en aquello consistía la fuerza de las aventuras
-      </Text>
-      <Text style={styles.text}>
-        Yendo, pues, caminando nuestro flamante aventurero, iba hablando consigo
-        mesmo, y diciendo: —¿Quién duda, sino que en los venideros tiempos,
-        cuando salga a luz la verdadera historia de mis famosos hechos, que el
-        sabio que los escribiere no ponga, cuando llegue a contar esta mi
-        primera salida tan de mañana, desta manera?: Apenas había el rubicundo
-        Apolo tendido por la faz de la ancha y espaciosa tierra las doradas
-        hebras de sus hermosos cabellos, y apenas los pequeños y pintados
-        pajarillos con sus arpadas lenguas habían saludado con dulce y meliflua
-        armonía la venida de la rosada Aurora, que, dejando la blanda cama del
-        celoso marido, por las puertas y balcones del manchego horizonte a los
-        mortales se mostraba, cuando el famoso caballero don Quijote de la
-        Mancha, dejando las ociosas plumas, subió sobre su famoso caballo
-        Rocinante y comenzó a caminar por el antiguo y conocido Campo de
-        Montiel.
-      </Text>
-      <Text style={styles.text}>
-        Y era la verdad que por él caminaba; y añadió diciendo: —Dichosa edad y
-        siglo dichoso aquel adonde saldrán a luz las famosas hazañas mías,
-        dignas de entallarse en bronces, esculpirse en mármoles y pintarse en
-        tablas, para memoria en lo futuro. ¡Oh tú, sabio encantador, quienquiera
-        que seas, a quien ha de tocar el ser coronista desta peregrina historia!
-        Ruégote que no te olvides de mi buen Rocinante, compañero eterno mío en
-        todos mis caminos y carreras.
-      </Text>
-      <Text style={styles.text}>
-        Luego volvía diciendo, como si verdaderamente fuera enamorado: —¡Oh
-        princesa Dulcinea, señora deste cautivo corazón! Mucho agravio me
-        habedes fecho en despedirme y reprocharme con el riguroso afincamiento
-        de mandarme no parecer ante la vuestra fermosura. Plégaos, señora, de
-        membraros deste vuestro sujeto corazón, que tantas cuitas por vuestro
-        amor padece. Con estos iba ensartando otros disparates, todos al modo de
-        los que sus libros le habían enseñado, imitando en cuanto podía su
-        lenguaje. Con esto caminaba tan despacio, y el sol entraba tan apriesa y
-        con tanto ardor, que fuera bastante a derretirle los sesos, si algunos
-        tuviera
-      </Text>
-      <Text style={styles.text}>
-        Casi todo aquel día caminó sin acontecerle cosa que de contar fuese, de
-        lo cual se desesperaba, porque quisiera topar luego luego con quien
-        hacer experiencia del valor de su fuerte brazo. Autores hay que dicen
-        que la primera aventura que le avino fue la del Puerto Lápice, otros
-        dicen que la de los molinos de viento; pero lo que yo he podido
-        averiguar en este caso, y lo que he hallado escrito en los anales de la
-        Mancha, es que él anduvo todo aquel día, y, al anochecer, su rocín y él
-        se hallaron cansados y muertos de hambre, y que, mirando a todas partes
-        por ver si descubriría algún castillo o alguna majada de pastores donde
-        recogerse y adonde pudiese remediar su mucha hambre y necesidad, vio, no
-        lejos del camino por donde iba, una venta,que fue como si viera una
-        estrella que, no a los portales, sino a los alcázares de su redención le
-        encaminaba. Diose priesa a caminar, y llegó a ella a tiempo que
-        anochecía.
-      </Text>
-      <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
-        `${pageNumber} / ${totalPages}`
-      )} fixed />
-    </Page>
-  </Document>
-);
+  const updatePDFData = () => {
+  return ("hi I am the data")  
+  }
+
+  const showUpdatePDF = () => {
+    console.log(mapRef.current.getSize().x);
+    //const _PageSize= { 	height: mapRef.current.getSize().y, width: mapRef.current.getSize().x }
+    const _PageSize= { 	height: 694, width: 663}
+    setTimeout(function(){
+    domtoimage.toPng(document.getElementById('report-inner-div-map1'), _PageSize)
+    //.then(function (blob) {
+    //  window.saveAs(blob, 'my-node.png');})
+    .then(function (dataUrl) {
+      img1.src = dataUrl;
+      img1a = dataUrl;
+      //document.getElementById('screenshot').src = dataUrl;
+    })  ;},1000)
+    //console.log(img1a)
+    //MapPrint()
+    //takeScreenShot2()
+    //downloadScreenshot()
+    //printDocument()
+    //easyPrinter()
+    var mapC1 = document.getElementById("map-container2");
+    setTimeout(function(){
+    setDetails([]);
+   
+    var pdfButton = document.getElementById("downloadPDF-report");
+    if (pdfButton.style.display === "none") {
+      pdfButton.style.display = "block";
+    } else {
+      pdfButton.style.display = "none";
+    }
+    ;},2000)
+    //refix map rendering whihc breaks when I update the state
+    console.log(scen2_idlist.length)
+    if (scen2_idlist.length == 0) {
+    document.getElementById("head-desc3").style.display = "none"
+    var mc2 = document.getElementById("map-container2");
+    mc2.style.display = "none"
+  }
+
+  }
+
 
 Font.register({
   family: 'Oswald',
@@ -4952,7 +4863,7 @@ const styles = StyleSheet.create({
   author: {
     fontSize: 12,
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 20,
   },
   subtitle: {
     fontSize: 18,
@@ -4965,15 +4876,25 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     fontFamily: 'Times-Roman'
   },
+  textTable: {
+    margin: 3,
+    fontSize: 12,
+    textAlign: 'justify',
+    fontFamily: 'Oswald'
+  },
   image: {
     marginVertical: 15,
-    marginHorizontal: 100,
+    marginHorizontal: 25,
   },
   header: {
-    fontSize: 12,
-    marginBottom: 20,
+    backgroundColor: '#005F73',
+    fontSize: 14,
+    top: 4,
+    bottom:4,
     textAlign: 'center',
-    color: 'grey',
+    color: 'white',
+    borderTop: 'none',
+    fontFamily: 'Oswald'
   },
   pageNumber: {
     position: 'absolute',
@@ -4984,18 +4905,304 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'grey',
   },
+  table: {
+    width: '100%',
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
+    borderTop: '1px solid #EEE',
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
+  row1: {
+    width: '27%',
+  },
+  row2: {
+    width: '15%',
+  },
+  row3: {
+    width: '15%',
+  },
+  row4: {
+    width: '20%',
+  },
+  row5: {
+    width: '27%',
+  },
+  row1a: {
+    width: '65%',
+  },
+  row2a: {
+    width: '35%',
+  },
 });
 
-const printPDF = () => {
-  console.log("printPDF was clicked")
-  const App = () => (
-    <div>
-      <PDFDownloadLink document={<MyDoc />} fileName="somename.pdf">
-        {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
-      </PDFDownloadLink>
-    </div>
-  )
+
+function MyDocument(props) {
+  console.log(styles.body)
+  if (scen1_idlist.length > 0 & scen2_idlist.length > 0) {
+  return(
+  <Document>
+    <Page style={{paddingTop: 35,paddingBottom: 65, paddingHorizontal: 35,}}>
+      <Text style={styles.title}>User Defined Scenario Result</Text>
+      <Text style={styles.author}>Produced by International Development Targeting Scenario Builder Tool</Text>
+      <Text style={styles.subtitle}>
+      Compare 2 User-Developed Scenarios
+      </Text>
+      <Text style={styles.text}>
+
+      </Text>
+      <Text style={styles.text}>
+        Es, pues, de saber, que este sobredicho hidalgo, los ratos que estaba
+      </Text>
+      <Text style={styles.text}>
+        Con estas y semejantes razones perdía el pobre caballero el juicio, y
+      </Text>
+      <Text style={styles.text}>
+        En resolución, él se enfrascó tanto en su lectura, que se le pasaban las
+      </Text>
+      <Text style={styles.subtitle}>
+        List of Administrative Units Selected by the User for Scenario 1:
+      </Text>
+      <Text style={styles.text}>
+      {scen1_Admins.slice(2)}
+      </Text>
+      <Text style={styles.subtitle}>
+        List of Administrative Units Selected by the User for Scenario 2:
+      </Text>
+      <Text style={styles.text}>
+      {scen2_Admins.slice(2)}
+      </Text>
+      <Text style={styles.subtitle}>
+        Analytic Caveats:
+      </Text>
+      <Text style={styles.text}>
+      1. For several datasets, data was only available at the first-order administrative level. For the purposes of this application, we assign each second-order administrative unit the value of the first order-administrative unit in the cases where data is not available.
+      </Text>
+      <Text style={styles.text}>
+      2. Two datasets should not be compared across countries: Hunger and Agricultural potential as they may use different datasets and methods depending on the selected countries.
+      </Text>
+      <Text style={styles.text}>
+      3. Summary values are population weighted averages based on Landscan 2022 population estimates for each administrative unit.
+      </Text>
+      <Text style={styles.subtitle}>
+      Sources and Definitions:
+      </Text>
+      <Text style={styles.text}>
+      Population: Sims, K., Reith, A., Bright, E., Kaufman, J., Pyle, J., Epting, J., Gonzales, J., Adams, D., Powell, E., Urban, M., & Rose, A. (2023). LandScan Global 2022 [Data set]. Oak Ridge National Laboratory. https://doi.org/10.48690/1529167
+      </Text>
+      <Text style={styles.text}>
+      Administrative Boundaries: FieldMaps, geoBoundaries, U.S. Department of State, U.S. Geological Survey. (2024, January 2). Data. Fieldmaps.io. Retrieved March 23, 2024, from https://fieldmaps.io/data, geometries simplified for this application
+      </Text>
+      <Text style={styles.text}>
+      Conflict Events - Count of Political Violence events per administrative district: ACLED, Raleigh, C., Kishi, R. & Linke, A. Political instability patterns are obscured by conflict dataset scope conditions, sources, and coding choices. Humanit Soc Sci Commun 10, 74 (2023). https://doi.org/10.1057/s41599-023-01559-4, acleddata.com
+      </Text>
+      <Text style={styles.text}>
+      Avg. Travel Time To Cities - Derived from MAP travel time to cities dataset by calculating a Landscan population weighted average of the travel time to cities for each administrative district: Accessibility to Healthcare | MAP. (2018, January 10). Malaria Atlas Project. Retrieved March 23, 2024, from https://malariaatlas.org/project-resources/accessibility-to-healthcare/
+      </Text>
+      <Text style={styles.text}>
+      Poverty - Poverty Headcount Ratio at US$ 2.15/day 2017 PPP (2019 line-up): Global Subnational Atlas of Poverty (version June 2023) [Data set]. World Bank Group
+      </Text>
+      <Text style={styles.text}>
+      Stunting - Percentage of children stunted (below -2 SD of height for age according to the WHO standard): Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+      </Text>
+      <Text style={styles.text}>
+      Wasting - Percentage of children wasted (below -2 SD of weight for height according to the WHO standard): Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+      </Text>
+      <Text style={styles.text}>
+      Agricultural Potential - The Agricultural Potential component provides the maximum agricultural income smallholders in a region can attain if performing at maximum capacity (their own, as well as of the markets, productive infrastructure, and basic services surrounding them). Agricultural income potential is determined by both the biophysical factors that impact agricultural production and the economic factors that influence crop prices: Food and Agriculture Organization (FAO). (2024, February 2). HiH Agricultural Typologies. Agricultural Potential Datasets. Retrieved March 23, 2024, from https://data.apps.fao.org/?lang=en, datasets were retrieved for each relevant country.
+      </Text>
+      <Text style={styles.text}>
+      Hunger - This application uses different sources for hunger: for Kenya, Tanzania and Malawi, we use Percent of People Experiencing IPC Phase 2 or Above (2023) from the IPC, for Liberia, Rwanda, Madagascar, Mozambique, and Zambia we use the Prevalence of Moderate or Severe Food Insecurity from FAO surveys using the Food Insecurity Experience Scale (FIES): The Integrated Food Security Phase Classification (IPC). (2024). IPC Country Analysis | IPC. IPC Country Analysis | IPC - Integrated Food Security Phase Classification. Retrieved March 23, 2024, from https://www.ipcinfo.org/ipc-country-analysis/en/?maptype=77106 or Cafiero, C., Gheri, F., Kepple, A.W., Rosero Moncayo, J. and Viviani, S. 2022. Access to food in 2021: Filling data gaps. Results of twenty national surveys using the Food Insecurity Experience Scale (FIES). Rome. https://doi.org/10.4060/cc0721en
+      </Text>
+      <Text style={styles.text}>
+      Under 5 Mortality Ratio - Probability of dying before the fifth birthday in the five or ten years preceding the survey, per 1,000 live births. Estimates are given for ten year periods for all characteristics, but for five year periods only for the national total, by residence, and by sex.: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+      </Text>
+      <Text style={styles.text}>
+      Women's Literacy - Percentage of women who are literate: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+      </Text>
+      <Text style={styles.text}>
+      Access to Handwashing - Percentage of households with a basic handwashing facility, defined as a handwashing facility with soap and water available: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+      </Text>
+      <ImageRPDF
+        style={styles.image}
+        src="/images/quijote2.png"
+      />
+      <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
+        `${pageNumber} / ${totalPages}`
+      )} fixed />
+    </Page>
+  </Document>);}
+  else {
+    {
+      return(
+      <Document>
+        <Page style={styles.body}>
+          <Text style={styles.title}>User Defined Scenario Result</Text>
+          <Text style={styles.author}>Produced by International Development Targeting Scenario Builder Tool</Text>
+          <Text style={styles.subtitle}>
+          This scenario selected {scen1_idlist.length + scen2_idlist.length} administrative unit(s) and has a population of approximately {numberWithCommas(scen1_population + scen2_population)} people. The following table shows summary statistics for our ten indicators of interest across the selected areas.
+          </Text>
+          <View style={styles.table}>
+          <View style={[styles.row, styles.bold, styles.header]}>
+              <Text style={styles.row1a}>Indicator</Text>
+              <Text style={styles.row2a}>User Selected Scenario</Text>
+              </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Prevalence of Poverty</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_povest+scen2_povest).toFixed(1)}%</Text>
+          </Text>          
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Hunger</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_hungest+scen2_hungest).toFixed(1)}%</Text>
+          </Text>          
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Prevalence of Stunting</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_stuntest+scen2_stuntest).toFixed(1)}%</Text>
+          </Text>          
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Prevalence of Wasting</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_wastest+scen2_wastest).toFixed(1)}%</Text>
+          </Text>          
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Under 5 Mortaility per 10,000</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_u5mortest+scen2_u5mortest).toFixed(1)}</Text>
+          </Text>          
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Conflict Events</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_conflictEventsEst+scen2_conflictEventsEst).toFixed(0)}</Text>
+          </Text>          
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Access to Basic Handwashing</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_accesstoHWest+scen2_accesstoHWest).toFixed(1)}%</Text>
+          </Text>          
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Percent of Women Literate</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_womensLitest+scen2_womensLitest).toFixed(1)}%</Text>
+          </Text>          
+          </View>
+          <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Agricultural Potential</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_agPotentialEst+scen2_agPotentialEst).toFixed(0)}</Text>
+          </Text>          
+          </View>
+          <View style={styles.row} wrap={false}>
+          <Text style={styles.row1a}>
+            <Text style={styles.textTable}>Avg. Travel Time To Nearest City</Text>
+          </Text>
+          <Text style={styles.row2a}>
+            <Text style={styles.textTable}>{(scen1_avgTravTimeEst+scen2_avgTravTimeEst).toFixed(1)} minutes</Text>
+          </Text>          
+          </View>
+          </View>
+          <ImageRPDF
+            style={styles.image}
+            src= {img1a}
+          />
+          <Text style={styles.subtitle}>
+            List of Administrative Units Selected by the User:
+          </Text>
+          <Text style={styles.text}>
+            {scen1_Admins.slice(2)}{scen2_Admins.slice(2)}
+          </Text>
+          <Text style={styles.subtitle}>
+            Analytic Caveats:
+          </Text>
+          <Text style={styles.text}>
+          1. For several datasets, data was only available at the first-order administrative level. For the purposes of this application, we assign each second-order administrative unit the value of the first order-administrative unit in the cases where data is not available.
+          </Text>
+          <Text style={styles.text}>
+          2. Two datasets should not be compared across countries: Hunger and Agricultural potential as they may use different datasets and methods depending on the selected countries.
+          </Text>
+          <Text style={styles.text}>
+          3. Summary values are population weighted averages based on Landscan 2022 population estimates for each administrative unit.
+          </Text>
+          <Text style={styles.subtitle}>
+          Sources and Definitions:
+          </Text>
+          <Text style={styles.text}>
+          Population: Sims, K., Reith, A., Bright, E., Kaufman, J., Pyle, J., Epting, J., Gonzales, J., Adams, D., Powell, E., Urban, M., & Rose, A. (2023). LandScan Global 2022 [Data set]. Oak Ridge National Laboratory. https://doi.org/10.48690/1529167
+          </Text>
+          <Text style={styles.text}>
+          Administrative Boundaries: FieldMaps, geoBoundaries, U.S. Department of State, U.S. Geological Survey. (2024, January 2). Data. Fieldmaps.io. Retrieved March 23, 2024, from https://fieldmaps.io/data, geometries simplified for this application
+          </Text>
+          <Text style={styles.text}>
+          Conflict Events - Count of Political Violence events per administrative district: ACLED, Raleigh, C., Kishi, R. & Linke, A. Political instability patterns are obscured by conflict dataset scope conditions, sources, and coding choices. Humanit Soc Sci Commun 10, 74 (2023). https://doi.org/10.1057/s41599-023-01559-4, acleddata.com
+          </Text>
+          <Text style={styles.text}>
+          Avg. Travel Time To Cities - Derived from MAP travel time to cities dataset by calculating a Landscan population weighted average of the travel time to cities for each administrative district: Accessibility to Healthcare | MAP. (2018, January 10). Malaria Atlas Project. Retrieved March 23, 2024, from https://malariaatlas.org/project-resources/accessibility-to-healthcare/
+          </Text>
+          <Text style={styles.text}>
+          Poverty - Poverty Headcount Ratio at US$ 2.15/day 2017 PPP (2019 line-up): Global Subnational Atlas of Poverty (version June 2023) [Data set]. World Bank Group
+          </Text>
+          <Text style={styles.text}>
+          Stunting - Percentage of children stunted (below -2 SD of height for age according to the WHO standard): Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.text}>
+          Wasting - Percentage of children wasted (below -2 SD of weight for height according to the WHO standard): Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.text}>
+          Agricultural Potential - The Agricultural Potential component provides the maximum agricultural income smallholders in a region can attain if performing at maximum capacity (their own, as well as of the markets, productive infrastructure, and basic services surrounding them). Agricultural income potential is determined by both the biophysical factors that impact agricultural production and the economic factors that influence crop prices: Food and Agriculture Organization (FAO). (2024, February 2). HiH Agricultural Typologies. Agricultural Potential Datasets. Retrieved March 23, 2024, from https://data.apps.fao.org/?lang=en, datasets were retrieved for each relevant country.
+          </Text>
+          <Text style={styles.text}>
+          Hunger - This application uses different sources for hunger: for Kenya, Tanzania and Malawi, we use Percent of People Experiencing IPC Phase 2 or Above (2023) from the IPC, for Liberia, Rwanda, Madagascar, Mozambique, and Zambia we use the Prevalence of Moderate or Severe Food Insecurity from FAO surveys using the Food Insecurity Experience Scale (FIES): The Integrated Food Security Phase Classification (IPC). (2024). IPC Country Analysis | IPC. IPC Country Analysis | IPC - Integrated Food Security Phase Classification. Retrieved March 23, 2024, from https://www.ipcinfo.org/ipc-country-analysis/en/?maptype=77106 or Cafiero, C., Gheri, F., Kepple, A.W., Rosero Moncayo, J. and Viviani, S. 2022. Access to food in 2021: Filling data gaps. Results of twenty national surveys using the Food Insecurity Experience Scale (FIES). Rome. https://doi.org/10.4060/cc0721en
+          </Text>
+          <Text style={styles.text}>
+          Under 5 Mortality Ratio - Probability of dying before the fifth birthday in the five or ten years preceding the survey, per 1,000 live births. Estimates are given for ten year periods for all characteristics, but for five year periods only for the national total, by residence, and by sex.: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.text}>
+          Women's Literacy - Percentage of women who are literate: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.text}>
+          Access to Handwashing - Percentage of households with a basic handwashing facility, defined as a handwashing facility with soap and water available: Spatial Data Repository, The Demographic and Health Surveys Program. ICF International. Funded by the United States Agency for International Development (USAID). Available from spatialdata.dhsprogram.com. Accessed 15 February 2024
+          </Text>
+          <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
+            `${pageNumber} / ${totalPages}`
+          )} fixed />
+        </Page>
+      </Document>);}
+  }
+  console.log(img1.src)
 }
+
 
 const addScenarioButtons = () => {
     var x = document.getElementById("scenario-div");
@@ -5087,9 +5294,113 @@ const addScenarioButtons = () => {
   }, [map]);
 
 
+//trying SimpleMapScreenshotter
+    const snapshotOptions = {
+      hideElementsWithSelectors: [
+        ".leaflet-control-container",
+        ".leaflet-dont-include-pane",
+        "#snapshot-button"
+      ],
+      hidden: true
+    };
+    //const screenshotter = new SimpleMapScreenshoter(snapshotOptions);
+    //screenshotter.addTo(mapRef);
+    // What happens when you clikc the "Snapshot Greek Border" button:
+  
+    const takeScreenShot2 = () => {
+          // Get bounds of feature, pad ot a but too
+      //const featureBounds = greekborder.getBounds().pad(0.1);
+      const nw = LatLng((latCent(country)+2), (lonCent(country)+2))
+      const se = LatLng((latCent(country)-2), (lonCent(country)-2))
+      // Get pixel position on screen of top left and bottom right
+      // of the bounds of the feature
+      //const nw = featureBounds.getNorthWest();
+      //const se = featureBounds.getSouthEast();
+      const topLeft = mapRef.latLngToContainerPoint(nw);
+      const bottomRight = mapRef.latLngToContainerPoint(se);
 
+      // Get the resulting image size that contains the feature
+      const imageSize = bottomRight.subtract(topLeft);
+
+      // Set up screenshot function
+      screenshotter
+        .takeScreen("image")
+        .then((image) => {
+          // Create <img> element to render img data
+          var img = new Image();
+
+          // once the image loads, do the following:
+          img.onload = () => {
+            // Create canvas to process image data
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            // Set canvas size to the size of your resultant image
+            canvas.width = imageSize.x;
+            canvas.height = imageSize.y;
+
+            // Draw just the portion of the whole map image that contains
+            // your feature to the canvas
+            // from https://stackoverflow.com/questions/26015497/how-to-resize-then-crop-an-image-with-canvas
+            ctx.drawImage(
+              img,
+              topLeft.x,
+              topLeft.y,
+              imageSize.x,
+              imageSize.y,
+              0,
+              0,
+              imageSize.x,
+              imageSize.y
+            );
+
+            // Create URL for resultant png
+            var imageurl = canvas.toDataURL("image/png");
+            console.log(imageurl);
+
+            const resultantImage = new Image();
+            resultantImage.style = "border: 1px solid black";
+            resultantImage.src = imageurl;
+
+            document.body.appendChild(canvas);
+
+            canvas.toBlob(function (blob) {
+              // saveAs function installed as part of leaflet snapshot package
+              saveAs(blob, "greek_border.png");
+            });
+          };
+
+          // set the image source to what the snapshotter captured
+          // img.onload will fire AFTER this
+          img.src = image;
+        })
+        .catch((e) => {
+          alert(e.toString());
+        });
+    };
+  
+
+
+  //attempt using react-screenshot
+  const [image, takeScreenShot] = useScreenshot({
+    type: "image/jpeg",
+    quality: 1.0
+  });
+
+  const download = (image, { name = "img", extension = "jpg" } = {}) => {
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = createFileName(extension, name);
+    a.click();
+  };
+
+  const downloadScreenshot = () => {
+    console.log(mapsRef);
+    takeScreenShot(mapsRef.current).then(download);}
+
+//using html2canvas
   const printDocument = () => {
-    const input = document.getElementById('report-inner-div');
+    const input = document.getElementById('report-inner-div-map1');
     html2canvas(input)
       .then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
@@ -5104,22 +5415,21 @@ const addScenarioButtons = () => {
   const handlePrint = useReactToPrint({
     content: () => reportRef.current,
   });
+  
 
-  function MapPrint(props) {
-    const map = useMap();
-    useEffect(() => {
-      const control = L.easyPrint({
-        ...props
-      });
-      map.addControl(control)
-      return () => {
-        map.removeControl(control);
-      }
-    }, [map]);
-  
-  
-    return null;
+
+      
+  const easyPrinter2 = () => {
+    const mr = mapRef.current
+    var printPlugin = L.easyPrint({
+      hidden: true,
+      sizeModes: ['A4Portrait']
+    }).addTo(mr); 
+    printPlugin.printMap('A4Portrait', 'MyFileName.png');
   }
+
+
+
   //lets try the browser leaflet thing
   function BrowserPrint(props) {
     const map = useMap();
@@ -5571,21 +5881,32 @@ const addScenarioButtons = () => {
       <PointsToFront/>
       <Search provider={new OpenStreetMapProvider({ })} />
     </MapContainer>
-    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div" ref={reportRef} ></div><div id="report-inner-div-map1"><SimpleMap1></SimpleMap1><SimpleMap2></SimpleMap2><PDFDownloadLink
-  document={<MyDocument/>}
+    <div id="report-div" style={{display:"none"}}><button id="close" class="button close" onClick={showReport}>x</button><div id="report-inner-div" ref={reportRef} ></div>
+    <div id="report-inner-div-map1" ref={mapsRef}><SimpleMap1></SimpleMap1><SimpleMap2></SimpleMap2></div>
+    <div id="reportSourcing"></div>
+    <div id="get-PDF-report"><button class="button button20" onClick={showUpdatePDF} type="button">Create PDF Output</button><br></br><br></br></div>
+    <div id="downloadPDF-report" style={{display:"none"}}>
+   <PDFDownloadLink
+  document={<MyDocument data={updatePDFData}/>}
   fileName="movielist.pdf"
   style={{
-    textDecoration: "none",
-    padding: "10px",
+    backgroundColor: "#363636",
+    padding: "8px 12px",
+    marginLeft: "5px",
+    marginRight: "5px",
     color: "#4a4a4a",
-    backgroundColor: "#f2f2f2",
-    border: "1px solid #4a4a4a"
+    fontFamily: 'Gill Sans, Gill Sans MT',
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+    marginTop: "10px"
   }}
 >
   {({ blob, url, loading, error }) =>
     loading ? "Loading document..." : "Download Pdf"
   }
-</PDFDownloadLink></div><div id="reportSourcing"></div></div> 
+</PDFDownloadLink></div></div> 
     <div id="tooltip2" ><text class="p1">Hover over any location to see details.</text></div>
     <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}{"\n "}</text></div> 
     <div id="bottom-desc" style={{zIndex: 19999, position: "absolute", bottom: 36, left: 1, width: "100%", textAlign: "center"}}>
@@ -5606,8 +5927,7 @@ const addScenarioButtons = () => {
     <button class="button button9"  onClick={toggleConflict} type="button">Conflict Events</button> 
     <button class="button button11"  onClick={toggleAgpot} type="button">Agricultural Potential</button> 
     <button class="button button12"  onClick={toggleTrav} type="button">Avg. Travel Time to Cities</button> 
-    <button class="button button18"  onClick={toggleLabels} type="button">Labels</button>
-    <button class="button button20"  onClick={printPDF} type="button">Print PDF</button> </div>
+    <button class="button button18"  onClick={toggleLabels} type="button">Labels</button> </div>
     <div id="legend" style={{display:"none"}}><button id="close" class="button close" onClick={addLegend}>x</button><b>Legend</b><br></br><br></br>
     <i style={{backgroundImage: "linear-gradient(to left, #9B2226,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Poverty</span2><br></br>
     <i style={{backgroundImage: "linear-gradient(to left, #3C4F76,#FFFFFF)"}}></i><span2>&nbsp;&nbsp;Hunger</span2><br></br>
