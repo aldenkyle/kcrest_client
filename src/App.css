@@ -168,9 +168,9 @@ body::-webkit-scrollbar{
   right: 2%;
   line-height: 1;
   text-align:left;
-  background-color:white;
+  background-color:#f3efea;
   z-index: 300000001;
-  border-radius: 8px;
+  border-radius: 2px;
   padding: 5px;
 }
 

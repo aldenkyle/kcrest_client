@@ -4869,7 +4869,7 @@ const styles = StyleSheet.create({
   author: {
     fontSize: 12,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 5
   },
   subtitle: {
     fontSize: 18,
@@ -4897,7 +4897,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     top: 4,
     bottom:4,
-    textAlign: 'center',
+    textAlign: 'left',
     color: 'white',
     borderTop: 'none',
     fontFamily: 'Oswald'
@@ -4950,6 +4950,9 @@ else if (b>a) {return "<"}
 else {return "="}
 }
 
+const timeElapsed = Date.now();
+const today = new Date(timeElapsed);
+
 function MyDocument(props) {
   //console.log(styles.body)
   if (scen1_idlist.length > 0 & scen2_idlist.length > 0) {
@@ -4958,15 +4961,17 @@ function MyDocument(props) {
      <Page style={styles.body}>
           <Text style={styles.title}>User Defined Scenario Result</Text>
           <Text style={styles.author}>Produced by International Development Targeting Scenario Builder Tool</Text>
+          <Text style={styles.author}>Map result produced on {today.toDateString()}</Text>
+          <Text style={styles.author}>Contact Kyle Alden (kyle.alden@gmail.com) with any questions</Text>
           <Text style={styles.subtitle}>
           The user selected two scenarios. The first scenario included {scen1_idlist.length} administrative unit(s) and has a population of approximately {numberWithCommas(scen1_population)} people. The second scenario included {scen2_idlist.length} administrative unit(s) and has a population of approximately {numberWithCommas(scen2_population)} people.  The following table shows summary statistics for our ten indicators of interest across the selected areas.
           </Text>
           <View style={styles.table}>
           <View style={[styles.row, styles.bold, styles.header]}>
-              <Text style={styles.row1}>Indicator</Text>
+              <Text style={styles.row1}>&nbsp;Indicator</Text>
               <Text style={styles.row2}>Scenario 1</Text>
               <Text style={styles.row3}></Text>
-              <Text style={styles.row4}>Scenario 4</Text>
+              <Text style={styles.row4}>Scenario 2</Text>
               </View>
           <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
           <Text style={styles.row1}>
@@ -5210,12 +5215,14 @@ function MyDocument(props) {
         <Page style={styles.body}>
           <Text style={styles.title}>User Defined Scenario Result</Text>
           <Text style={styles.author}>Produced by International Development Targeting Scenario Builder Tool</Text>
+          <Text style={styles.author}>Map result produced on {today.toDateString()}</Text>
+          <Text style={styles.author}>Contact Kyle Alden (kyle.alden@gmail.com) with any questions</Text>
           <Text style={styles.subtitle}>
           This scenario selected {scen1_idlist.length + scen2_idlist.length} administrative unit(s) and has a population of approximately {numberWithCommas(scen1_population + scen2_population)} people. The following table shows summary statistics for our ten indicators of interest across the selected areas.
           </Text>
           <View style={styles.table}>
           <View style={[styles.row, styles.bold, styles.header]}>
-              <Text style={styles.row1a}>Indicator</Text>
+              <Text style={styles.row1a}>&nbsp;Indicator</Text>
               <Text style={styles.row2a}>User Selected Scenario</Text>
               </View>
           <View style={[styles.row, {backgroundColor: "#f2f2f2"}]} wrap={false}>
@@ -5380,12 +5387,13 @@ const addScenarioButtons = () => {
 
 
   const addInfo = () => {
-  var x = document.getElementById("info-div");
+  var x = document.getElementById("info-inner-div");
   x.innerHTML = "<span style='color:black;font-size:12px;font-family:Gill Sans,Gill Sans MT, Calibri, sans-serif;'><b>About</b><br>This tool allows international development practitioners to develop scenarios regarding where they will target international development programs. First, users can visualize several key development indicators across different geographies. Next, they can summarize those indicators across subsets of administrative areas in their countries of interest and print the results to share with colleagues. The goal is to ensure that development practitioners have easy access to, and are using, high quality quantitative data as a determinant in their decision making about where to invest their limited resources.  If you have questions please reach out to Kyle Alden at kyle.alden@gmail.com<br><br></span>" + defsSourcing
-  if (x.style.display === "none") {
-    x.style.display = "block";
+  var y = document.getElementById("info-div");
+  if (y.style.display === "none") {
+    y.style.display = "block";
   } else {
-    x.style.display = "none";
+    y.style.display = "none";
   }}
 
   
@@ -6089,7 +6097,7 @@ const addScenarioButtons = () => {
     <div id="downloadPDF-report" style={{display:"none"}}>
    <PDFDownloadLink
   document={<MyDocument data={scenarioDetails}/>}
-  fileName="movielist.pdf"
+  fileName="ScenarioReport.pdf"
   style={{
     backgroundColor: "#363636",
     padding: "8px 12px",
@@ -6109,7 +6117,7 @@ const addScenarioButtons = () => {
   }
 </PDFDownloadLink></div></div> 
     <div id="tooltip2" ><text class="p1">Hover over any location to see details.</text></div>
-    <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><text class="p1">{"\n"}{"\n "}</text></div> 
+    <div id="info-div" style={{display:"none"}}><button id="close" class="button close" onClick={addInfo}>x</button><div id="info-inner-div" ></div></div> 
     <div id="bottom-desc" style={{zIndex: 19999, position: "absolute", bottom: 36, left: 1, width: "100%", textAlign: "center"}}>
       <div id= "scenario-div" style={{display:"none"}} >
     <button class="button button14"  onClick={scenario1} type="button">Create Scenario 1</button>   
