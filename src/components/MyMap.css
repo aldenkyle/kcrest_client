@@ -3,4 +3,13 @@
     width: 100%;
     background: white;
   }
+
+  
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {
+  border: none;
+}
+
+.leaflet-touch .leaflet-bar {
+  border: none;
+}
   

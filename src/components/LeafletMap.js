@@ -695,7 +695,7 @@ const KcrestCountriesFront = () => {
 
   const getData = async () => {
     try {
-      const response = await fetch("https://kcrest-server-38b9724c4a82.herokuapp.com/kcrest_countries");
+      const response = await fetch("https://raw.githubusercontent.com/aldenkyle/kcrest_client/main/src/data/kcrest_countries.json");
 
       //jsonData is an array cotaining the json object
       const jsonData = await response.json();
@@ -3974,8 +3974,14 @@ const LeafletMap = () => {
       }
       var cent_lat = (min_lat + max_lat)/2
       var cent_lon = (min_lon + max_lon)/2
+      var zl1 = 5
+      if ((max_lat-min_lat)<1.5 & (max_lon-min_lon)<2.5) {zl1 = 7}
+      else if ((max_lat-min_lat)<3 & (max_lon-min_lon)<5) {zl1 = 6}
+      else if ((max_lat-min_lat)>14 | (max_lon-min_lon)>30) {zl1 = 3}
+      else if ((max_lat-min_lat)>8 & (max_lon-min_lon)>16) {zl1 = 4}
+      else {zl1 = 5}
       var mapLayer = mapRef.current
-      mapLayer.setView([cent_lat,cent_lon],5)
+      mapLayer.setView([cent_lat,cent_lon],zl1)
       //console.log(mapLayer)
       var lc = document.getElementsByClassName('leaflet-control-layers');
       lc[1].style.visibility = 'hidden';
@@ -4025,8 +4031,15 @@ const LeafletMap = () => {
       }
       var cent_lat = (min_lat + max_lat)/2
       var cent_lon = (min_lon + max_lon)/2
+      var zl = 5
+      if ((max_lat-min_lat)<1.5 & (max_lon-min_lon)<2.5) {zl1 = 7}
+      else if ((max_lat-min_lat)<3 & (max_lon-min_lon)<5) {zl1 = 6}
+      else if ((max_lat-min_lat)>14 | (max_lon-min_lon)>30) {zl = 3}
+      else if ((max_lat-min_lat)>8 & (max_lon-min_lon)>16) {zl = 4}
+      else {zl = 5}
       var mapLayer = mapRef2.current
-      mapLayer.setView([cent_lat,cent_lon],5)
+      //mapLayer.fitBounds([[min_lat,min_lon],[max_lat,max_lon]])
+      mapLayer.setView([cent_lat,cent_lon],zl)
       //console.log(mapLayer)
       var lc = document.getElementsByClassName('leaflet-control-layers');
       lc[2].style.visibility = 'hidden';
@@ -4736,7 +4749,7 @@ const showReport = () => {
     y.innerHTML += "<br><br>The administrative unit(s) included in Scenario 2 are: " + scen2_Admins.slice(2) + "."
     }
     //add stuff to report if scenario 1 only
-    else if (scenario == 1) {
+    else if (scen1_idlist.length > 0) {
     var mapC2 = document.getElementById("map-container2");
     console.log(mapC2)
     if (mapC2.style.display === "none") {
@@ -4764,7 +4777,7 @@ const showReport = () => {
     y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in Scenario 1: " + scen1_Admins.slice(2) + "."
     }
     //add stuff to report if scenario 2 only
-    else if (scenario == 2) {
+    else if (scen2_idlist.length > 0) {
     var mapC1 = document.getElementById("map-container1");
     if (mapC1.style.display === "none") {
       mapC1.style.display = "block";
@@ -4788,21 +4801,39 @@ const showReport = () => {
       y.innerHTML += thtml
       y.innerHTML += "<br><u><b>Additional Details</u></b><br> The administrative unit(s) included in Scenario 2: "  + scen2_Admins.slice(2) + "."
       }
-      else if (scenario == 0) {
-        y.innerHTML = "<br><u><b>No scenarios have been developed, click Create Scenario 1 to start building a targeting scenario</u></b>"
+      else {
+        y.innerHTML = "<br><u><b>No scenarios have been developed, close report window and click Create Scenario 1 to start building a targeting scenario</u></b>"
+        var mapC2 = document.getElementById("map-container2");
+        console.log(mapC2)
+        if (mapC2.style.display === "none") {
+          mapC2.style.display = "block";
+        } else if (mapC2.style.display == "") {
+          mapC2.style.display = "none";
+        }
+        else {
+          mapC2.style.display = "none";
+        }
+        var headC2 = document.getElementById("head-desc3");
+        if (headC2.style.display === "none") {
+          headC2.style.display = "block";
+        } else {
+          headC2.style.display = "none";
+        }
+        var mapC1 = document.getElementById("map-container1");
+        if (mapC1.style.display === "none") {
+          mapC1.style.display = "block";
+        } else {
+          mapC1.style.display = "none";
+        }
+        var headC1 = document.getElementById("head-desc2");
+        if (headC1.style.display === "none") {
+          headC1.style.display = "block";
+        } else {
+          headC1.style.display = "none";
+        }
         }
     //console.log(x)
   }
-
-  const updatePDFData = () => {
-  return ("hi I am the data")  
-  }
-
-  const generatePdfDocument = async (documentData,fileName) => {
-    const blob = await pdf((
-        <MyDocument/>
-    )).toBlob();
-    saveAs(blob, "latestDownload.pdf");};
 
 
   const showUpdatePDF =  async () => {
@@ -5439,14 +5470,6 @@ const addScenarioButtons = () => {
         }, 5000)}
     }, [scenarioDetails]);  
 
-  useEffect(() => {
-    if (!map) return;
-    //const map = mapRef.current;
-    L.easyButton( "fa-map", () => {
-      addScenarioButtons()
-    }, 'Create Targeting Scenarios').addTo(map);
-
-  }, [map]);
 
   const  ScenToFront = () => {
       if (map && popRef.current) {
@@ -5485,15 +5508,6 @@ const addScenarioButtons = () => {
   useEffect(() => {
     if (!map) return;
     //const map = mapRef.current;
-    L.easyButton("fa-bars", () => {
-      addLegend()
-    }, 'View Legend').addTo(map);
-
-  }, [map]);
-
-  useEffect(() => {
-    if (!map) return;
-    //const map = mapRef.current;
     console.log(map)
     L.easyButton("fa-info-circle", () => {
       addInfo()
@@ -5501,6 +5515,30 @@ const addScenarioButtons = () => {
 
   }, [map]);
 
+  useEffect(() => {
+    if (!map) return;
+    //const map = mapRef.current;
+    console.log(map)
+    L.easyButton('<span class="star">View Legend</span>', () => {
+      addLegend()
+    }, 'View Legend', 'info-button3').addTo(map);
+
+  }, [map]);
+
+
+  useEffect(() => {
+    if (!map) return;
+    //const map = mapRef.current;
+    console.log(map)
+    L.easyButton('<span class="star">Create Scenarios</span>', () => {
+      addScenarioButtons()
+    }, 'Create User-Defined Targeting Scenarios', 'info-button4').addTo(map);
+
+  }, [map]);
+
+
+
+<button class="button button7"  onClick={toggleHandwashing} type="button">Access to Handwashing</button> 
 
 //trying SimpleMapScreenshotter
     const snapshotOptions = {
@@ -5664,6 +5702,19 @@ const addScenarioButtons = () => {
   var lc = document.getElementsByClassName('leaflet-control-layers');
   lc[0].style.visibility = 'hidden';}
 
+
+
+  function CreateButton() {
+    var loc = document.getElementsByClassName("leaflet-top leaflet-left")[0]
+    console.log(loc)
+    const button = document.createElement("button");
+    button.textContent = 'Click me!';
+    button.addEventListener('click', () => {
+      addInfo()
+    });
+    console.log(button)
+    loc.appendChild(button);
+  }
 
   const [center, setCenter] = useState({ lat: latCent(country), lng: lonCent(country) });
   const zoomLevel = zoomLevelVar(country);
