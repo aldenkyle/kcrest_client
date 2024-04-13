@@ -4032,8 +4032,8 @@ const LeafletMap = () => {
       var cent_lat = (min_lat + max_lat)/2
       var cent_lon = (min_lon + max_lon)/2
       var zl = 5
-      if ((max_lat-min_lat)<1.5 & (max_lon-min_lon)<2.5) {zl1 = 7}
-      else if ((max_lat-min_lat)<3 & (max_lon-min_lon)<5) {zl1 = 6}
+      if ((max_lat-min_lat)<1.5 & (max_lon-min_lon)<2.5) {zl = 7}
+      else if ((max_lat-min_lat)<3 & (max_lon-min_lon)<5) {zl = 6}
       else if ((max_lat-min_lat)>14 | (max_lon-min_lon)>30) {zl = 3}
       else if ((max_lat-min_lat)>8 & (max_lon-min_lon)>16) {zl = 4}
       else {zl = 5}
@@ -4991,7 +4991,7 @@ function MyDocument(props) {
   <Document>
      <Page style={styles.body}>
           <Text style={styles.title}>User Defined Scenario Result</Text>
-          <Text style={styles.author}>Produced by International Development Targeting Scenario Builder Tool</Text>
+          <Text style={styles.author}>Produced by Scenario Builder for Targeting International Development Programs</Text>
           <Text style={styles.author}>Map result produced on {today.toDateString()}</Text>
           <Text style={styles.author}>Contact Kyle Alden (kyle.alden@gmail.com) with any questions</Text>
           <Text style={styles.subtitle}>
@@ -5245,7 +5245,7 @@ function MyDocument(props) {
       <Document>
         <Page style={styles.body}>
           <Text style={styles.title}>User Defined Scenario Result</Text>
-          <Text style={styles.author}>Produced by International Development Targeting Scenario Builder Tool</Text>
+          <Text style={styles.author}>Produced by Scenario Builder for Targeting International Development Programs</Text>
           <Text style={styles.author}>Map result produced on {today.toDateString()}</Text>
           <Text style={styles.author}>Contact Kyle Alden (kyle.alden@gmail.com) with any questions</Text>
           <Text style={styles.subtitle}>
@@ -5721,7 +5721,7 @@ const addScenarioButtons = () => {
   return (
     <>
     <div id="head-desc" style={{zIndex: 20000, position: "absolute", top: 1, left: 0, width: "100%"}}>
-      <h1>Scenario Builder for Development Programs<br></br> 
+      <h1>Scenario Builder for Targeting International Development Programs<br></br> 
       <select name="country" id="country">
         <option value="Ghana">Ghana</option>
         <option value="Liberia">Liberia</option>
